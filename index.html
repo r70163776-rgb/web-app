@@ -1,30 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><meta name="monetag" content="0bc242eedca64849ede335b56c3fc491">
   <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatCoin Tasks</title>
+    <title>CatCoin Miner</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            touch-action: manipulation; /* Prevents double-tap zoom on mobile */
+        }
+        .coin {
+            transition: transform 0.1s ease-out;
+            filter: drop-shadow(0 10px 15px rgba(255, 215, 0, 0.4));
+        }
+        .coin:active {
+            transform: scale(0.95);
+        }
+        .float-text {
+            animation: floatUp 1s ease-out forwards;
+            position: absolute;
+            font-weight: bold;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none;
+            opacity: 1;
+        }
+        @keyframes floatUp {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex flex-col h-screen antialiased">
 
+    <!-- App Container -->
     <div class="flex-grow flex flex-col items-center justify-between p-4 max-w-md mx-auto w-full">
 
+        <!-- Header -->
         <header class="w-full flex justify-between items-center p-2 rounded-xl bg-gray-800/50">
             <div class="flex items-center space-x-3">
-                <a href="index.html" class="p-2 rounded-full hover:bg-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" />
                     </svg>
-                </a>
-                <h1 class="font-bold text-2xl">CatCoin Tasks 📋</h1>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-400">John Doe</p>
+                    <p class="font-bold text-lg">CatCoin</p>
+                </div>
             </div>
             <button class="p-2 rounded-full hover:bg-gray-700">
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -34,71 +67,39 @@
             </button>
         </header>
 
-        <main class="w-full flex-grow mt-6 space-y-4 overflow-y-auto">
-            
-            <h2 class="text-xl font-bold text-gray-300">Daily Tasks 🗓️</h2>
-            <div class="space-y-3">
-                <div class="bg-gray-800 p-4 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-3xl">🎁</span>
-                        <div>
-                            <p class="font-medium">Claim Daily Reward</p>
-                            <p class="text-sm text-yellow-400 font-bold">+10,000 CatCoin</p>
-                        </div>
-                    </div>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm">
-                        Claim
-                    </button>
-                </div>
+        <!-- Main Balance -->
+        <div class="text-center my-4">
+            <p class="text-gray-400 text-sm">Your Balance</p>
+            <div class="flex items-center justify-center space-x-2">
+                 <span class="text-3xl">🐈</span>
+                 <h1 id="balance" class="text-5xl font-black tracking-tighter">1,234,567</h1>
             </div>
+        </div>
+        
+        <!-- Mining Coin -->
+        <div id="coin-container" class="relative flex items-center justify-center w-full">
+            <button id="coin" class="coin w-64 h-64 md:w-72 md:h-72 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center select-none">
+                <div class="w-56 h-56 md:w-64 md:h-64 rounded-full bg-gradient-to-tr from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center shadow-inner">
+                    <span class="text-8xl select-none" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">&#128049;</span>
+                </div>
+            </button>
+        </div>
 
-            <h2 class="text-xl font-bold text-gray-300 pt-4">One-Time Missions ✨</h2>
-            <div class="space-y-3">
-                <div class="bg-gray-800 p-4 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-3xl">✈️</span>
-                        <div>
-                            <p class="font-medium">Join Telegram Channel</p>
-                            <p class="text-sm text-yellow-400 font-bold">+50,000 CatCoin</p>
-                        </div>
-                    </div>
-                    <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-sm">
-                        Go
-                    </button>
-                </div>
-                
-                <div class="bg-gray-800 p-4 rounded-xl flex items-center justify-between opacity-50">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-3xl">🐦</span>
-                        <div>
-                            <p class="font-medium">Follow on X (Twitter)</p>
-                            <p class="text-sm text-gray-400 font-bold">Completed</p>
-                        </div>
-                    </div>
-                    <button class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm cursor-not-allowed">
-                        Done
-                    </button>
-                </div>
-                
-                <div class="bg-gray-800 p-4 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-3xl">👫</span>
-                        <div>
-                            <p class="font-medium">Invite 3 Friends</p>
-                            <p class="text-sm text-yellow-400 font-bold">+100,000 CatCoin</p>
-                        </div>
-                    </div>
-                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg text-sm">
-                        Invite
-                    </button>
-                </div>
+        <!-- Energy/Limit -->
+        <div class="w-full p-4 mt-4">
+            <div class="flex justify-between items-center text-lg mb-2">
+                <span class="font-bold">⚡ Energy</span>
+                <span id="energy" class="font-bold">5000 / 5000</span>
             </div>
+            <div class="w-full bg-gray-700 rounded-full h-4">
+                <div id="energy-bar" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-4 rounded-full" style="width: 100%"></div>
+            </div>
+        </div>
 
-        </main>
-
+        <!-- Bottom Navigation -->
         <nav class="w-full bg-gray-800/50 rounded-2xl p-2 mt-4">
             <div class="flex justify-around items-center">
-                <a href="index.html" class="flex flex-col items-center text-gray-400 hover:text-white p-2 w-1/4">
+                <a href="#" class="flex flex-col items-center text-center p-2 rounded-lg bg-gray-700 text-cyan-400 w-1/4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                     <span class="text-xs font-medium">Home</span>
                 </a>
@@ -106,42 +107,108 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 006-6v-1a3 3 0 00-3-3H6a3 3 0 00-3 3v1a6 6 0 006 6z" /></svg>
                     <span class="text-xs font-medium">Friends</span>
                 </a>
-                <a href="tasks.html" class="flex flex-col items-center text-center p-2 rounded-lg bg-gray-700 text-cyan-400 w-1/4">
+                <a href="#" class="flex flex-col items-center text-gray-400 hover:text-white p-2 w-1/4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                     <span class="text-xs font-medium">Tasks</span>
                 </a>
                  <a href="#" class="flex flex-col items-center text-gray-400 hover:text-white p-2 w-1/4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                     <span class="text-xs font-medium">Boost</span>
-show_9973247().then(() => {
+                </a>
+            </div>
+        </nav>
+    </div>
+  show_9973247().then(() => {
   console.log('User watched the ad');
 }).catch(() => {
   console.log('Ad failed or was skipped');
 });
 
-                   button.addEventListener('click', () => {
-  show_9973247({ type: 'pop' }).then(() => {
-    console.log('Popup attempt completed')
-  }).catch(() => {
-    console.log('Popup ad failed to open')
-  })
-})
+    <script>
+        const coin = document.getElementById('coin');
+        const coinContainer = document.getElementById('coin-container');
+        const balanceDisplay = document.getElementById('balance');
+        const energyDisplay = document.getElementById('energy');
+        const energyBar = document.getElementById('energy-bar');
 
+        let balance = 1234567;
+        let energy = 5000;
+        const maxEnergy = 5000;
+        const clickValue = 11; // Amount gained per click
 
-                   show_9973247({
-  type: 'inApp',
-  inAppSettings: {
-    frequency: 2,
-    capping: 0.1,
-    interval: 30,
-    timeout: 5,
-    everyPage: false
-  }
-})
-                 
-                 </a>
-            </div>
-        </nav>
-    </div>
+        // Format numbers with commas
+        const formatNumber = (num) => num.toLocaleString();
+        
+        balanceDisplay.innerText = formatNumber(balance);
+        energyDisplay.innerText = `${energy} / ${maxEnergy}`;
+
+        // Function to handle the coin click
+        const handleCoinClick = (event) => {
+            if (energy >= clickValue) {
+                balance += clickValue;
+                energy -= clickValue;
+                
+                balanceDisplay.innerText = formatNumber(balance);
+                updateEnergy();
+
+                // Show floating text
+                const x = event.clientX || event.touches[0].clientX;
+                const y = event.clientY || event.touches[0].clientY;
+
+                const floatText = document.createElement('div');
+                floatText.className = 'float-text';
+                floatText.innerText = `+${clickValue}`;
+                floatText.style.left = `${x}px`;
+                floatText.style.top = `${y}px`;
+                
+                document.body.appendChild(floatText);
+
+                setTimeout(() => {
+                    floatText.remove();
+                }, 1000);
+            } else {
+                // Optional: show a "not enough energy" message
+                console.log("Not enough energy!");
+            }
+        };
+
+        const updateEnergy = () => {
+             energyDisplay.innerText = `${energy} / ${maxEnergy}`;
+             const percentage = (energy / maxEnergy) * 100;
+             energyBar.style.width = `${percentage}%`;
+        }
+
+      // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCaDmbc6rDR7vkhdvh8ZUZ6TXgNaGAieu0",
+  authDomain: "mining-app-3bd3d.firebaseapp.com",
+  projectId: "mining-app-3bd3d",
+  storageBucket: "mining-app-3bd3d.firebasestorage.app",
+  messagingSenderId: "973558318881",
+  appId: "1:973558318881:web:ae913f63684cc451c9a060"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+        // Add event listeners for both mouse and touch
+        coin.addEventListener('mousedown', handleCoinClick);
+        coin.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // prevent mouse event from firing
+            handleCoinClick(e);
+        });
+
+        // Regenerate energy over time
+        setInterval(() => {
+            if (energy < maxEnergy) {
+                energy = Math.min(maxEnergy, energy + 5); // Regenerate 5 energy per second
+                updateEnergy();
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
