@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cato Mining — Mine $GEM</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Telegram Web App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Monetag SDK (replace with Monetag dashboard tag if different) -->
+  <script async src="https://s.monetag.com/tag.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    :root{
+      --bg:#0b0710;
+      --panel:#0f1724;
+      --accent:#7c3aed; /* purple */
+      --accent-2:#f59e0b; /* gold */
+      --muted:#9ca3af;
+      --glass: rgba(255,255,255,0.03);
+    }
+    html,body{height:100%}
+    body{
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:linear-gradient(180deg,var(--bg) 0%, #071026 100%);
+      color:white;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .pulse-ring {
+      animation: pulse 2.2s infinite;
+      box-shadow: 0 0 8px rgba(124,58,237,0.18);
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(124,58,237,0.18); }
+      50% { transform: scale(1.02); box-shadow: 0 0 40px 8px rgba(124,58,237,0.02); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(124,58,237,0.0); }
+    }
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
+    }
+    .big-btn:active{ transform: scale(0.97); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+  <div class="w-full max-w-lg">
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight" style="color:var(--accent)">Cato Mining</h1>
+        <p class="text-sm text-[--muted]" style="color:var(--muted)">Tap to mine $GEM — watch ads for bonuses</p>
+      </div>
+      <div class="text-right">
+        <div id="userName" class="text-sm text-gray-300">Guest</div>
+        <div id="userIdSmall" class="text-xs text-gray-500 truncate hidden"></div>
+      </div>
+    </header>
+
+    <!-- Card -->
+    <main class="glass rounded-2xl p-6 shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <div class="text-xs text-gray-400">Balance</div>
+          <div id="balanceDisplay" class="text-3xl font-bold text-white">0.00 <span class="text-lg text-yellow-300">$GEM</span></div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs text-gray-400">Click Power</div>
+          <div id="clickPowerDisplay" class="text-lg font-semibold">0.05 $GEM</div>
+          <div class="text-xs text-gray-400 mt-1">Passive: <span id="passiveDisplay">0.00</span> /sec</div>
+        </div>
+      </div>
+
+      <!-- Mine Button -->
+      <div class="flex flex-col items-center my-6">
+        <button id="mineBtn" class="big-btn w-44 h-44 rounded-full bg-gradient-to-b from-[color:var(--accent)] to-[color:var(--accent-2)] shadow-2xl flex items-center justify-center text-5xl font-extrabold pulse-ring">
+          ??
+        </button>
+        <div class="mt-3 text-sm text-gray-300">Tap to mine</div>
+      </div>
+
+      <!-- Progress + Upgrade Row -->
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        <div class="p-3 bg-[#071124] rounded-xl">
+          <div class="text-sm text-gray-400 mb-2">Upgrades</div>
+          <div id="upgradeList" class="space-y-3"> <!-- populated by JS --> </div>
+        </div>
+
+        <div class="p-3 bg-[#071124] rounded-xl">
+          <div class="text-sm text-gray-400 mb-2">Tasks & Ads</div>
+          <div class="space-y-3">
+            <button id="watchAdBtn" class="w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-green-500 to-emerald-500 hover:opacity-95 disabled:opacity-50">
+              ?? Watch Ad — +1.00 $GEM
+            </button>
+            <div class="flex items-center justify-between text-xs text-gray-400">
+              <div>Ad cooldown:</div>
+              <div id="adCooldownText">Ready</div>
+            </div>
+            <a id="directOffer" class="text-xs text-blue-300 underline" target="_blank" href="#">Open Direct Offer</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer small -->
+      <div class="mt-5 text-xs text-gray-500">
+        <div>Powered by Firebase • Monetag (Rewarded Interstitial recommended)</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal (simple) -->
+  <div id="modalWrap" class="fixed inset-0 hidden items-center justify-center z-40">
+    <div class="bg-black bg-opacity-60 absolute inset-0"></div>
+    <div class="relative bg-[#0b1220] p-5 rounded-xl border border-white/5 w-11/12 max-w-sm text-center">
+      <div id="modalMsg" class="text-white font-semibold mb-3"></div>
+      <button id="modalClose" class="px-4 py-2 rounded bg-indigo-600">Close</button>
+    </div>
+  </div>
+
+  <!-- Firebase + Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // -------------------------
+    // Configs (provided)
+    // -------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyCaDmbc6rDR7vkhdvh8ZUZ6TXgNaGAieu0",
+      authDomain: "mining-app-3bd3d.firebaseapp.com",
+      projectId: "mining-app-3bd3d",
+      storageBucket: "mining-app-3bd3d.firebasestorage.app",
+      messagingSenderId: "973558318881",
+      appId: "1:973558318881:web:ae913f63684cc451c9a060"
+    };
+
+    // Monetag reward amount (GEM)
+    const AD_REWARD_AMOUNT = 1.00;
+    // Ad cooldown in seconds
+    const AD_COOLDOWN_SECONDS = 60;
+
+    // -------------------------
+    // Init Firebase + vars
+    // -------------------------
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Telegram WebApp
+    const tg = window.Telegram?.WebApp || null;
+    if (tg && tg.expand) try { tg.expand(); } catch(e){}
+
+    const rawUser = tg?.initDataUnsafe?.user || null;
+    const tgUserId = rawUser?.id ? String(rawUser.id) : null;
+    const displayName = rawUser ? `${rawUser.first_name || ''} ${rawUser.last_name || ''}`.trim() : 'Guest';
+
+    // UI refs
+    const balanceEl = document.getElementById('balanceDisplay');
+    const clickPowerEl = document.getElementById('clickPowerDisplay');
+    const passiveEl = document.getElementById('passiveDisplay');
+    const mineBtn = document.getElementById('mineBtn');
+    const watchAdBtn = document.getElementById('watchAdBtn');
+    const adCooldownText = document.getElementById('adCooldownText');
+    const userNameEl = document.getElementById('userName');
+    const userIdSmall = document.getElementById('userIdSmall');
+    const upgradeListEl = document.getElementById('upgradeList');
+
+    userNameEl.textContent = displayName || 'Guest';
+    if (tgUserId) {
+      userIdSmall.textContent = `ID: ${tgUserId}`;
+      userIdSmall.classList.remove('hidden');
+    }
+
+    // Game state
+    let state = {
+      balance: 0.00,
+      clickPower: 0.05,
+      passive: 0.0,
+      upgrades: { click_basic: 0, passive_miner: 0 }
+    };
+
+    // Upgrade definitions
+    const UPGRADES = [
+      { id: 'click_basic', name: 'Basic Shovel', costBase: 10, costFactor: 1.5, addClick: 0.05, desc: '+0.05 per click' },
+      { id: 'passive_miner', name: 'Cloud Contract', costBase: 100, costFactor: 2, addPassive: 0.5, desc: '+0.5 GEM/sec' }
+    ];
+
+    // Realtime saving path uses telegram user id if available, else anonymous uid
+    let docPathUserId = tgUserId || null;
+    let firestoreDocRef = null;
+    let lastSave = 0;
+    const SAVE_DEBOUNCE_MS = 800;
+
+    // ---------- UI render ----------
+    function fmt(x){ return (Math.floor(x*100)/100).toFixed(2); }
+    function renderState(){
+      balanceEl.innerHTML = `${fmt(state.balance)} <span class="text-lg text-yellow-300">$GEM</span>`;
+      clickPowerEl.textContent = `${fmt(state.clickPower)} $GEM`;
+      passiveEl.textContent = `${fmt(state.passive)}`;
+      renderUpgrades();
+    }
+
+    function renderUpgrades(){
+      upgradeListEl.innerHTML = '';
+      UPGRADES.forEach(up => {
+        const level = state.upgrades[up.id] || 0;
+        const cost = up.costBase * Math.pow(up.costFactor, level);
+        const can = state.balance >= cost;
+        const div = document.createElement('div');
+        div.className = `flex items-center justify-between p-2 rounded-lg ${can? 'bg-[#081022]' : 'bg-[#05081a]'}`;
+        div.innerHTML = `
+          <div>
+            <div class="font-semibold">${up.name} <span class="text-xs text-gray-400">Lv ${level}</span></div>
+            <div class="text-xs text-gray-400">${up.desc}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-semibold ${can? 'text-green-400' : 'text-red-400'}">${fmt(cost)} $GEM</div>
+            <button ${!can? 'disabled' : ''} class="mt-1 px-3 py-1 rounded bg-indigo-600 text-xs text-white buy-btn" data-id="${up.id}" data-cost="${cost}">${can? 'Buy' : 'Locked'}</button>
+          </div>
+        `;
+        upgradeListEl.appendChild(div);
+      });
+      // attach listeners
+      document.querySelectorAll('.buy-btn').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const id = b.getAttribute('data-id');
+          const cost = parseFloat(b.getAttribute('data-cost'));
+          buyUpgrade(id,cost);
+        });
+      });
+    }
+
+    // ---------- Game mechanics ----------
+    function mineClick(){
+      state.balance += state.clickPower;
+      renderState();
+      debouncedSave();
+    }
+
+    function buyUpgrade(id,cost){
+      if (state.balance < cost) return showModal('Not enough $GEM');
+      const up = UPGRADES.find(u=>u.id===id);
+      state.balance -= cost;
+      state.upgrades[id] = (state.upgrades[id]||0) + 1;
+      if (up.addClick) state.clickPower += up.addClick;
+      if (up.addPassive) state.passive += up.addPassive;
+      renderState();
+      debouncedSave(true);
+      showModal(`Purchased ${up.name}!`);
+    }
+
+    function passiveTick(){
+      if (state.passive <= 0) return;
+      state.balance += state.passive;
+      renderState();
+      debouncedSave();
+    }
+
+    // ---------- Save / Load ----------
+    function setDocRefForUser(uid){
+      docPathUserId = uid;
+      firestoreDocRef = doc(db, 'miners', String(uid));
+    }
+
+    async function saveState(force=false){
+      if (!firestoreDocRef) return;
+      const now = Date.now();
+      if (!force && (now - lastSave < SAVE_DEBOUNCE_MS)) return;
+      lastSave = now;
+      try {
+        await setDoc(firestoreDocRef, {
+          name: displayName || 'Guest',
+          balance: state.balance,
+          clickPower: state.clickPower,
+          passive: state.passive,
+          upgrades: state.upgrades,
+          updatedAt: Date.now()
+        }, { merge: true });
+        // console.log('saved');
+      } catch(e){
+        console.error('save error', e);
+      }
+    }
+
+    function debouncedSave(force=false){
+      saveState(force);
+    }
+
+    async function loadStateFromFirestore(){
+      if (!firestoreDocRef) return;
+      try {
+        const snap = await getDoc(firestoreDocRef);
+        if (snap.exists()){
+          const d = snap.data();
+          state.balance = Number(d.balance || 0);
+          state.clickPower = Number(d.clickPower || state.clickPower);
+          state.passive = Number(d.passive || state.passive);
+          state.upgrades = d.upgrades || state.upgrades;
+          renderState();
+        } else {
+          // initialize on server
+          await saveState(true);
+        }
+      } catch(e){
+        console.error('load error', e);
+      }
+    }
+
+    // realtime listener so changes sync while open
+    function startRealtime(){
+      if (!firestoreDocRef) return;
+      onSnapshot(firestoreDocRef, (snap)=>{
+        if (!snap.exists()) return;
+        const d = snap.data();
+        // avoid overwriting local high-frequency clicks too aggressively, but update baseline
+        state.balance = Number(d.balance || state.balance);
+        state.clickPower = Number(d.clickPower || state.clickPower);
+        state.passive = Number(d.passive || state.passive);
+        state.upgrades = d.upgrades || state.upgrades;
+        renderState();
+      }, (err)=>console.error('realtime err',err));
+    }
+
+    // ---------- Modal ----------
+    const modalWrap = document.getElementById('modalWrap');
+    const modalMsg = document.getElementById('modalMsg');
+    const modalClose = document.getElementById('modalClose');
+    function showModal(text){
+      modalMsg.textContent = text;
+      modalWrap.classList.remove('hidden');
+      modalWrap.classList.add('flex');
+    }
+    modalClose.addEventListener('click', ()=> {
+      modalWrap.classList.add('hidden');
+      modalWrap.classList.remove('flex');
+    });
+
+    // ---------- Ad handling (Monetag) ----------
+    let adCooldownRemaining = 0;
+    let adCooldownTimer = null;
+
+    function startAdCooldown(seconds){
+      adCooldownRemaining = seconds;
+      updateAdCooldownUI();
+      clearInterval(adCooldownTimer);
+      adCooldownTimer = setInterval(()=>{
+        adCooldownRemaining--;
+        if (adCooldownRemaining <= 0){
+          clearInterval(adCooldownTimer);
+          adCooldownRemaining = 0;
+        }
+        updateAdCooldownUI();
+      }, 1000);
+    }
+
+    function updateAdCooldownUI(){
+      if (adCooldownRemaining > 0){
+        watchAdBtn.setAttribute('disabled','');
+        adCooldownText.textContent = `${adCooldownRemaining}s`;
+      } else {
+        watchAdBtn.removeAttribute('disabled');
+        adCooldownText.textContent = 'Ready';
+      }
+    }
+
+    async function handleAdReward(){
+      // Called when Monetag confirms reward
+      state.balance += AD_REWARD_AMOUNT;
+      renderState();
+      await saveState(true);
+      if (tg && tg.showAlert) tg.showAlert(`?? +${fmt(AD_REWARD_AMOUNT)} GEM`);
+    }
+
+    // Attach ad button handler (Monetag)
+    watchAdBtn.addEventListener('click', async ()=>{
+      if (adCooldownRemaining > 0) return;
+      // Prefer Monetag rewarded interstitial
+      if (window.Monetag && typeof window.Monetag.rewarded === 'function'){
+        try {
+          // start cooldown immediately to avoid spam
+          startAdCooldown(AD_COOLDOWN_SECONDS);
+          await window.Monetag.rewarded("CatoMiningReward", async () => {
+            await handleAdReward();
+          });
+        } catch(e){
+          console.error('Monetag rewarded error', e);
+          // revert cooldown if fail
+          adCooldownRemaining = 0;
+          updateAdCooldownUI();
+          showModal('Ad failed to load. Try again later.');
+        }
+      } else {
+        showModal('Ad service not ready. Try again later.');
+      }
+    });
+
+    // ---------- Init flow ----------
+    // If Telegram user id exists, use it. Otherwise sign in anonymously and use firebase uid.
+    (async function init(){
+      try {
+        // If we have a Telegram user id, set doc ref immediately
+        if (tgUserId){
+          setDocRefForUser(tgUserId);
+          // No need to sign in to match save path, but Firebase needs auth for rules.
+          await signInAnonymously(auth);
+        } else {
+          // Use firebase anonymous id as user id path
+          const cred = await signInAnonymously(auth);
+          const anonUid = cred.user.uid;
+          setDocRefForUser(anonUid);
+        }
+
+        // Load + realtime
+        await loadStateFromFirestore();
+        startRealtime();
+
+        // render once
+        renderState();
+
+        // passive loop every 1 second
+        setInterval(passiveTick, 1000);
+
+      } catch(e){
+        console.error('init error', e);
+        showModal('Initialization error. Check console.');
+      }
+    })();
+
+    // ---------- Click handler ----------
+    mineBtn.addEventListener('click', (ev)=> {
+      mineClick();
+      // small click effect (optional)
+      // disable for animation heavy
+    });
+
+    // ---------- Helpful direct offer link (Monetag directLink) ----------
+    const directOfferLink = document.getElementById('directOffer');
+    // If Monetag provides a direct link function, we can set it; fallback to Monetag dashboard link
+    directOfferLink.href = 'https://publishers.monetag.com/directLink'; // editable by you
+
+    // initial UI states
+    updateAdCooldownUI();
+    renderState();
+
+  </script>
+</body>
+</html>
