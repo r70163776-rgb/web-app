@@ -1,220 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="9973247"></script>
-
+<head>
+    <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="9973247"></script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App with Monetag Ads (Fixed)</title>
+    <title>Telegram Web App with Monetag Ads (Working)</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* CSS styles wahi hain jo aapne diye the */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        
-        header {
-            background: linear-gradient(90deg, #0088cc, #00a2e8);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-        
-        .content {
-            padding: 25px;
-        }
-        
-        .user-info {
-            background: #f0f8ff;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-            border-left: 4px solid #0088cc;
-        }
-        
-        .user-info h3 {
-            color: #0088cc;
-            margin-bottom: 10px;
-        }
-        
-        .coins-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(90deg, #ffd700, #ffed4e);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
-        }
-        
-        .coins-display h3 {
-            color: #b8860b;
-        }
-        
-        .coins-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #b8860b;
-        }
-        
-        .ad-section {
-            margin-bottom: 30px;
-        }
-        
-        .ad-section h2 {
-            color: #0088cc;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .ad-buttons {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        
-        @media (min-width: 600px) {
-            .ad-buttons {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        .ad-button {
-            background: linear-gradient(90deg, #34c759, #30d158);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3);
-        }
-        
-        .ad-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(52, 199, 89, 0.4);
-        }
-        
-        .ad-button:active {
-            transform: translateY(1px);
-        }
-        
-        .ad-button.rewarded {
-            background: linear-gradient(90deg, #ff9500, #ffaa33);
-            box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3);
-        }
-        
-        .ad-button.rewarded:hover {
-            box-shadow: 0 6px 15px rgba(255, 149, 0, 0.4);
-        }
-        
-        .ad-button.popup {
-            background: linear-gradient(90deg, #ff3b30, #ff625a);
-            box-shadow: 0 4px 10px rgba(255, 59, 48, 0.3);
-        }
-        
-        .ad-button.popup:hover {
-            box-shadow: 0 6px 15px rgba(255, 59, 48, 0.4);
-        }
-        
-        .ad-button i {
-            font-size: 20px;
-        }
-        
-        .instructions {
-            background: #f9f9f9;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 4px solid #34c759;
-        }
-        
-        .instructions h3 {
-            color: #34c759;
-            margin-bottom: 10px;
-        }
-        
-        .instructions ul {
-            padding-left: 20px;
-        }
-        
-        .instructions li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-        
-        .status {
-            text-align: center;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 12px;
-            background: #f0f8ff;
-            font-weight: bold;
-            color: #0088cc;
-            display: none;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #f0f0f0;
-        }
-        
-        .telegram-button {
-            background: #0088cc;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .telegram-button:hover {
-            background: #0077b3;
-            transform: translateY(-2px);
-        }
+        /* Aapke diye hue CSS styles yahan hain */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.95); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); overflow: hidden; }
+        header { background: linear-gradient(90deg, #0088cc, #00a2e8); color: white; padding: 20px; text-align: center; }
+        header h1 { font-size: 24px; margin-bottom: 10px; }
+        header p { opacity: 0.9; font-size: 14px; }
+        .content { padding: 25px; }
+        .user-info { background: #f0f8ff; border-radius: 12px; padding: 15px; margin-bottom: 25px; border-left: 4px solid #0088cc; }
+        .user-info h3 { color: #0088cc; margin-bottom: 10px; }
+        .coins-display { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(90deg, #ffd700, #ffed4e); border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3); }
+        .coins-display h3 { color: #b8860b; }
+        .coins-value { font-size: 28px; font-weight: bold; color: #b8860b; }
+        .ad-section { margin-bottom: 30px; }
+        .ad-section h2 { color: #0088cc; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; }
+        .ad-buttons { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 600px) { .ad-buttons { grid-template-columns: 1fr 1fr; } }
+        .ad-button { background: linear-gradient(90deg, #34c759, #30d158); color: white; border: none; border-radius: 12px; padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3); }
+        .ad-button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(52, 199, 89, 0.4); }
+        .ad-button:active { transform: translateY(1px); }
+        .ad-button.rewarded { background: linear-gradient(90deg, #ff9500, #ffaa33); box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3); }
+        .ad-button.rewarded:hover { box-shadow: 0 6px 15px rgba(255, 149, 0, 0.4); }
+        .ad-button.popup { background: linear-gradient(90deg, #ff3b30, #ff625a); box-shadow: 0 4px 10px rgba(255, 59, 48, 0.3); }
+        .ad-button.popup:hover { box-shadow: 0 6px 15px rgba(255, 59, 48, 0.4); }
+        .ad-button i { font-size: 20px; }
+        .instructions { background: #f9f9f9; border-radius: 12px; padding: 20px; margin-top: 20px; border-left: 4px solid #34c759; }
+        .instructions h3 { color: #34c759; margin-bottom: 10px; }
+        .instructions ul { padding-left: 20px; }
+        .instructions li { margin-bottom: 8px; line-height: 1.5; }
+        .status { text-align: center; padding: 15px; margin-top: 20px; border-radius: 12px; background: #f0f8ff; font-weight: bold; color: #0088cc; display: none; }
+        footer { text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #f0f0f0; }
+        .telegram-button { background: #0088cc; color: white; border: none; border-radius: 50px; padding: 12px 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: all 0.3s ease; }
+        .telegram-button:hover { background: #0077b3; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -227,7 +53,7 @@
         <div class="content">
             <div class="user-info">
                 <h3>User Information</h3>
-                <p id="user-data">Loading user data from Telegram...</p>
+                <p id="user-data">Loading user data...</p>
             </div>
             
             <div class="coins-display">
@@ -248,7 +74,7 @@
                         <i>📱</i> In-App Interstitial
                     </button>
                     <button class="ad-button popup" id="popup-ad">
-                        <i>🔔</i> Popup Ad (Standard Popunder)
+                        <i>🔔</i> Popup Ad (Standard)
                     </button>
                 </div>
             </div>
@@ -257,9 +83,9 @@
                 <h3>How it works:</h3>
                 <ul>
                     <li><strong>Rewarded Interstitial:</strong> Watch a full-screen ad and earn 25 coins</li>
-                    <li><strong>Rewarded Popup:</strong> Go to an offer in a new tab and earn 50 coins</li>
-                    <li><strong>In-App Interstitial:</strong> Automatic ad that appears during app usage (No Reward)</li>
-                    <li><strong>Popup Ad:</strong> Simple popup ad (No Reward)</li>
+                    <li><strong>Rewarded Popup:</strong> Complete an offer in a new tab and earn 50 coins</li>
+                    <li><strong>In-App Interstitial:</strong> Automatic ad that appears during app usage</li>
+                    <li><strong>Popup Ad:</strong> Simple popup ad that earns 10 coins</li>
                 </ul>
             </div>
             
@@ -274,19 +100,30 @@
     </div>
 
     <script>
-        // Monetag Zone ID (Aapki ID)
+        // Monetag Zone ID
         const MONETAG_ZONE_ID = 9973247;
         
-        // Telegram Web App Initialization
+        // Telegram Initialization (Safe Check Lagaya gaya hai)
         const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.enableClosingConfirmation();
-        tg.ready();
+        let userId = 'unknown'; // Testing ke liye default ID
         
-        // User Info and Coins Display (Code wahi hai)
-        document.getElementById('user-data').textContent = 
-            `Hello, ${tg.initDataUnsafe.user?.first_name || 'User'}! (ID: ${tg.initDataUnsafe.user?.id || 'Unknown'})`;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            // Agar Telegram ke andar khula hai
+            tg.expand();
+            tg.enableClosingConfirmation();
+            tg.ready();
+            
+            userId = tg.initDataUnsafe.user.id || 'unknown';
+
+            document.getElementById('user-data').textContent = 
+                `Hello, ${tg.initDataUnsafe.user.first_name || 'User'}! (ID: ${userId})`;
+        } else {
+            // Agar seedhe browser mein khula hai (Error se bachne ke liye)
+            document.getElementById('user-data').textContent = 
+                `Hello, Browser Tester! (ID: Unknown - Telegram not initialized)`;
+        }
         
+        // Coins Logic
         let coins = localStorage.getItem('userCoins') ? parseInt(localStorage.getItem('userCoins')) : 100;
         updateCoinsDisplay();
         
@@ -309,82 +146,96 @@
         
         // Expand button functionality
         document.getElementById('expand-button').addEventListener('click', function() {
-            tg.expand();
-            showStatus('App expanded!', 'success');
+            if (tg && tg.expand) {
+                tg.expand();
+                showStatus('App expanded!', 'success');
+            } else {
+                 showStatus('Can only expand inside Telegram.', 'info');
+            }
         });
         
         // =========================================================================
-        // Monetag Ads Integration (Asli Function Calls)
+        // Monetag Ads Integration (Fixed Direct Function Calls)
         // =========================================================================
-        
-        // Function reference for Monetag SDK (show_9973247)
+
+        // Common function for Monetag SDK (show_9973247)
         const showMonetagAd = window[`show_${MONETAG_ZONE_ID}`];
 
-        // 1. Rewarded Popup
+        // 1. Rewarded Popup Button (Main Target)
         document.getElementById('rewarded-popup').addEventListener('click', function() {
             showStatus('Rewarded Popup Loading...', 'info');
 
-            showMonetagAd({ type: 'pop', ymid: tg.initDataUnsafe.user?.id || 'unknown' })
-            .then(() => {
-                // Success: Popup successfully opened (reward given immediately for 'pop')
-                const rewardAmount = 50;
-                coins += rewardAmount;
-                updateCoinsDisplay();
-                showStatus(`Rewarded Popup success! You earned ${rewardAmount} coins!`, 'success');
-            })
-            .catch((error) => {
-                // Failure: Ad was blocked or failed to load
-                console.error('Ad failed:', error);
-                showStatus('Ad was blocked or failed to load. Please try again.', 'info');
-            });
+            if (typeof showMonetagAd === 'function') {
+                showMonetagAd({ type: 'pop', ymid: userId }) 
+                .then(() => {
+                    const rewardAmount = 50;
+                    coins += rewardAmount;
+                    updateCoinsDisplay();
+                    showStatus(`Rewarded Popup success! You earned ${rewardAmount} coins!`, 'success');
+                })
+                .catch((error) => {
+                    console.error('Ad failed:', error);
+                    showStatus('Ad was blocked or failed to load. Please try again.', 'info');
+                });
+            } else {
+                 showStatus('Monetag SDK not loaded. Check connection or Zone ID.', 'error');
+            }
         });
 
         // 2. Rewarded Interstitial
         document.getElementById('rewarded-interstitial').addEventListener('click', function() {
             showStatus('Rewarded Interstitial Loading...', 'info');
             
-            showMonetagAd({ type: 'int', ymid: tg.initDataUnsafe.user?.id || 'unknown' }) 
-            .then(() => {
-                // Success: Ad has finished/closed
-                const rewardAmount = 25;
-                coins += rewardAmount;
-                updateCoinsDisplay();
-                showStatus(`Rewarded Interstitial completed! You earned ${rewardAmount} coins!`, 'success');
-            })
-            .catch((error) => {
-                showStatus('Ad was skipped or failed to load.', 'info');
-            });
+            if (typeof showMonetagAd === 'function') {
+                showMonetagAd({ type: 'int', ymid: userId }) 
+                .then(() => {
+                    const rewardAmount = 25;
+                    coins += rewardAmount;
+                    updateCoinsDisplay();
+                    showStatus(`Rewarded Interstitial completed! You earned ${rewardAmount} coins!`, 'success');
+                })
+                .catch((error) => {
+                    showStatus('Ad was skipped or failed to load.', 'info');
+                });
+            } else {
+                 showStatus('Monetag SDK not loaded.', 'error');
+            }
         });
 
-        // 3. In-App Interstitial (Manual Trigger - No Reward Logic needed)
+        // 3. In-App Interstitial (Manual Trigger)
         document.getElementById('inapp-interstitial').addEventListener('click', function() {
             showStatus('In-App Interstitial Loading (No Reward)...', 'info');
             
-            // This is a standard ad, not rewarded
-            showMonetagAd({ type: 'int' }) 
-            .then(() => {
-                showStatus('In-App Interstitial shown.', 'info');
-            })
-            .catch(() => {
-                showStatus('Ad failed to load.', 'info');
-            });
+            if (typeof showMonetagAd === 'function') {
+                showMonetagAd({ type: 'int' }) 
+                .then(() => {
+                    showStatus('In-App Interstitial shown.', 'info');
+                })
+                .catch(() => {
+                    showStatus('Ad failed to load.', 'info');
+                });
+            } else {
+                 showStatus('Monetag SDK not loaded.', 'error');
+            }
         });
-
-        // 4. Standard Popunder (Popup Ad)
+        
+        // 4. Standard Popunder
         document.getElementById('popup-ad').addEventListener('click', function() {
             showStatus('Standard Popunder Loading (No Reward)...', 'info');
             
-            // Standard Popunder
-            showMonetagAd({ type: 'pop' }) 
-            .then(() => {
-                 showStatus('Standard Popunder shown.', 'info');
-            })
-            .catch(() => {
-                showStatus('Ad failed to load.', 'info');
-            });
+            if (typeof showMonetagAd === 'function') {
+                showMonetagAd({ type: 'pop' }) 
+                .then(() => {
+                     showStatus('Standard Popunder shown.', 'info');
+                })
+                .catch(() => {
+                    showStatus('Ad failed to load.', 'info');
+                });
+            } else {
+                 showStatus('Monetag SDK not loaded.', 'error');
+            }
         });
         
     </script>
 </body>
 </html>
-
