@@ -1,195 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
+<head>
+    <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="9973247"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatCoin Miner</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <title>Telegram Web App with Monetag Ads (Fixed)</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* CSS styles wahi hain jo aapne diye the */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            touch-action: manipulation; /* Prevents double-tap zoom on mobile */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .coin {
-            transition: transform 0.1s ease-out;
-            filter: drop-shadow(0 10px 15px rgba(255, 215, 0, 0.4));
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
-        .coin:active {
-            transform: scale(0.95);
-        }
-        .float-text {
-            animation: floatUp 1s ease-out forwards;
-            position: absolute;
-            font-weight: bold;
-            font-size: 2rem;
+        
+        header {
+            background: linear-gradient(90deg, #0088cc, #00a2e8);
             color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            pointer-events: none;
-            opacity: 1;
+            padding: 20px;
+            text-align: center;
         }
-        @keyframes floatUp {
-            from {
-                transform: translateY(0);
-                opacity: 1;
+        
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .user-info {
+            background: #f0f8ff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid #0088cc;
+        }
+        
+        .user-info h3 {
+            color: #0088cc;
+            margin-bottom: 10px;
+        }
+        
+        .coins-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .coins-display h3 {
+            color: #b8860b;
+        }
+        
+        .coins-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #b8860b;
+        }
+        
+        .ad-section {
+            margin-bottom: 30px;
+        }
+        
+        .ad-section h2 {
+            color: #0088cc;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .ad-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        @media (min-width: 600px) {
+            .ad-buttons {
+                grid-template-columns: 1fr 1fr;
             }
-            to {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
+        }
+        
+        .ad-button {
+            background: linear-gradient(90deg, #34c759, #30d158);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3);
+        }
+        
+        .ad-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(52, 199, 89, 0.4);
+        }
+        
+        .ad-button:active {
+            transform: translateY(1px);
+        }
+        
+        .ad-button.rewarded {
+            background: linear-gradient(90deg, #ff9500, #ffaa33);
+            box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3);
+        }
+        
+        .ad-button.rewarded:hover {
+            box-shadow: 0 6px 15px rgba(255, 149, 0, 0.4);
+        }
+        
+        .ad-button.popup {
+            background: linear-gradient(90deg, #ff3b30, #ff625a);
+            box-shadow: 0 4px 10px rgba(255, 59, 48, 0.3);
+        }
+        
+        .ad-button.popup:hover {
+            box-shadow: 0 6px 15px rgba(255, 59, 48, 0.4);
+        }
+        
+        .ad-button i {
+            font-size: 20px;
+        }
+        
+        .instructions {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #34c759;
+        }
+        
+        .instructions h3 {
+            color: #34c759;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 12px;
+            background: #f0f8ff;
+            font-weight: bold;
+            color: #0088cc;
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .telegram-button {
+            background: #0088cc;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .telegram-button:hover {
+            background: #0077b3;
+            transform: translateY(-2px);
         }
     </style>
-</head><script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
-<body class="bg-gray-900 text-white flex flex-col h-screen antialiased">
-
-    <!-- App Container -->
-    <div class="flex-grow flex flex-col items-center justify-between p-4 max-w-md mx-auto w-full">
-
-        <!-- Header -->
-        <header class="w-full flex justify-between items-center p-2 rounded-xl bg-gray-800/50">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-400">John Doe</p>
-                    <p class="font-bold text-lg">CatCoin</p>
-                </div>
-            </div>
-            <button class="p-2 rounded-full hover:bg-gray-700">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            </button>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Telegram Rewards App</h1>
+            <p>Watch ads and earn coins in this Telegram Web App</p>
         </header>
-
-        <!-- Main Balance -->
-        <div class="text-center my-4">
-            <p class="text-gray-400 text-sm">Your Balance</p>
-            <div class="flex items-center justify-center space-x-2">
-                 <span class="text-3xl">🐈</span>
-                 <h1 id="balance" class="text-5xl font-black tracking-tighter">00</h1>
+        
+        <div class="content">
+            <div class="user-info">
+                <h3>User Information</h3>
+                <p id="user-data">Loading user data from Telegram...</p>
             </div>
+            
+            <div class="coins-display">
+                <h3>Your Coins</h3>
+                <div class="coins-value" id="coins">100</div>
+            </div>
+            
+            <div class="ad-section">
+                <h2>Rewarded Ads</h2>
+                <div class="ad-buttons">
+                    <button class="ad-button rewarded" id="rewarded-interstitial">
+                        <i>💰</i> Rewarded Interstitial
+                    </button>
+                    <button class="ad-button rewarded" id="rewarded-popup">
+                        <i>🪙</i> Rewarded Popup
+                    </button>
+                    <button class="ad-button" id="inapp-interstitial">
+                        <i>📱</i> In-App Interstitial
+                    </button>
+                    <button class="ad-button popup" id="popup-ad">
+                        <i>🔔</i> Popup Ad (Standard Popunder)
+                    </button>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How it works:</h3>
+                <ul>
+                    <li><strong>Rewarded Interstitial:</strong> Watch a full-screen ad and earn 25 coins</li>
+                    <li><strong>Rewarded Popup:</strong> Go to an offer in a new tab and earn 50 coins</li>
+                    <li><strong>In-App Interstitial:</strong> Automatic ad that appears during app usage (No Reward)</li>
+                    <li><strong>Popup Ad:</strong> Simple popup ad (No Reward)</li>
+                </ul>
+            </div>
+            
+            <div class="status" id="status-message"></div>
+            
+            <button class="telegram-button" id="expand-button">Expand App</button>
         </div>
         
-        <!-- Mining Coin -->
-        <div id="coin-container" class="relative flex items-center justify-center w-full">
-            <button id="coin" class="coin w-64 h-64 md:w-72 md:h-72 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center select-none">
-                <div class="w-56 h-56 md:w-64 md:h-64 rounded-full bg-gradient-to-tr from-yellow-300 via-yellow-400 to-orange-500 flex items-center justify-center shadow-inner">
-                    <span class="text-8xl select-none" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">&#128049;</span>
-                </div>
-            </button>
-        </div>
-
-        <!-- Energy/Limit -->
-        <div class="w-full p-4 mt-4">
-            <div class="flex justify-between items-center text-lg mb-2">
-                <span class="font-bold">⚡ Energy</span>
-                <span id="energy" class="font-bold">5000 / 5000</span>
-            </div>
-            <div class="w-full bg-gray-700 rounded-full h-4">
-                <div id="energy-bar" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-4 rounded-full" style="width: 100%"></div>
-            </div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="w-full bg-gray-800/50 rounded-2xl p-2 mt-4">
-            <div class="flex justify-around items-center">
-                <a href="#" class="flex flex-col items-center text-center p-2 rounded-lg bg-gray-700 text-cyan-400 w-1/4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                    <span class="text-xs font-medium">Home</span>
-                </a>
-                <a href="#" class="flex flex-col items-center text-gray-400 hover:text-white p-2 w-1/4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 006-6v-1a3 3 0 00-3-3H6a3 3 0 00-3 3v1a6 6 0 006 6z" /></svg>
-                    <span class="text-xs font-medium">Friends</span>
-                </a>
-                <a href="#" class="flex flex-col items-center text-gray-400 hover:text-white p-2 w-1/4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
-                    <span class="text-xs font-medium">Tasks</span>
-                </a>
-                 <a href="#" class="flex flex-col items-center text-gray-400 hover:text-white p-2 w-1/4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                    <span class="text-xs font-medium">Boost</span>
-                </a>
-            </div>
-        </nav>
+        <footer>
+            <p>Powered by Monetag SDK • Integrated with Telegram Web App</p>
+        </footer>
     </div>
 
     <script>
-        const coin = document.getElementById('coin');
-        const coinContainer = document.getElementById('coin-container');
-        const balanceDisplay = document.getElementById('balance');
-        const energyDisplay = document.getElementById('energy');
-        const energyBar = document.getElementById('energy-bar');
-
-        let balance = 1234567;
-        let energy = 5000;
-        const maxEnergy = 5000;
-        const clickValue = 11; // Amount gained per click
-
-        // Format numbers with commas
-        const formatNumber = (num) => num.toLocaleString();
+        // Monetag Zone ID (Aapki ID)
+        const MONETAG_ZONE_ID = 9973247;
         
-        balanceDisplay.innerText = formatNumber(balance);
-        energyDisplay.innerText = `${energy} / ${maxEnergy}`;
-
-        // Function to handle the coin click
-        const handleCoinClick = (event) => {
-            if (energy >= clickValue) {
-                balance += clickValue;
-                energy -= clickValue;
-                
-                balanceDisplay.innerText = formatNumber(balance);
-                updateEnergy();
-
-                // Show floating text
-                const x = event.clientX || event.touches[0].clientX;
-                const y = event.clientY || event.touches[0].clientY;
-
-                const floatText = document.createElement('div');
-                floatText.className = 'float-text';
-                floatText.innerText = `+${clickValue}`;
-                floatText.style.left = `${x}px`;
-                floatText.style.top = `${y}px`;
-                
-                document.body.appendChild(floatText);
-
-                setTimeout(() => {
-                    floatText.remove();
-                }, 1000);
-            } else {
-                // Optional: show a "not enough energy" message
-                console.log("Not enough energy!");
-            }
-        };
-
-        const updateEnergy = () => {
-             energyDisplay.innerText = `${energy} / ${maxEnergy}`;
-             const percentage = (energy / maxEnergy) * 100;
-             energyBar.style.width = `${percentage}%`;
+        // Telegram Web App Initialization
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+        tg.ready();
+        
+        // User Info and Coins Display (Code wahi hai)
+        document.getElementById('user-data').textContent = 
+            `Hello, ${tg.initDataUnsafe.user?.first_name || 'User'}! (ID: ${tg.initDataUnsafe.user?.id || 'Unknown'})`;
+        
+        let coins = localStorage.getItem('userCoins') ? parseInt(localStorage.getItem('userCoins')) : 100;
+        updateCoinsDisplay();
+        
+        function updateCoinsDisplay() {
+            document.getElementById('coins').textContent = coins;
+            localStorage.setItem('userCoins', coins);
         }
+        
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status-message');
+            statusEl.textContent = message;
+            statusEl.style.display = 'block';
+            statusEl.style.background = type === 'success' ? '#e6f4ea' : '#f0f8ff';
+            statusEl.style.color = type === 'success' ? '#137333' : '#0088cc';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Expand button functionality
+        document.getElementById('expand-button').addEventListener('click', function() {
+            tg.expand();
+            showStatus('App expanded!', 'success');
+        });
+        
+        // =========================================================================
+        // Monetag Ads Integration (Asli Function Calls)
+        // =========================================================================
+        
+        // Function reference for Monetag SDK (show_9973247)
+        const showMonetagAd = window[`show_${MONETAG_ZONE_ID}`];
 
-        // Add event listeners for both mouse and touch
-        coin.addEventListener('mousedown', handleCoinClick);
-        coin.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // prevent mouse event from firing
-            handleCoinClick(e);
+        // 1. Rewarded Popup
+        document.getElementById('rewarded-popup').addEventListener('click', function() {
+            showStatus('Rewarded Popup Loading...', 'info');
+
+            showMonetagAd({ type: 'pop', ymid: tg.initDataUnsafe.user?.id || 'unknown' })
+            .then(() => {
+                // Success: Popup successfully opened (reward given immediately for 'pop')
+                const rewardAmount = 50;
+                coins += rewardAmount;
+                updateCoinsDisplay();
+                showStatus(`Rewarded Popup success! You earned ${rewardAmount} coins!`, 'success');
+            })
+            .catch((error) => {
+                // Failure: Ad was blocked or failed to load
+                console.error('Ad failed:', error);
+                showStatus('Ad was blocked or failed to load. Please try again.', 'info');
+            });
         });
 
-        // Regenerate energy over time
-        setInterval(() => {
-            if (energy < maxEnergy) {
-                energy = Math.min(maxEnergy, energy + 5); // Regenerate 5 energy per second
-                updateEnergy();
-            }
-        }, 1000);
-    </script> <script>(function(s){s.dataset.zone='9948210',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</body><script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
+        // 2. Rewarded Interstitial
+        document.getElementById('rewarded-interstitial').addEventListener('click', function() {
+            showStatus('Rewarded Interstitial Loading...', 'info');
+            
+            showMonetagAd({ type: 'int', ymid: tg.initDataUnsafe.user?.id || 'unknown' }) 
+            .then(() => {
+                // Success: Ad has finished/closed
+                const rewardAmount = 25;
+                coins += rewardAmount;
+                updateCoinsDisplay();
+                showStatus(`Rewarded Interstitial completed! You earned ${rewardAmount} coins!`, 'success');
+            })
+            .catch((error) => {
+                showStatus('Ad was skipped or failed to load.', 'info');
+            });
+        });
+
+        // 3. In-App Interstitial (Manual Trigger - No Reward Logic needed)
+        document.getElementById('inapp-interstitial').addEventListener('click', function() {
+            showStatus('In-App Interstitial Loading (No Reward)...', 'info');
+            
+            // This is a standard ad, not rewarded
+            showMonetagAd({ type: 'int' }) 
+            .then(() => {
+                showStatus('In-App Interstitial shown.', 'info');
+            })
+            .catch(() => {
+                showStatus('Ad failed to load.', 'info');
+            });
+        });
+
+        // 4. Standard Popunder (Popup Ad)
+        document.getElementById('popup-ad').addEventListener('click', function() {
+            showStatus('Standard Popunder Loading (No Reward)...', 'info');
+            
+            // Standard Popunder
+            showMonetagAd({ type: 'pop' }) 
+            .then(() => {
+                 showStatus('Standard Popunder shown.', 'info');
+            })
+            .catch(() => {
+                showStatus('Ad failed to load.', 'info');
+            });
+        });
+        
+    </script>
+</body>
 </html>
-
-
-
-
