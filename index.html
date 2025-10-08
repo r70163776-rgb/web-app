@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="9973247"></script>
+    <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="3062791"></script>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,7 +101,7 @@
 
     <script>
         // Monetag Zone ID
-        const MONETAG_ZONE_ID = 9973247;
+        const MONETAG_ZONE_ID =3062791;
         
         // Telegram Initialization (Safe Check Lagaya gaya hai)
         const tg = window.Telegram.WebApp;
@@ -158,7 +158,7 @@
         // Monetag Ads Integration (Fixed Direct Function Calls)
         // =========================================================================
 
-        // Common function for Monetag SDK (show_9973247)
+        // Common function for Monetag SDK (show_ 3062791)
         const showMonetagAd = window[`show_${MONETAG_ZONE_ID}`];
 
 // 1. Rewarded Popup Button (Final Fix with Safety Delay)
@@ -167,7 +167,7 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
 
     // 500ms (Aadha Second) ka intezaar karein taa ke SDK load ho jaye
     setTimeout(() => {
-        const showMonetagAd = window[`show_${MONETAG_ZONE_ID}`];
+        const showMonetagAd = window[`show_${3062791}`];
 
         if (typeof showMonetagAd === 'function') {
             showMonetagAd({ type: 'pop', ymid: userId }) 
@@ -184,7 +184,7 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
             });
         } else {
              // Agar SDK 500ms mein bhi load nahi hua
-             showStatus('Monetag SDK not ready after delay. Check your connection or Zone ID.', 'error');
+             showStatus('Monetag SDK not ready after delay. Check your connection or Zone ID 3062791);
         }
     }, 500); // 500 milliseconds ka delay
 });
@@ -254,4 +254,5 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
     </script>
 </body>
 </html>
+
 
