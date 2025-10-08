@@ -161,18 +161,33 @@
         // Common function for Monetag SDK (show_9973247)
         const showMonetagAd = window[`show_${MONETAG_ZONE_ID}`];
 
-        // 1. Rewarded Popup Button (Main Target)
-        document.getElementById('rewarded-popup').addEventListener('click', function() {
-            showStatus('Rewarded Popup Loading...', 'info');
+// 1. Rewarded Popup Button (Final Fix with Safety Delay)
+document.getElementById('rewarded-popup').addEventListener('click', function() {
+    showStatus('Rewarded Popup Loading...', 'info');
 
-            if (typeof showMonetagAd === 'function') {
-                showMonetagAd({ type: 'pop', ymid: userId }) 
-                .then(() => {
-                    const rewardAmount = 50;
-                    coins += rewardAmount;
-                    updateCoinsDisplay();
-                    showStatus(`Rewarded Popup success! You earned ${rewardAmount} coins!`, 'success');
-                })
+    // 500ms (Aadha Second) ka intezaar karein taa ke SDK load ho jaye
+    setTimeout(() => {
+        const showMonetagAd = window[`show_${MONETAG_ZONE_ID}`];
+
+        if (typeof showMonetagAd === 'function') {
+            showMonetagAd({ type: 'pop', ymid: userId }) 
+            .then(() => {
+                // SUCCESS: Popup successfully opened
+                const rewardAmount = 50;
+                coins += rewardAmount;
+                updateCoinsDisplay();
+                showStatus(`Rewarded Popup success! You earned ${rewardAmount} coins!`, 'success');
+            })
+            .catch((error) => {
+                console.error('Ad failed:', error);
+                showStatus('Ad was blocked or failed to load. Please try again.', 'info');
+            });
+        } else {
+             // Agar SDK 500ms mein bhi load nahi hua
+             showStatus('Monetag SDK not ready after delay. Check your connection or Zone ID.', 'error');
+        }
+    }, 500); // 500 milliseconds ka delay
+});
                 .catch((error) => {
                     console.error('Ad failed:', error);
                     showStatus('Ad was blocked or failed to load. Please try again.', 'info');
@@ -239,3 +254,4 @@
     </script>
 </body>
 </html>
+
