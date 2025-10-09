@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="3062791"></script>
+    <script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -159,7 +160,7 @@
         // =========================================================================
 
         // Common function for Monetag SDK (show_ 3062791)
-        const showMonetagAd = window[`show_${MONETAG_ZONE_ID}`];
+        const showMonetagAd = window[`show_${3062791}`];
 
 // 1. Rewarded Popup Button (Final Fix with Safety Delay)
 document.getElementById('rewarded-popup').addEventListener('click', function() {
@@ -184,7 +185,7 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
             });
         } else {
              // Agar SDK 500ms mein bhi load nahi hua
-             showStatus('Monetag SDK not ready after delay. Check your connection or Zone ID 3062791);
+             showStatus('  <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="3062791"></script>);
         }
     }, 500); // 500 milliseconds ka delay
 });
@@ -193,7 +194,7 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
                     showStatus('Ad was blocked or failed to load. Please try again.', 'info');
                 });
             } else {
-                 showStatus('Monetag SDK not loaded. Check connection or Zone ID.', 'error');
+                 showStatus('<script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>.', 'error');
             }
         });
 
@@ -213,7 +214,7 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
                     showStatus('Ad was skipped or failed to load.', 'info');
                 });
             } else {
-                 showStatus('Monetag SDK not loaded.', 'error');
+                 showStatus('  <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="3062791"></script>.', 'error');
             }
         });
 
@@ -227,10 +228,10 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
                     showStatus('In-App Interstitial shown.', 'info');
                 })
                 .catch(() => {
-                    showStatus('Ad failed to load.', 'info');
+                    showStatus('Ad run to load.', 'info');
                 });
             } else {
-                 showStatus('Monetag SDK not loaded.', 'error');
+                 showStatus('<script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>.', 'error');
             }
         });
         
@@ -251,8 +252,9 @@ document.getElementById('rewarded-popup').addEventListener('click', function() {
             }
         });
         
-    </script>
+    </script><script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>
 </body>
 </html>
+
 
 
