@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
+<head><script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Miner - With Ad Integration</title>
+    <title>Crypto Miner - Multiple Ad Types</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -298,6 +297,19 @@
             background: linear-gradient(135deg, #4ade80, #22c55e);
         }
 
+        .ad-task {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .ad-task .task-icon {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+
+        .ad-task .task-reward {
+            color: #FFD700;
+        }
+
         .navigation {
             display: flex;
             justify-content: space-around;
@@ -414,20 +426,7 @@
             margin-top: 4px;
         }
 
-        .ad-task {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .ad-task .task-icon {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-        }
-
-        .ad-task .task-reward {
-            color: #FFD700;
-        }
-
-        .ad-container {
+        .ad-center {
             margin-top: 20px;
             padding: 15px;
             background: rgba(0, 0, 0, 0.2);
@@ -435,54 +434,196 @@
             text-align: center;
         }
 
-        .ad-label {
-            font-size: 12px;
-            opacity: 0.7;
-            margin-bottom: 10px;
-        }
-
-        .ad-placeholder {
-            width: 100%;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+        .ad-center-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            gap: 8px;
+            color: #FFD700;
         }
 
-        .ad-icon {
-            font-size: 24px;
+        .ad-types {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ad-type {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .ad-type-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ad-type-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .ad-type-text {
+            text-align: left;
+        }
+
+        .ad-type-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ad-type-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .ad-type-reward {
+            font-size: 14px;
+            font-weight: 600;
             color: #FFD700;
             margin-bottom: 5px;
-        }
-
-        .ad-text {
-            font-size: 14px;
-            color: #FFD700;
         }
 
         .watch-ad-btn {
             background: linear-gradient(135deg, #FFD700, #FFA500);
             border: none;
             color: #000;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 12px;
         }
 
         .watch-ad-btn:active {
             transform: scale(0.95);
         }
 
+        .watch-ad-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .ad-timer {
-            font-size: 12px;
-            margin-top: 8px;
+            font-size: 11px;
+            margin-top: 5px;
             opacity: 0.7;
+        }
+
+        .ad-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .ad-popup-content {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .ad-popup-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        .ad-popup-desc {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .ad-popup-reward {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4cc9f0;
+            margin-bottom: 20px;
+        }
+
+        .ad-popup-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .ad-popup-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .ad-popup-btn.primary {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .ad-popup-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .ad-popup-btn:active {
+            transform: scale(0.95);
+        }
+
+        .ad-popup-ad {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .ad-popup-ad-icon {
+            font-size: 40px;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .ad-popup-ad-text {
+            font-size: 16px;
+            color: #FFD700;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -613,7 +754,7 @@
                             <i class="fas fa-tv"></i>
                         </div>
                         <div>
-                            <div class="task-text">Watch an ad</div>
+                            <div class="task-text">Watch a Rewarded Ad</div>
                             <div class="progress-bar">
                                 <div class="progress-fill" id="task-3-progress"></div>
                             </div>
@@ -622,34 +763,58 @@
                     </div>
                     <div class="task-reward">+150 coins</div>
                 </div>
-                <div class="task-item" id="task-4">
-                    <div class="task-info">
-                        <div class="task-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div>
-                            <div class="task-text">Join our channel</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="task-4-progress"></div>
-                            </div>
-                            <div class="task-progress" id="task-4-text">0/1</div>
-                        </div>
-                    </div>
-                    <div class="task-reward">+200 coins</div>
-                </div>
             </div>
 
-            <!-- AdMonetag Ad Container -->
-            <div class="ad-container">
-                <div class="ad-label">Sponsored Content</div>
-                <div class="ad-placeholder">
-                    <div class="ad-icon">
-                        <i class="fas fa-ad"></i>
-                    </div>
-                    <div class="ad-text">AdMonetag Ad</div>
+            <!-- Ad Center with Multiple Ad Types -->
+            <div class="ad-center">
+                <div class="ad-center-title">
+                    <i class="fas fa-ad"></i>
+                    AD CENTER
                 </div>
-                <button class="watch-ad-btn" id="watch-ad-btn">Watch Ad for 2x Coins (30 min)</button>
-                <div class="ad-timer" id="ad-timer">Next ad available</div>
+                <div class="ad-types">
+                    <div class="ad-type">
+                        <div class="ad-type-info">
+                            <div class="ad-type-icon">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <div class="ad-type-text">
+                                <div class="ad-type-name">Rewarded Interstitial</div>
+                                <div class="ad-type-desc">Watch a full-screen video ad</div>
+                                <div class="ad-type-reward">Reward: 200 coins</div>
+                                <div class="ad-timer" id="interstitial-timer">Available now</div>
+                            </div>
+                        </div>
+                        <button class="watch-ad-btn" id="watch-interstitial-btn">Watch Ad</button>
+                    </div>
+                    <div class="ad-type">
+                        <div class="ad-type-info">
+                            <div class="ad-type-icon">
+                                <i class="fas fa-window-restore"></i>
+                            </div>
+                            <div class="ad-type-text">
+                                <div class="ad-type-name">Rewarded Popup</div>
+                                <div class="ad-type-desc">Watch a popup video ad</div>
+                                <div class="ad-type-reward">Reward: 150 coins</div>
+                                <div class="ad-timer" id="popup-timer">Available now</div>
+                            </div>
+                        </div>
+                        <button class="watch-ad-btn" id="watch-popup-btn">Watch Ad</button>
+                    </div>
+                    <div class="ad-type">
+                        <div class="ad-type-info">
+                            <div class="ad-type-icon">
+                                <i class="fas fa-square"></i>
+                            </div>
+                            <div class="ad-type-text">
+                                <div class="ad-type-name">In-app Interstitial</div>
+                                <div class="ad-type-desc">Watch an interstitial ad</div>
+                                <div class="ad-type-reward">Reward: 100 coins</div>
+                                <div class="ad-timer" id="inapp-timer">Available now</div>
+                            </div>
+                        </div>
+                        <button class="watch-ad-btn" id="watch-inapp-btn">Watch Ad</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -681,6 +846,25 @@
         </div>
     </div>
 
+    <!-- Ad Popup -->
+    <div class="ad-popup hidden" id="ad-popup">
+        <div class="ad-popup-content">
+            <div class="ad-popup-title" id="ad-popup-title">Watch Ad for Rewards</div>
+            <div class="ad-popup-desc" id="ad-popup-desc">Watch this ad to earn coins</div>
+            <div class="ad-popup-ad">
+                <div class="ad-popup-ad-icon">
+                    <i class="fas fa-ad"></i>
+                </div>
+                <div class="ad-popup-ad-text">AdMonetag Ad</div>
+            </div>
+            <div class="ad-popup-reward" id="ad-popup-reward">Reward: 100 coins</div>
+            <div class="ad-popup-buttons">
+                <button class="ad-popup-btn secondary" id="ad-popup-close">Close</button>
+                <button class="ad-popup-btn primary" id="ad-popup-watch">Watch Ad</button>
+            </div>
+        </div>
+    </div>
+
     <div class="notification" id="notification">
         +1 coin mined!
     </div>
@@ -700,13 +884,14 @@
             tasks: {
                 task1: { completed: false, progress: 0, target: 100, reward: 50 },
                 task2: { completed: false, progress: 0, target: 1, reward: 100 },
-                task3: { completed: false, progress: 0, target: 1, reward: 150 },
-                task4: { completed: false, progress: 0, target: 1, reward: 200 }
+                task3: { completed: false, progress: 0, target: 1, reward: 150 }
             },
             totalMined: 0,
-            adMultiplierActive: false,
-            adMultiplierExpires: 0,
-            lastAdWatch: 0
+            adCooldowns: {
+                interstitial: 0,
+                popup: 0,
+                inapp: 0
+            }
         };
 
         // Costs for upgrades
@@ -717,6 +902,16 @@
             multiplier: 1000
         };
 
+        // Ad rewards
+        const adRewards = {
+            interstitial: 200,
+            popup: 150,
+            inapp: 100
+        };
+
+        // Ad cooldowns in milliseconds (30 minutes)
+        const adCooldownTime = 30 * 60 * 1000;
+
         // DOM elements
         const balanceEl = document.getElementById('balance');
         const perTapEl = document.getElementById('per-tap');
@@ -726,8 +921,25 @@
         const mineButton = document.getElementById('mine-button');
         const notification = document.getElementById('notification');
         const particlesContainer = document.getElementById('particles-container');
-        const watchAdBtn = document.getElementById('watch-ad-btn');
-        const adTimer = document.getElementById('ad-timer');
+        const adPopup = document.getElementById('ad-popup');
+        const adPopupTitle = document.getElementById('ad-popup-title');
+        const adPopupDesc = document.getElementById('ad-popup-desc');
+        const adPopupReward = document.getElementById('ad-popup-reward');
+        const adPopupClose = document.getElementById('ad-popup-close');
+        const adPopupWatch = document.getElementById('ad-popup-watch');
+
+        // Ad buttons
+        const watchInterstitialBtn = document.getElementById('watch-interstitial-btn');
+        const watchPopupBtn = document.getElementById('watch-popup-btn');
+        const watchInappBtn = document.getElementById('watch-inapp-btn');
+
+        // Ad timers
+        const interstitialTimer = document.getElementById('interstitial-timer');
+        const popupTimer = document.getElementById('popup-timer');
+        const inappTimer = document.getElementById('inapp-timer');
+
+        // Current ad type being watched
+        let currentAdType = null;
 
         // Initialize Telegram Web App
         const tg = window.Telegram?.WebApp;
@@ -745,7 +957,7 @@
             }
             updateUI();
             updateTaskProgress();
-            updateAdButton();
+            updateAdButtons();
         }
 
         // Save game state
@@ -756,8 +968,8 @@
         // Update all UI elements
         function updateUI() {
             balanceEl.textContent = Math.floor(gameState.balance);
-            perTapEl.textContent = gameState.perTap * (gameState.adMultiplierActive ? 2 : 1);
-            perHourEl.textContent = gameState.perHour * (gameState.adMultiplierActive ? 2 : 1);
+            perTapEl.textContent = gameState.perTap;
+            perHourEl.textContent = gameState.perHour;
             energyEl.textContent = `${Math.floor(gameState.energy)}/${gameState.maxEnergy}`;
             energyFillEl.style.width = `${(gameState.energy / gameState.maxEnergy) * 100}%`;
             
@@ -766,15 +978,6 @@
             document.getElementById('energy-cost').textContent = `Cost: ${upgradeCosts.energy * gameState.energyLevel}`;
             document.getElementById('auto-cost').textContent = `Cost: ${upgradeCosts.auto * (gameState.autoLevel + 1)}`;
             document.getElementById('multiplier-cost').textContent = `Cost: ${upgradeCosts.multiplier * gameState.multiplierLevel}`;
-            
-            // Update ad multiplier status
-            if (gameState.adMultiplierActive) {
-                document.body.style.setProperty('--tg-theme-button-color', '#FFD700');
-                document.body.style.setProperty('--tg-theme-header-bg-color', '#3d2c01');
-            } else {
-                document.body.style.setProperty('--tg-theme-button-color', '#4cc9f0');
-                document.body.style.setProperty('--tg-theme-header-bg-color', '#0f3460');
-            }
         }
 
         // Update task progress bars and text
@@ -793,11 +996,6 @@
             const task3Progress = (gameState.tasks.task3.progress / gameState.tasks.task3.target) * 100;
             document.getElementById('task-3-progress').style.width = `${task3Progress}%`;
             document.getElementById('task-3-text').textContent = `${gameState.tasks.task3.progress}/${gameState.tasks.task3.target}`;
-            
-            // Task 4: Join channel
-            const task4Progress = (gameState.tasks.task4.progress / gameState.tasks.task4.target) * 100;
-            document.getElementById('task-4-progress').style.width = `${task4Progress}%`;
-            document.getElementById('task-4-text').textContent = `${gameState.tasks.task4.progress}/${gameState.tasks.task4.target}`;
             
             // Update task completion status
             updateTaskCompletionStatus();
@@ -825,40 +1023,32 @@
             } else {
                 document.getElementById('task-3').classList.remove('task-complete');
             }
-            
-            // Task 4
-            if (gameState.tasks.task4.completed) {
-                document.getElementById('task-4').classList.add('task-complete');
-            } else {
-                document.getElementById('task-4').classList.remove('task-complete');
-            }
         }
 
-        // Update ad button status
-        function updateAdButton() {
+        // Update ad buttons status
+        function updateAdButtons() {
             const now = Date.now();
-            const timeSinceLastAd = now - gameState.lastAdWatch;
-            const adCooldown = 30 * 60 * 1000; // 30 minutes in milliseconds
             
-            if (timeSinceLastAd < adCooldown) {
-                // Ad is on cooldown
-                const remainingTime = Math.ceil((adCooldown - timeSinceLastAd) / 1000 / 60);
-                adTimer.textContent = `Next ad available in ${remainingTime} minutes`;
-                watchAdBtn.disabled = true;
-                watchAdBtn.style.opacity = '0.5';
-            } else {
-                // Ad is available
-                adTimer.textContent = 'Ad available now!';
-                watchAdBtn.disabled = false;
-                watchAdBtn.style.opacity = '1';
-            }
-            
-            // Check if ad multiplier is active
-            if (gameState.adMultiplierActive && now > gameState.adMultiplierExpires) {
-                gameState.adMultiplierActive = false;
-                updateUI();
-                showNotification("2x coin boost has expired");
-            }
+            // Check each ad type
+            const adTypes = ['interstitial', 'popup', 'inapp'];
+            adTypes.forEach(type => {
+                const timeSinceLastAd = now - gameState.adCooldowns[type];
+                const button = document.getElementById(`watch-${type}-btn`);
+                const timer = document.getElementById(`${type}-timer`);
+                
+                if (timeSinceLastAd < adCooldownTime) {
+                    // Ad is on cooldown
+                    const remainingTime = Math.ceil((adCooldownTime - timeSinceLastAd) / 1000 / 60);
+                    timer.textContent = `Available in ${remainingTime} min`;
+                    button.disabled = true;
+                    button.style.opacity = '0.5';
+                } else {
+                    // Ad is available
+                    timer.textContent = 'Available now';
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                }
+            });
         }
 
         // Mine function
@@ -868,9 +1058,7 @@
                 return;
             }
             
-            const baseCoins = gameState.perTap * gameState.multiplierLevel;
-            const coinsEarned = gameState.adMultiplierActive ? baseCoins * 2 : baseCoins;
-            
+            const coinsEarned = gameState.perTap * gameState.multiplierLevel;
             gameState.balance += coinsEarned;
             gameState.energy -= 1;
             gameState.totalMined += coinsEarned;
@@ -911,43 +1099,84 @@
             saveGame();
         }
 
-        // Watch ad function
-        function watchAd() {
-            const now = Date.now();
-            const timeSinceLastAd = now - gameState.lastAdWatch;
-            const adCooldown = 30 * 60 * 1000; // 30 minutes in milliseconds
+        // Show ad popup
+        function showAdPopup(type) {
+            currentAdType = type;
             
-            if (timeSinceLastAd < adCooldown) {
-                showNotification(`Please wait ${Math.ceil((adCooldown - timeSinceLastAd) / 1000 / 60)} minutes before watching another ad`);
+            // Set popup content based on ad type
+            let title, desc, reward;
+            
+            switch(type) {
+                case 'interstitial':
+                    title = 'Rewarded Interstitial Ad';
+                    desc = 'Watch this full-screen video ad to earn coins';
+                    reward = adRewards.interstitial;
+                    break;
+                case 'popup':
+                    title = 'Rewarded Popup Ad';
+                    desc = 'Watch this popup video ad to earn coins';
+                    reward = adRewards.popup;
+                    break;
+                case 'inapp':
+                    title = 'In-app Interstitial Ad';
+                    desc = 'Watch this interstitial ad to earn coins';
+                    reward = adRewards.inapp;
+                    break;
+            }
+            
+            adPopupTitle.textContent = title;
+            adPopupDesc.textContent = desc;
+            adPopupReward.textContent = `Reward: ${reward} coins`;
+            
+            adPopup.classList.remove('hidden');
+        }
+
+        // Watch ad function
+        function watchAd(type) {
+            const now = Date.now();
+            const timeSinceLastAd = now - gameState.adCooldowns[type];
+            
+            if (timeSinceLastAd < adCooldownTime) {
+                showNotification(`Please wait ${Math.ceil((adCooldownTime - timeSinceLastAd) / 1000 / 60)} minutes before watching another ${type} ad`);
                 return;
             }
             
-            // Simulate ad loading and watching
-            showNotification("Loading ad...");
+            showAdPopup(type);
+        }
+
+        // Complete ad watching
+        function completeAd() {
+            if (!currentAdType) return;
             
-            setTimeout(() => {
-                // Simulate ad completion
-                showNotification("Ad completed! 2x coins activated for 30 minutes!");
-                
-                // Activate ad multiplier
-                gameState.adMultiplierActive = true;
-                gameState.adMultiplierExpires = now + (30 * 60 * 1000); // 30 minutes from now
-                gameState.lastAdWatch = now;
-                
-                // Complete the watch ad task
-                if (!gameState.tasks.task3.completed) {
-                    gameState.tasks.task3.progress = 1;
-                    completeTask('task3');
-                }
-                
-                updateUI();
-                updateAdButton();
-                saveGame();
-                
-                // In a real implementation, you would call AdMonetag's ad display function here
-                // For example: monetag_playAd('9973247');
-                
-            }, 2000);
+            const reward = adRewards[currentAdType];
+            
+            // Simulate ad completion
+            showNotification(`Ad completed! +${reward} coins earned!`);
+            
+            // Add reward to balance
+            gameState.balance += reward;
+            
+            // Set cooldown
+            gameState.adCooldowns[currentAdType] = Date.now();
+            
+            // Complete the watch ad task if it's the first time
+            if (!gameState.tasks.task3.completed && currentAdType === 'interstitial') {
+                gameState.tasks.task3.progress = 1;
+                completeTask('task3');
+            }
+            
+            updateUI();
+            updateAdButtons();
+            saveGame();
+            
+            // Close popup
+            adPopup.classList.add('hidden');
+            
+            // In a real implementation, you would call AdMonetag's ad display function here
+            // For example: 
+            // if (currentAdType === 'interstitial') monetag_playAd('9973247');
+            // else if (currentAdType === 'popup') monetag_playAd('9973247');
+            // else if (currentAdType === 'inapp') monetag_playAd('9973247');
         }
 
         // Show notification
@@ -974,9 +1203,7 @@
                 particle.style.setProperty('--ty', `${ty}px`);
                 particle.style.left = '50%';
                 particle.style.top = '50%';
-                particle.style.background = gameState.adMultiplierActive ? 
-                    `hsl(${50 + Math.random() * 20}, 80%, 60%)` : 
-                    `hsl(${200 + Math.random() * 40}, 80%, 60%)`;
+                particle.style.background = `hsl(${200 + Math.random() * 40}, 80%, 60%)`;
                 
                 particlesContainer.appendChild(particle);
                 
@@ -1048,9 +1275,7 @@
         // Auto mining function
         function autoMine() {
             if (gameState.autoLevel > 0) {
-                const baseCoins = gameState.autoLevel * gameState.multiplierLevel;
-                const coinsEarned = gameState.adMultiplierActive ? baseCoins * 2 : baseCoins;
-                
+                const coinsEarned = gameState.autoLevel * gameState.multiplierLevel;
                 gameState.balance += coinsEarned;
                 gameState.totalMined += coinsEarned;
                 updateUI();
@@ -1073,8 +1298,27 @@
 
         // Event listeners
         mineButton.addEventListener('click', mine);
-        watchAdBtn.addEventListener('click', watchAd);
 
+        // Ad buttons
+        watchInterstitialBtn.addEventListener('click', () => watchAd('interstitial'));
+        watchPopupBtn.addEventListener('click', () => watchAd('popup'));
+        watchInappBtn.addEventListener('click', () => watchAd('inapp'));
+
+        // Ad popup buttons
+        adPopupClose.addEventListener('click', () => {
+            adPopup.classList.add('hidden');
+        });
+        
+        adPopupWatch.addEventListener('click', () => {
+            // Simulate ad loading
+            showNotification("Loading ad...");
+            
+            setTimeout(() => {
+                completeAd();
+            }, 2000);
+        });
+
+        // Upgrade buttons
         document.getElementById('booster-tap').addEventListener('click', () => buyUpgrade('tap'));
         document.getElementById('booster-energy').addEventListener('click', () => buyUpgrade('energy'));
         document.getElementById('booster-auto').addEventListener('click', () => buyUpgrade('auto'));
@@ -1088,40 +1332,49 @@
             }
         });
 
-        // Complete task 4 (join channel)
-        document.getElementById('task-4').addEventListener('click', function() {
-            if (!gameState.tasks.task4.completed) {
-                gameState.tasks.task4.progress = 1;
-                completeTask('task4');
-            }
-        });
-
         // Initialize the game
         loadGame();
 
         // Set up game loops
         setInterval(autoMine, 1000);
         setInterval(regenerateEnergy, 2000);
-        setInterval(updateAdButton, 1000);
+        setInterval(updateAdButtons, 1000);
     </script>
 
-    <!-- AdMonetag Script (9973247) -->
+    <!-- <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>) -->
     <script>
         // This is a placeholder for the actual AdMonetag integration
-        //  <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
-                // Initialize AdMonetag with your zone ID
-                monetag_init('9973247');
+        //<script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
+        
+        /*
+        // Example AdMonetag integration (pseudocode):
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://sdk.admonetag.com/js/admonetag.js';
+            script.onload = function() {
+                // Initialize AdMonetag with your zone IDs
+                monetag_init('3062791');
             };
             document.head.appendChild(script);
         })();
         
-        // Function to display an ad
-        function monetag_playAd(zoneId) {
+        // Function to display different ad types
+        function monetag_playAd(9973247) {
             // This would trigger the ad display
             monetag_displayAd(9973247);
+            
+            // You would set up event listeners for ad completion
+            monetag_onAdCompleted(function() {
+                completeAd(); // Call our completeAd function when ad is finished
+            });
         }
         */
+        
+        // In a real implementation, you would replace the simulated ad watching
+        // with calls to the actual AdMonetag functions:
+        // - For Rewarded Interstitial: monetag_playAd('ZONE_ID_REWARDED_INTERSTITIAL')
+        // - For Rewarded Popup: monetag_playAd('ZONE_ID_REWARDED_POPUP')
+        // - For In-app Interstitial: monetag_playAd('9973247')
     </script>
 </body>
 </html>
-
