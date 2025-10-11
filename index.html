@@ -1,261 +1,1133 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src="https://fpyf8.com/88/tag.min.js" data-zone="176945" async data-cfasync="false"></script>
-    <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="3062791"></script>
-    <script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>
-    
+<head>
+    <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App with Monetag Ads (Working)</title>
+    <title>Crypto Miner - With Ad Integration</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Aapke diye hue CSS styles yahan hain */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; min-height: 100vh; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.95); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); overflow: hidden; }
-        header { background: linear-gradient(90deg, #0088cc, #00a2e8); color: white; padding: 20px; text-align: center; }
-        header h1 { font-size: 24px; margin-bottom: 10px; }
-        header p { opacity: 0.9; font-size: 14px; }
-        .content { padding: 25px; }
-        .user-info { background: #f0f8ff; border-radius: 12px; padding: 15px; margin-bottom: 25px; border-left: 4px solid #0088cc; }
-        .user-info h3 { color: #0088cc; margin-bottom: 10px; }
-        .coins-display { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(90deg, #ffd700, #ffed4e); border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3); }
-        .coins-display h3 { color: #b8860b; }
-        .coins-value { font-size: 28px; font-weight: bold; color: #b8860b; }
-        .ad-section { margin-bottom: 30px; }
-        .ad-section h2 { color: #0088cc; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; }
-        .ad-buttons { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 600px) { .ad-buttons { grid-template-columns: 1fr 1fr; } }
-        .ad-button { background: linear-gradient(90deg, #34c759, #30d158); color: white; border: none; border-radius: 12px; padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3); }
-        .ad-button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(52, 199, 89, 0.4); }
-        .ad-button:active { transform: translateY(1px); }
-        .ad-button.rewarded { background: linear-gradient(90deg, #ff9500, #ffaa33); box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3); }
-        .ad-button.rewarded:hover { box-shadow: 0 6px 15px rgba(255, 149, 0, 0.4); }
-        .ad-button.popup { background: linear-gradient(90deg, #ff3b30, #ff625a); box-shadow: 0 4px 10px rgba(255, 59, 48, 0.3); }
-        .ad-button.popup:hover { box-shadow: 0 6px 15px rgba(255, 59, 48, 0.4); }
-        .ad-button i { font-size: 20px; }
-        .instructions { background: #f9f9f9; border-radius: 12px; padding: 20px; margin-top: 20px; border-left: 4px solid #34c759; }
-        .instructions h3 { color: #34c759; margin-bottom: 10px; }
-        .instructions ul { padding-left: 20px; }
-        .instructions li { margin-bottom: 8px; line-height: 1.5; }
-        .status { text-align: center; padding: 15px; margin-top: 20px; border-radius: 12px; background: #f0f8ff; font-weight: bold; color: #0088cc; display: none; }
-        footer { text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #f0f0f0; }
-        .telegram-button { background: #0088cc; color: white; border: none; border-radius: 50px; padding: 12px 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: all 0.3s ease; }
-        .telegram-button:hover { background: #0077b3; transform: translateY(-2px); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --tg-theme-bg-color: #1a1a2e;
+            --tg-theme-text-color: #ffffff;
+            --tg-theme-button-color: #4cc9f0;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-secondary-bg-color: #16213e;
+            --tg-theme-header-bg-color: #0f3460;
+        }
+
+        body {
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--tg-theme-header-bg-color);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .balance-card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+        }
+
+        .balance-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .mining-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4cc9f0;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .mining-area {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+        }
+
+        .mine-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .mine-button {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border: none;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 8px 25px rgba(76, 201, 240, 0.4);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mine-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.6);
+        }
+
+        .mine-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .tap-text {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .boosters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .booster-card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .booster-card:active {
+            transform: scale(0.98);
+        }
+
+        .booster-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f72585, #b5179e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .booster-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .booster-description {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+
+        .booster-cost {
+            font-size: 12px;
+            color: #4cc9f0;
+            font-weight: 600;
+        }
+
+        .tasks {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .task-item:active {
+            transform: scale(0.98);
+        }
+
+        .task-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f48c06, #e85d04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .task-text {
+            font-size: 14px;
+        }
+
+        .task-reward {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4cc9f0;
+        }
+
+        .task-complete {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .task-complete .task-reward {
+            color: #4ade80;
+        }
+
+        .task-complete .task-icon {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-around;
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            color: #4cc9f0;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #4cc9f0;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        @keyframes particle-animation {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(76, 201, 240, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .energy-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            border-radius: 3px;
+            width: 70%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .task-progress {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .ad-task {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .ad-task .task-icon {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+
+        .ad-task .task-reward {
+            color: #FFD700;
+        }
+
+        .ad-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .ad-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+
+        .ad-placeholder {
+            width: 100%;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .ad-icon {
+            font-size: 24px;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        .ad-text {
+            font-size: 14px;
+            color: #FFD700;
+        }
+
+        .watch-ad-btn {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border: none;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .watch-ad-btn:active {
+            transform: scale(0.95);
+        }
+
+        .ad-timer {
+            font-size: 12px;
+            margin-top: 8px;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Telegram Rewards App</h1>
-            <p>Watch ads and earn coins in this Telegram Web App</p>
-        </header>
-        
-        <div class="content">
-            <div class="user-info">
-                <h3>User Information</h3>
-                <p id="user-data">Loading user data...</p>
-            </div>
-            
-            <div class="coins-display">
-                <h3>Your Coins</h3>
-                <div class="coins-value" id="coins">100</div>
-            </div>
-            
-            <div class="ad-section">
-                <h2>Rewarded Ads</h2>
-                <div class="ad-buttons">
-                    <button class="ad-button rewarded" id="rewarded-interstitial">
-                        <i>💰</i> Rewarded Interstitial
-                    </button>
-                    <button class="ad-button rewarded" id="rewarded-popup">
-                        <i>🪙</i> Rewarded Popup
-                    </button>
-                    <button class="ad-button" id="inapp-interstitial">
-                        <i>📱</i> In-App Interstitial
-                    </button>
-                    <button class="ad-button popup" id="popup-ad">
-                        <i>🔔</i> Popup Ad (Standard)
-                    </button>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div>
+                    <div style="font-weight: 700;">CRYPTO MINER</div>
+                    <div style="font-size: 12px; opacity: 0.7;">Earn coins every tap</div>
                 </div>
             </div>
-            
-            <div class="instructions">
-                <h3>How it works:</h3>
-                <ul>
-                    <li><strong>Rewarded Interstitial:</strong> Watch a full-screen ad and earn 25 coins</li>
-                    <li><strong>Rewarded Popup:</strong> Complete an offer in a new tab and earn 50 coins</li>
-                    <li><strong>In-App Interstitial:</strong> Automatic ad that appears during app usage</li>
-                    <li><strong>Popup Ad:</strong> Simple popup ad that earns 10 coins</li>
-                </ul>
+            <div class="user">
+                <i class="fas fa-user" style="font-size: 24px; opacity: 0.8;"></i>
             </div>
-            
-            <div class="status" id="status-message"></div>
-            
-            <button class="telegram-button" id="expand-button">Expand App</button>
         </div>
-        
-        <footer>
-            <p>Powered by Monetag SDK • Integrated with Telegram Web App</p>
-        </footer>
+
+        <div class="balance-card">
+            <div class="balance-label">TOTAL BALANCE</div>
+            <div class="balance-amount" id="balance">0</div>
+            <div class="energy-bar">
+                <div class="energy-fill" id="energy-fill"></div>
+            </div>
+            <div class="mining-stats">
+                <div class="stat">
+                    <div class="stat-value" id="per-tap">1</div>
+                    <div class="stat-label">Per Tap</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="per-hour">0</div>
+                    <div class="stat-label">Per Hour</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="energy">100/100</div>
+                    <div class="stat-label">Energy</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mining-area">
+            <div class="mine-title">TAP TO MINE</div>
+            <button class="mine-button" id="mine-button">
+                <div class="mine-icon">
+                    <i class="fas fa-hammer"></i>
+                </div>
+                <div class="tap-text">TAP!</div>
+            </button>
+            <div class="particles" id="particles-container"></div>
+        </div>
+
+        <div class="boosters">
+            <div class="booster-card" id="booster-tap">
+                <div class="booster-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="booster-title">Tap Power</div>
+                <div class="booster-description">+1 coin per tap</div>
+                <div class="booster-cost" id="tap-cost">Cost: 50</div>
+            </div>
+            <div class="booster-card" id="booster-energy">
+                <div class="booster-icon">
+                    <i class="fas fa-battery-full"></i>
+                </div>
+                <div class="booster-title">Energy Boost</div>
+                <div class="booster-description">+10 max energy</div>
+                <div class="booster-cost" id="energy-cost">Cost: 100</div>
+            </div>
+            <div class="booster-card" id="booster-auto">
+                <div class="booster-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="booster-title">Auto Miner</div>
+                <div class="booster-description">1 coin per second</div>
+                <div class="booster-cost" id="auto-cost">Cost: 500</div>
+            </div>
+            <div class="booster-card" id="booster-multiplier">
+                <div class="booster-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="booster-title">Multiplier</div>
+                <div class="booster-description">2x all earnings</div>
+                <div class="booster-cost" id="multiplier-cost">Cost: 1000</div>
+            </div>
+        </div>
+
+        <div class="tasks">
+            <div class="section-title">
+                <i class="fas fa-tasks"></i>
+                DAILY TASKS
+            </div>
+            <div class="task-list">
+                <div class="task-item" id="task-1">
+                    <div class="task-info">
+                        <div class="task-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div>
+                            <div class="task-text">Mine 100 coins</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="task-1-progress"></div>
+                            </div>
+                            <div class="task-progress" id="task-1-text">0/100</div>
+                        </div>
+                    </div>
+                    <div class="task-reward">+50 coins</div>
+                </div>
+                <div class="task-item" id="task-2">
+                    <div class="task-info">
+                        <div class="task-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div>
+                            <div class="task-text">Invite a friend</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="task-2-progress"></div>
+                            </div>
+                            <div class="task-progress" id="task-2-text">0/1</div>
+                        </div>
+                    </div>
+                    <div class="task-reward">+100 coins</div>
+                </div>
+                <div class="task-item ad-task" id="task-3">
+                    <div class="task-info">
+                        <div class="task-icon">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <div>
+                            <div class="task-text">Watch an ad</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="task-3-progress"></div>
+                            </div>
+                            <div class="task-progress" id="task-3-text">0/1</div>
+                        </div>
+                    </div>
+                    <div class="task-reward">+150 coins</div>
+                </div>
+                <div class="task-item" id="task-4">
+                    <div class="task-info">
+                        <div class="task-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div>
+                            <div class="task-text">Join our channel</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="task-4-progress"></div>
+                            </div>
+                            <div class="task-progress" id="task-4-text">0/1</div>
+                        </div>
+                    </div>
+                    <div class="task-reward">+200 coins</div>
+                </div>
+            </div>
+
+            <!-- AdMonetag Ad Container -->
+            <div class="ad-container">
+                <div class="ad-label">Sponsored Content</div>
+                <div class="ad-placeholder">
+                    <div class="ad-icon">
+                        <i class="fas fa-ad"></i>
+                    </div>
+                    <div class="ad-text">AdMonetag Ad</div>
+                </div>
+                <button class="watch-ad-btn" id="watch-ad-btn">Watch Ad for 2x Coins (30 min)</button>
+                <div class="ad-timer" id="ad-timer">Next ad available</div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-item active">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div>Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div>Stats</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <div>Rewards</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div>Settings</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        +1 coin mined!
     </div>
 
     <script>
-        // Monetag Zone ID
-        const MONETAG_ZONE_ID =3062791;
-        
-        // Telegram Initialization (Safe Check Lagaya gaya hai)
-        const tg = window.Telegram.WebApp;
-        let userId = 'unknown'; // Testing ke liye default ID
-        
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            // Agar Telegram ke andar khula hai
-            tg.expand();
-            tg.enableClosingConfirmation();
-            tg.ready();
-            
-            userId = tg.initDataUnsafe.user.id || 'unknown';
+        // Game state
+        const gameState = {
+            balance: 0,
+            perTap: 1,
+            perHour: 0,
+            energy: 100,
+            maxEnergy: 100,
+            tapLevel: 1,
+            energyLevel: 1,
+            autoLevel: 0,
+            multiplierLevel: 1,
+            tasks: {
+                task1: { completed: false, progress: 0, target: 100, reward: 50 },
+                task2: { completed: false, progress: 0, target: 1, reward: 100 },
+                task3: { completed: false, progress: 0, target: 1, reward: 150 },
+                task4: { completed: false, progress: 0, target: 1, reward: 200 }
+            },
+            totalMined: 0,
+            adMultiplierActive: false,
+            adMultiplierExpires: 0,
+            lastAdWatch: 0
+        };
 
-            document.getElementById('user-data').textContent = 
-                `Hello, ${tg.initDataUnsafe.user.first_name || 'User'}! (ID: ${userId})`;
-        } else {
-            // Agar seedhe browser mein khula hai (Error se bachne ke liye)
-            document.getElementById('user-data').textContent = 
-                `Hello, Browser Tester! (ID: Unknown - Telegram not initialized)`;
+        // Costs for upgrades
+        const upgradeCosts = {
+            tap: 50,
+            energy: 100,
+            auto: 500,
+            multiplier: 1000
+        };
+
+        // DOM elements
+        const balanceEl = document.getElementById('balance');
+        const perTapEl = document.getElementById('per-tap');
+        const perHourEl = document.getElementById('per-hour');
+        const energyEl = document.getElementById('energy');
+        const energyFillEl = document.getElementById('energy-fill');
+        const mineButton = document.getElementById('mine-button');
+        const notification = document.getElementById('notification');
+        const particlesContainer = document.getElementById('particles-container');
+        const watchAdBtn = document.getElementById('watch-ad-btn');
+        const adTimer = document.getElementById('ad-timer');
+
+        // Initialize Telegram Web App
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.expand();
+            tg.ready();
         }
-        
-        // Coins Logic
-        let coins = localStorage.getItem('userCoins') ? parseInt(localStorage.getItem('userCoins')) : 100;
-        updateCoinsDisplay();
-        
-        function updateCoinsDisplay() {
-            document.getElementById('coins').textContent = coins;
-            localStorage.setItem('userCoins', coins);
+
+        // Load saved game state
+        function loadGame() {
+            const saved = localStorage.getItem('cryptoMinerSave');
+            if (saved) {
+                const savedState = JSON.parse(saved);
+                Object.assign(gameState, savedState);
+            }
+            updateUI();
+            updateTaskProgress();
+            updateAdButton();
         }
-        
-        function showStatus(message, type = 'info') {
-            const statusEl = document.getElementById('status-message');
-            statusEl.textContent = message;
-            statusEl.style.display = 'block';
-            statusEl.style.background = type === 'success' ? '#e6f4ea' : '#f0f8ff';
-            statusEl.style.color = type === 'success' ? '#137333' : '#0088cc';
+
+        // Save game state
+        function saveGame() {
+            localStorage.setItem('cryptoMinerSave', JSON.stringify(gameState));
+        }
+
+        // Update all UI elements
+        function updateUI() {
+            balanceEl.textContent = Math.floor(gameState.balance);
+            perTapEl.textContent = gameState.perTap * (gameState.adMultiplierActive ? 2 : 1);
+            perHourEl.textContent = gameState.perHour * (gameState.adMultiplierActive ? 2 : 1);
+            energyEl.textContent = `${Math.floor(gameState.energy)}/${gameState.maxEnergy}`;
+            energyFillEl.style.width = `${(gameState.energy / gameState.maxEnergy) * 100}%`;
+            
+            // Update upgrade costs
+            document.getElementById('tap-cost').textContent = `Cost: ${upgradeCosts.tap * gameState.tapLevel}`;
+            document.getElementById('energy-cost').textContent = `Cost: ${upgradeCosts.energy * gameState.energyLevel}`;
+            document.getElementById('auto-cost').textContent = `Cost: ${upgradeCosts.auto * (gameState.autoLevel + 1)}`;
+            document.getElementById('multiplier-cost').textContent = `Cost: ${upgradeCosts.multiplier * gameState.multiplierLevel}`;
+            
+            // Update ad multiplier status
+            if (gameState.adMultiplierActive) {
+                document.body.style.setProperty('--tg-theme-button-color', '#FFD700');
+                document.body.style.setProperty('--tg-theme-header-bg-color', '#3d2c01');
+            } else {
+                document.body.style.setProperty('--tg-theme-button-color', '#4cc9f0');
+                document.body.style.setProperty('--tg-theme-header-bg-color', '#0f3460');
+            }
+        }
+
+        // Update task progress bars and text
+        function updateTaskProgress() {
+            // Task 1: Mine coins
+            const task1Progress = (gameState.tasks.task1.progress / gameState.tasks.task1.target) * 100;
+            document.getElementById('task-1-progress').style.width = `${task1Progress}%`;
+            document.getElementById('task-1-text').textContent = `${gameState.tasks.task1.progress}/${gameState.tasks.task1.target}`;
+            
+            // Task 2: Invite friend
+            const task2Progress = (gameState.tasks.task2.progress / gameState.tasks.task2.target) * 100;
+            document.getElementById('task-2-progress').style.width = `${task2Progress}%`;
+            document.getElementById('task-2-text').textContent = `${gameState.tasks.task2.progress}/${gameState.tasks.task2.target}`;
+            
+            // Task 3: Watch ad
+            const task3Progress = (gameState.tasks.task3.progress / gameState.tasks.task3.target) * 100;
+            document.getElementById('task-3-progress').style.width = `${task3Progress}%`;
+            document.getElementById('task-3-text').textContent = `${gameState.tasks.task3.progress}/${gameState.tasks.task3.target}`;
+            
+            // Task 4: Join channel
+            const task4Progress = (gameState.tasks.task4.progress / gameState.tasks.task4.target) * 100;
+            document.getElementById('task-4-progress').style.width = `${task4Progress}%`;
+            document.getElementById('task-4-text').textContent = `${gameState.tasks.task4.progress}/${gameState.tasks.task4.target}`;
+            
+            // Update task completion status
+            updateTaskCompletionStatus();
+        }
+
+        // Update task completion status visually
+        function updateTaskCompletionStatus() {
+            // Task 1
+            if (gameState.tasks.task1.completed) {
+                document.getElementById('task-1').classList.add('task-complete');
+            } else {
+                document.getElementById('task-1').classList.remove('task-complete');
+            }
+            
+            // Task 2
+            if (gameState.tasks.task2.completed) {
+                document.getElementById('task-2').classList.add('task-complete');
+            } else {
+                document.getElementById('task-2').classList.remove('task-complete');
+            }
+            
+            // Task 3
+            if (gameState.tasks.task3.completed) {
+                document.getElementById('task-3').classList.add('task-complete');
+            } else {
+                document.getElementById('task-3').classList.remove('task-complete');
+            }
+            
+            // Task 4
+            if (gameState.tasks.task4.completed) {
+                document.getElementById('task-4').classList.add('task-complete');
+            } else {
+                document.getElementById('task-4').classList.remove('task-complete');
+            }
+        }
+
+        // Update ad button status
+        function updateAdButton() {
+            const now = Date.now();
+            const timeSinceLastAd = now - gameState.lastAdWatch;
+            const adCooldown = 30 * 60 * 1000; // 30 minutes in milliseconds
+            
+            if (timeSinceLastAd < adCooldown) {
+                // Ad is on cooldown
+                const remainingTime = Math.ceil((adCooldown - timeSinceLastAd) / 1000 / 60);
+                adTimer.textContent = `Next ad available in ${remainingTime} minutes`;
+                watchAdBtn.disabled = true;
+                watchAdBtn.style.opacity = '0.5';
+            } else {
+                // Ad is available
+                adTimer.textContent = 'Ad available now!';
+                watchAdBtn.disabled = false;
+                watchAdBtn.style.opacity = '1';
+            }
+            
+            // Check if ad multiplier is active
+            if (gameState.adMultiplierActive && now > gameState.adMultiplierExpires) {
+                gameState.adMultiplierActive = false;
+                updateUI();
+                showNotification("2x coin boost has expired");
+            }
+        }
+
+        // Mine function
+        function mine() {
+            if (gameState.energy <= 0) {
+                showNotification("No energy left!");
+                return;
+            }
+            
+            const baseCoins = gameState.perTap * gameState.multiplierLevel;
+            const coinsEarned = gameState.adMultiplierActive ? baseCoins * 2 : baseCoins;
+            
+            gameState.balance += coinsEarned;
+            gameState.energy -= 1;
+            gameState.totalMined += coinsEarned;
+            
+            showNotification(`+${coinsEarned} coin${coinsEarned > 1 ? 's' : ''} mined!`);
+            createParticles();
+            updateUI();
+            
+            // Update task progress for mining coins
+            updateTaskProgressMining();
+            saveGame();
+        }
+
+        // Update task progress for mining-related tasks
+        function updateTaskProgressMining() {
+            // Task 1: Mine coins
+            if (!gameState.tasks.task1.completed) {
+                gameState.tasks.task1.progress = Math.min(gameState.totalMined, gameState.tasks.task1.target);
+                
+                if (gameState.tasks.task1.progress >= gameState.tasks.task1.target) {
+                    completeTask('task1');
+                }
+            }
+            
+            updateTaskProgress();
+        }
+
+        // Complete a task and give reward
+        function completeTask(taskId) {
+            if (gameState.tasks[taskId].completed) return;
+            
+            gameState.tasks[taskId].completed = true;
+            gameState.balance += gameState.tasks[taskId].reward;
+            
+            showNotification(`Task completed! +${gameState.tasks[taskId].reward} coins`);
+            updateUI();
+            updateTaskProgress();
+            saveGame();
+        }
+
+        // Watch ad function
+        function watchAd() {
+            const now = Date.now();
+            const timeSinceLastAd = now - gameState.lastAdWatch;
+            const adCooldown = 30 * 60 * 1000; // 30 minutes in milliseconds
+            
+            if (timeSinceLastAd < adCooldown) {
+                showNotification(`Please wait ${Math.ceil((adCooldown - timeSinceLastAd) / 1000 / 60)} minutes before watching another ad`);
+                return;
+            }
+            
+            // Simulate ad loading and watching
+            showNotification("Loading ad...");
             
             setTimeout(() => {
-                statusEl.style.display = 'none';
-            }, 5000);
+                // Simulate ad completion
+                showNotification("Ad completed! 2x coins activated for 30 minutes!");
+                
+                // Activate ad multiplier
+                gameState.adMultiplierActive = true;
+                gameState.adMultiplierExpires = now + (30 * 60 * 1000); // 30 minutes from now
+                gameState.lastAdWatch = now;
+                
+                // Complete the watch ad task
+                if (!gameState.tasks.task3.completed) {
+                    gameState.tasks.task3.progress = 1;
+                    completeTask('task3');
+                }
+                
+                updateUI();
+                updateAdButton();
+                saveGame();
+                
+                // In a real implementation, you would call AdMonetag's ad display function here
+                // For example: monetag_playAd('9973247');
+                
+            }, 2000);
         }
-        
-        // Expand button functionality
-        document.getElementById('expand-button').addEventListener('click', function() {
-            if (tg && tg.expand) {
-                tg.expand();
-                showStatus('App expanded!', 'success');
-            } else {
-                 showStatus('Can only expand inside Telegram.', 'info');
-            }
-        });
-        
-        // =========================================================================
-        // Monetag Ads Integration (Fixed Direct Function Calls)
-        // =========================================================================
 
-        // Common function for Monetag SDK (show_ 3062791)
-        const showMonetagAd = window[`show_${3062791}`];
-
-// 1. Rewarded Popup Button (Final Fix with Safety Delay)
-document.getElementById('rewarded-popup').addEventListener('click', function() {
-    showStatus('Rewarded Popup Loading...', 'info');
-
-    // 500ms (Aadha Second) ka intezaar karein taa ke SDK load ho jaye
-    setTimeout(() => {
-        const showMonetagAd = window[`show_${3062791}`];
-
-        if (typeof showMonetagAd === 'function') {
-            showMonetagAd({ type: 'pop', ymid: userId }) 
-            .then(() => {
-                // SUCCESS: Popup successfully opened
-                const rewardAmount = 50;
-                coins += rewardAmount;
-                updateCoinsDisplay();
-                showStatus(`Rewarded Popup success! You earned ${rewardAmount} coins!`, 'success');
-            })
-            .catch((error) => {
-                console.error('Ad failed:', error);
-                showStatus('Ad was blocked or failed to load. Please try again.', 'info');
-            });
-        } else {
-             // Agar SDK 500ms mein bhi load nahi hua
-             showStatus('  <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="3062791"></script>);
+        // Show notification
+        function showNotification(text) {
+            notification.textContent = text;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 1500);
         }
-    }, 500); // 500 milliseconds ka delay
-});
-                .catch((error) => {
-                    console.error('Ad failed:', error);
-                    showStatus('Ad was blocked or failed to load. Please try again.', 'info');
-                });
-            } else {
-                 showStatus('<script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>.', 'error');
+
+        // Create particle effects
+        function createParticles() {
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.background = gameState.adMultiplierActive ? 
+                    `hsl(${50 + Math.random() * 20}, 80%, 60%)` : 
+                    `hsl(${200 + Math.random() * 40}, 80%, 60%)`;
+                
+                particlesContainer.appendChild(particle);
+                
+                particle.style.animation = `particle-animation ${0.5 + Math.random() * 0.5}s ease-out forwards`;
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+
+        // Buy upgrade function
+        function buyUpgrade(type) {
+            let cost = 0;
+            
+            switch(type) {
+                case 'tap':
+                    cost = upgradeCosts.tap * gameState.tapLevel;
+                    if (gameState.balance >= cost) {
+                        gameState.balance -= cost;
+                        gameState.perTap += 1;
+                        gameState.tapLevel++;
+                        showNotification("Tap power increased!");
+                    } else {
+                        showNotification("Not enough coins!");
+                    }
+                    break;
+                    
+                case 'energy':
+                    cost = upgradeCosts.energy * gameState.energyLevel;
+                    if (gameState.balance >= cost) {
+                        gameState.balance -= cost;
+                        gameState.maxEnergy += 10;
+                        gameState.energyLevel++;
+                        showNotification("Energy capacity increased!");
+                    } else {
+                        showNotification("Not enough coins!");
+                    }
+                    break;
+                    
+                case 'auto':
+                    cost = upgradeCosts.auto * (gameState.autoLevel + 1);
+                    if (gameState.balance >= cost) {
+                        gameState.balance -= cost;
+                        gameState.autoLevel++;
+                        gameState.perHour += 1;
+                        showNotification("Auto miner purchased!");
+                    } else {
+                        showNotification("Not enough coins!");
+                    }
+                    break;
+                    
+                case 'multiplier':
+                    cost = upgradeCosts.multiplier * gameState.multiplierLevel;
+                    if (gameState.balance >= cost) {
+                        gameState.balance -= cost;
+                        gameState.multiplierLevel++;
+                        showNotification("Multiplier increased!");
+                    } else {
+                        showNotification("Not enough coins!");
+                    }
+                    break;
+            }
+            
+            updateUI();
+            saveGame();
+        }
+
+        // Auto mining function
+        function autoMine() {
+            if (gameState.autoLevel > 0) {
+                const baseCoins = gameState.autoLevel * gameState.multiplierLevel;
+                const coinsEarned = gameState.adMultiplierActive ? baseCoins * 2 : baseCoins;
+                
+                gameState.balance += coinsEarned;
+                gameState.totalMined += coinsEarned;
+                updateUI();
+                updateTaskProgressMining();
+                saveGame();
+            }
+        }
+
+        // Energy regeneration
+        function regenerateEnergy() {
+            if (gameState.energy < gameState.maxEnergy) {
+                gameState.energy += 0.5;
+                if (gameState.energy > gameState.maxEnergy) {
+                    gameState.energy = gameState.maxEnergy;
+                }
+                updateUI();
+                saveGame();
+            }
+        }
+
+        // Event listeners
+        mineButton.addEventListener('click', mine);
+        watchAdBtn.addEventListener('click', watchAd);
+
+        document.getElementById('booster-tap').addEventListener('click', () => buyUpgrade('tap'));
+        document.getElementById('booster-energy').addEventListener('click', () => buyUpgrade('energy'));
+        document.getElementById('booster-auto').addEventListener('click', () => buyUpgrade('auto'));
+        document.getElementById('booster-multiplier').addEventListener('click', () => buyUpgrade('multiplier'));
+
+        // Complete task 2 (invite friend)
+        document.getElementById('task-2').addEventListener('click', function() {
+            if (!gameState.tasks.task2.completed) {
+                gameState.tasks.task2.progress = 1;
+                completeTask('task2');
             }
         });
 
-        // 2. Rewarded Interstitial
-        document.getElementById('rewarded-interstitial').addEventListener('click', function() {
-            showStatus('Rewarded Interstitial Loading...', 'info');
-            
-            if (typeof showMonetagAd === 'function') {
-                showMonetagAd({ type: 'int', ymid: userId }) 
-                .then(() => {
-                    const rewardAmount = 25;
-                    coins += rewardAmount;
-                    updateCoinsDisplay();
-                    showStatus(`Rewarded Interstitial completed! You earned ${rewardAmount} coins!`, 'success');
-                })
-                .catch((error) => {
-                    showStatus('Ad was skipped or failed to load.', 'info');
-                });
-            } else {
-                 showStatus('  <script async src="https://tg-sdk.monetag.com/v1/script.js" data-zone="3062791"></script>.', 'error');
+        // Complete task 4 (join channel)
+        document.getElementById('task-4').addEventListener('click', function() {
+            if (!gameState.tasks.task4.completed) {
+                gameState.tasks.task4.progress = 1;
+                completeTask('task4');
             }
         });
 
-        // 3. In-App Interstitial (Manual Trigger)
-        document.getElementById('inapp-interstitial').addEventListener('click', function() {
-            showStatus('In-App Interstitial Loading (No Reward)...', 'info');
-            
-            if (typeof showMonetagAd === 'function') {
-                showMonetagAd({ type: 'int' }) 
-                .then(() => {
-                    showStatus('In-App Interstitial shown.', 'info');
-                })
-                .catch(() => {
-                    showStatus('Ad run to load.', 'info');
-                });
-            } else {
-                 showStatus('<script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>.', 'error');
-            }
-        });
+        // Initialize the game
+        loadGame();
+
+        // Set up game loops
+        setInterval(autoMine, 1000);
+        setInterval(regenerateEnergy, 2000);
+        setInterval(updateAdButton, 1000);
+    </script>
+
+    <!-- AdMonetag Script (9973247) -->
+    <script>
+        // This is a placeholder for the actual AdMonetag integration
+        //  <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
         
-        // 4. Standard Popunder
-        document.getElementById('popup-ad').addEventListener('click', function() {
-            showStatus('Standard Popunder Loading (No Reward)...', 'info');
-            
-            if (typeof showMonetagAd === 'function') {
-                showMonetagAd({ type: 'pop' }) 
-                .then(() => {
-                     showStatus('Standard Popunder shown.', 'info');
-                })
-                .catch(() => {
-                    showStatus('Ad failed to load.', 'info');
-                });
-            } else {
-                 showStatus('Monetag SDK not loaded.', 'error');
-            }
-        });
+        /*
+        // Example AdMonetag integration (pseudocode):
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://sdk.admonetag.com/js/admonetag.js';
+            script.onload = function() {
+                // Initialize AdMonetag with your zone ID
+                monetag_init('9973247');
+            };
+            document.head.appendChild(script);
+        })();
         
-    </script><script src="https://vaugroar.com/act/files/tag.min.js?z=9978054" data-cfasync="false" async></script>
+        // Function to display an ad
+        function monetag_playAd(zoneId) {
+            // This would trigger the ad display
+            monetag_displayAd(9973247);
+        }
+        */
+    </script>
 </body>
 </html>
-
-
-
-
