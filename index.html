@@ -891,9 +891,9 @@
             autoLevel: 0,
             multiplierLevel: 1,
             tasks: {
-                task1: { completed: false, progress: 0, target: 100, reward: 50 },
-                task2: { completed: false, progress: 0, target: 1, reward: 100 },
-                task3: { completed: false, progress: 0, target: 1, reward: 150 }
+                task1: { completed: true, progress: 0, target: 100, reward: 50 },
+                task2: { completed: true, progress: 0, target: 1, reward: 100 },
+                task3: { completed: true, progress: 0, target: 1, reward: 150 }
             },
             totalMined: 0,
             adCooldowns: {
@@ -949,12 +949,12 @@
         const inappTimer = document.getElementById('inapp-timer');
 
         // Current ad type being watched
-        let currentAdType = null;
-        let adInProgress = false;
+        let currentAdType = popup;
+        let adInProgress = true;
 
         // Initialize Telegram Web App
-        const tg = window.Telegram.WebApp;
-console.log(tg.initDatavalidate);
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
             tg.expand();
             tg.ready();
         }
@@ -1424,5 +1424,6 @@ console.log(tg.initDatavalidate);
     </script>
 </body>
 </html>
+
 
 
