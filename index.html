@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head><script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
+<head> <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Miner - Multiple Ad Types</title>
+    <title>Crypto Miner - Fixed Ad System</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -625,6 +626,12 @@
         .hidden {
             display: none;
         }
+
+        .ad-loading {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #FFD700;
+        }
     </style>
 </head>
 <body>
@@ -667,7 +674,7 @@
         </div>
 
         <div class="mining-area">
-            <div class="mine-title">TAP TO MINE</div>
+            <div class="mine-title">TAP TO cato😺</div>
             <button class="mine-button" id="mine-button">
                 <div class="mine-icon">
                     <i class="fas fa-hammer"></i>
@@ -856,6 +863,7 @@
                     <i class="fas fa-ad"></i>
                 </div>
                 <div class="ad-popup-ad-text">AdMonetag Ad</div>
+                <div class="ad-loading" id="ad-loading">Ad is loading...</div>
             </div>
             <div class="ad-popup-reward" id="ad-popup-reward">Reward: 100 coins</div>
             <div class="ad-popup-buttons">
@@ -927,6 +935,7 @@
         const adPopupReward = document.getElementById('ad-popup-reward');
         const adPopupClose = document.getElementById('ad-popup-close');
         const adPopupWatch = document.getElementById('ad-popup-watch');
+        const adLoading = document.getElementById('ad-loading');
 
         // Ad buttons
         const watchInterstitialBtn = document.getElementById('watch-interstitial-btn');
@@ -940,6 +949,7 @@
 
         // Current ad type being watched
         let currentAdType = null;
+        let adInProgress = false;
 
         // Initialize Telegram Web App
         const tg = window.Telegram?.WebApp;
@@ -1101,6 +1111,8 @@
 
         // Show ad popup
         function showAdPopup(type) {
+            if (adInProgress) return;
+            
             currentAdType = type;
             
             // Set popup content based on ad type
@@ -1128,6 +1140,11 @@
             adPopupDesc.textContent = desc;
             adPopupReward.textContent = `Reward: ${reward} coins`;
             
+            // Reset loading state
+            adLoading.textContent = 'Ad is loading...';
+            adPopupWatch.disabled = false;
+            adPopupWatch.textContent = 'Watch Ad';
+            
             adPopup.classList.remove('hidden');
         }
 
@@ -1146,37 +1163,51 @@
 
         // Complete ad watching
         function completeAd() {
-            if (!currentAdType) return;
+            if (!currentAdType || adInProgress) return;
+            
+            adInProgress = true;
+            adPopupWatch.disabled = true;
+            adPopupWatch.textContent = 'Watching...';
             
             const reward = adRewards[currentAdType];
             
-            // Simulate ad completion
-            showNotification(`Ad completed! +${reward} coins earned!`);
+            // Simulate ad loading and watching
+            adLoading.textContent = 'Ad is loading...';
             
-            // Add reward to balance
-            gameState.balance += reward;
-            
-            // Set cooldown
-            gameState.adCooldowns[currentAdType] = Date.now();
-            
-            // Complete the watch ad task if it's the first time
-            if (!gameState.tasks.task3.completed && currentAdType === 'interstitial') {
-                gameState.tasks.task3.progress = 1;
-                completeTask('task3');
-            }
-            
-            updateUI();
-            updateAdButtons();
-            saveGame();
-            
-            // Close popup
-            adPopup.classList.add('hidden');
-            
-            // In a real implementation, you would call AdMonetag's ad display function here
-            // For example: 
-            // if (currentAdType === 'interstitial') monetag_playAd('9973247');
-            // else if (currentAdType === 'popup') monetag_playAd('9973247');
-            // else if (currentAdType === 'inapp') monetag_playAd('9973247');
+            setTimeout(() => {
+                adLoading.textContent = 'Ad is playing...';
+                
+                setTimeout(() => {
+                    // Ad completed successfully
+                    showNotification(`Ad completed! +${reward} coins earned!`);
+                    
+                    // Add reward to balance
+                    gameState.balance += reward;
+                    
+                    // Set cooldown
+                    gameState.adCooldowns[currentAdType] = Date.now();
+                    
+                    // Complete the watch ad task if it's the first time
+                    if (!gameState.tasks.task3.completed) {
+                        gameState.tasks.task3.progress = 1;
+                        completeTask('task3');
+                    }
+                    
+                    updateUI();
+                    updateAdButtons();
+                    saveGame();
+                    
+                    // Close popup
+                    adPopup.classList.add('hidden');
+                    adInProgress = false;
+                    
+                    // In a real implementation, you would call AdMonetag's ad display function here
+                    // For example: 
+                    // if (currentAdType === 'interstitial') monetag_playAd('9973247');
+                    // else if (currentAdType === 'popup') monetag_playAd('9973247');
+                    // else if (currentAdType === 'inapp') monetag_playAd('9973247');
+                }, 3000);
+            }, 1500);
         }
 
         // Show notification
@@ -1306,17 +1337,12 @@
 
         // Ad popup buttons
         adPopupClose.addEventListener('click', () => {
-            adPopup.classList.add('hidden');
+            if (!adInProgress) {
+                adPopup.classList.add('hidden');
+            }
         });
         
-        adPopupWatch.addEventListener('click', () => {
-            // Simulate ad loading
-            showNotification("Loading ad...");
-            
-            setTimeout(() => {
-                completeAd();
-            }, 2000);
-        });
+        adPopupWatch.addEventListener('click', completeAd);
 
         // Upgrade buttons
         document.getElementById('booster-tap').addEventListener('click', () => buyUpgrade('tap'));
@@ -1341,40 +1367,59 @@
         setInterval(updateAdButtons, 1000);
     </script>
 
-    <!-- <script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>) -->
+    <!-- AdMonetag Script Integration -->
     <script>
-        // This is a placeholder for the actual AdMonetag integration
-        //<script src='//libtl.com/sdk.js' data-zone='9973247' data-sdk='show_9973247'></script>
-        
-        /*
-        // Example AdMonetag integration (pseudocode):
+        // AdMonetag integration - Replace with your actual zone IDs
         (function() {
-            var script = document.createElement('script');
-            script.src = 'https://sdk.admonetag.com/js/admonetag.js';
-            script.onload = function() {
-                // Initialize AdMonetag with your zone IDs
-                monetag_init('3062791');
-            };
-            document.head.appendChild(script);
-        })();
-        
-        // Function to display different ad types
-        function monetag_playAd(9973247) {
-            // This would trigger the ad display
-            monetag_displayAd(9973247);
+            // This is a simulation of AdMonetag integration
+            // In production, you would include the actual AdMonetag SDK
             
-            // You would set up event listeners for ad completion
-            monetag_onAdCompleted(function() {
-                completeAd(); // Call our completeAd function when ad is finished
-            });
-        }
-        */
-        
-        // In a real implementation, you would replace the simulated ad watching
-        // with calls to the actual AdMonetag functions:
-        // - For Rewarded Interstitial: monetag_playAd('ZONE_ID_REWARDED_INTERSTITIAL')
-        // - For Rewarded Popup: monetag_playAd('ZONE_ID_REWARDED_POPUP')
-        // - For In-app Interstitial: monetag_playAd('9973247')
+            console.log("AdMonetag integration ready");
+            
+            // Example of how to initialize AdMonetag with your zone IDs
+            /*
+            // Replace these with your actual AdMonetag zone IDs
+            const ZONE_ID_REWARDED_INTERSTITIAL = '9973247';
+            const ZONE_ID_REWARDED_POPUP = '9973247';
+            const ZONE_ID_INTERSTITIAL = '9973247';
+            
+            // Initialize AdMonetag
+            if (typeof monetag !== 'undefined') {
+                // Set up ad callbacks
+                monetag.cmd.push(function() {
+                    monetag.setAdUnit(9973247, {
+                        type: 'rewarded_interstitial',
+                        onAdReady: function() {
+                            console.log('Rewarded interstitial ad ready');
+                        },
+                        onAdCompleted: function() {
+                            completeAd(); // Call our completeAd function when ad is finished
+                        }
+                    });
+                    
+                    monetag.setAdUnit(9973247, {
+                        type: 'rewarded_popup',
+                        onAdReady: function() {
+                            console.log('Rewarded popup ad ready');
+                        },
+                        onAdCompleted: function() {
+                            completeAd(); // Call our completeAd function when ad is finished
+                        }
+                    });
+                    
+                    monetag.setAdUnit(9973247, {
+                        type: 'interstitial',
+                        onAdReady: function() {
+                            console.log('Interstitial ad ready');
+                        },
+                        onAdCompleted: function() {
+                            completeAd(); // Call our completeAd function when ad is finished
+                        }
+                    });
+                });
+            }
+            */
+        })();
     </script>
 </body>
 </html>
