@@ -953,8 +953,8 @@
         let adInProgress = false;
 
         // Initialize Telegram Web App
-        const tg = window.Telegram?.WebApp;
-        if (tg) {
+        const tg = window.Telegram.WebApp;
+console.log(tg.initDatavalidate);
             tg.expand();
             tg.ready();
         }
@@ -1424,4 +1424,5 @@
     </script>
 </body>
 </html>
+
 
