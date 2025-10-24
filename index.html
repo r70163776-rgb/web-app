@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamster Miner - Working Monetag Integration</title>
+    <title>Hamster Miner - Complete Monetag Integration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -172,59 +172,30 @@
             color: #ffcc00;
         }
 
-        .boosters {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .booster {
-            background: rgba(43, 82, 120, 0.7);
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .booster:hover {
-            background: rgba(43, 82, 120, 0.9);
-            transform: translateY(-3px);
-        }
-
-        .booster-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #ffcc00;
-        }
-
-        .booster-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .booster-desc {
-            font-size: 12px;
-            opacity: 0.8;
-            text-align: center;
-        }
-
-        .booster-cost {
-            margin-top: 8px;
-            font-size: 12px;
-            color: #ffcc00;
-        }
-
         .ad-section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 15px;
             margin-top: 15px;
-            text-align: center;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: #ffcc00;
+        }
+
+        .ad-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
 
         .ad-button {
@@ -232,39 +203,146 @@
             color: #333;
             border: none;
             border-radius: 8px;
-            padding: 12px 20px;
+            padding: 12px 15px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin: 5px;
-            width: calc(100% - 10px);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .ad-button:hover {
             background: #ffaa00;
+            transform: translateY(-2px);
         }
 
         .ad-button:disabled {
             background: #666;
             color: #999;
             cursor: not-allowed;
+            transform: none;
+        }
+
+        .ad-button i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .ad-info {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 5px;
+            padding-left: 34px;
         }
 
         .ad-status {
             margin-top: 10px;
             font-size: 12px;
             color: #aaa;
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
         }
 
-        .debug-info {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid rgba(255, 0, 0, 0.3);
+        .ad-popup-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .ad-popup {
+            background: #1e2a3a;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .ad-popup-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+
+        .ad-popup-content {
+            background: #2b5278;
+            border-radius: 10px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ad-timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ad-popup-reward {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        .ad-popup-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .ad-popup-btn {
+            padding: 10px 20px;
+            border: none;
             border-radius: 8px;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 11px;
-            color: #ff6b6b;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ad-popup-watch {
+            background: #ffcc00;
+            color: #333;
+        }
+
+        .ad-popup-watch:hover {
+            background: #ffaa00;
+        }
+
+        .ad-popup-skip {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .ad-popup-skip:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .notification {
@@ -310,14 +388,12 @@
             margin-bottom: 5px;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .pulse {
-            animation: pulse 0.5s ease-in-out;
+        .ad-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 12px;
+            opacity: 0.7;
         }
 
         .success {
@@ -326,6 +402,20 @@
 
         .error {
             color: #f44336;
+        }
+
+        .warning {
+            color: #ff9800;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -369,47 +459,83 @@
                 <div class="tap-text">Tap the hamster to mine coins!</div>
             </div>
 
-            <!-- Monetag Ad Integration Section -->
+            <!-- Rewarded Interstitial Ads Section -->
             <div class="ad-section">
-                <h3><i class="fas fa-ad"></i> Monetag Rewards</h3>
-                <p style="font-size: 12px; margin-bottom: 15px; opacity: 0.8;">Watch ads to earn bonuses</p>
-                
-                <button class="ad-button" id="ad-double-coins">
-                    <i class="fas fa-coins"></i> Watch Ad for 2x Coins (30 min)
-                </button>
-                
-                <button class="ad-button" id="ad-refill-energy">
-                    <i class="fas fa-bolt"></i> Watch Ad for Full Energy
-                </button>
-                
-                <button class="ad-button" id="ad-bonus-coins">
-                    <i class="fas fa-gem"></i> Watch Ad for 500 Bonus Coins
-                </button>
-
-                <div class="ad-status" id="ad-status">
-                    Ad system: <span id="sdk-status">Checking...</span>
+                <div class="section-title">
+                    <i class="fas fa-play-circle"></i>
+                    Rewarded Interstitial Ads
                 </div>
-
-                <!-- Debug Information -->
-                <div class="debug-info" id="debug-info" style="display: none;">
-                    <strong>Debug Info:</strong><br>
-                    <span id="debug-details">Loading debug information...</span>
+                <div class="ad-grid">
+                    <button class="ad-button" id="ad-interstitial-2x">
+                        <i class="fas fa-coins"></i>
+                        <div>
+                            <div>2x Coins Boost</div>
+                            <div class="ad-info">Watch full ad for 30 minutes of 2x coins</div>
+                        </div>
+                    </button>
+                    
+                    <button class="ad-button" id="ad-interstitial-energy">
+                        <i class="fas fa-bolt"></i>
+                        <div>
+                            <div>Full Energy Refill</div>
+                            <div class="ad-info">Watch ad to completely refill your energy</div>
+                        </div>
+                    </button>
+                    
+                    <button class="ad-button" id="ad-interstitial-bonus">
+                        <i class="fas fa-gem"></i>
+                        <div>
+                            <div>500 Bonus Coins</div>
+                            <div class="ad-info">Watch ad to get 500 coins instantly</div>
+                        </div>
+                    </button>
                 </div>
             </div>
 
-            <div class="boosters">
-                <div class="booster" id="booster1">
-                    <div class="booster-icon"><i class="fas fa-hammer"></i></div>
-                    <div class="booster-title">Better Pickaxe</div>
-                    <div class="booster-desc">Increase coins per tap</div>
-                    <div class="booster-cost">Cost: 500 coins</div>
+            <!-- Rewarded Popup Ads Section -->
+            <div class="ad-section">
+                <div class="section-title">
+                    <i class="fas fa-external-link-alt"></i>
+                    Rewarded Popup Ads
                 </div>
-                <div class="booster" id="booster2">
-                    <div class="booster-icon"><i class="fas fa-bolt"></i></div>
-                    <div class="booster-title">Energy Boost</div>
-                    <div class="booster-desc">Increase max energy</div>
-                    <div class="booster-cost">Cost: 800 coins</div>
+                <div class="ad-grid">
+                    <button class="ad-button" id="ad-popup-daily">
+                        <i class="fas fa-calendar-day"></i>
+                        <div>
+                            <div>Daily Bonus</div>
+                            <div class="ad-info">Click for daily reward popup</div>
+                        </div>
+                    </button>
+                    
+                    <button class="ad-button" id="ad-popup-special">
+                        <i class="fas fa-gift"></i>
+                        <div>
+                            <div>Special Offer</div>
+                            <div class="ad-info">Limited time special offer popup</div>
+                        </div>
+                    </button>
                 </div>
+            </div>
+
+            <!-- In-app Interstitial Info -->
+            <div class="ad-section">
+                <div class="section-title">
+                    <i class="fas fa-mobile-alt"></i>
+                    In-app Interstitial Ads
+                </div>
+                <div class="ad-info">
+                    These ads appear automatically during gameplay. You'll see them:
+                </div>
+                <div class="ad-stats">
+                    <div>• After every 50 taps</div>
+                    <div>• When leveling up</div>
+                    <div>• Every 3 minutes</div>
+                </div>
+            </div>
+
+            <!-- Ad Status -->
+            <div class="ad-status" id="ad-status">
+                <span id="sdk-status">Initializing Monetag SDK...</span>
             </div>
         </div>
 
@@ -428,77 +554,31 @@
             </div>
         </div>
 
+        <!-- Notification -->
         <div class="notification" id="notification">
             <div id="notification-content">Notification</div>
         </div>
+
+        <!-- Ad Popup Overlay -->
+        <div class="ad-popup-overlay" id="ad-popup-overlay">
+            <div class="ad-popup">
+                <div class="ad-popup-title" id="ad-popup-title">Watch Ad for Reward</div>
+                <div class="ad-popup-content">
+                    <div class="ad-timer" id="ad-timer">15s</div>
+                    <i class="fas fa-play-circle" style="font-size: 50px; color: #ffcc00; margin-bottom: 10px;"></i>
+                    <div>Video Advertisement</div>
+                </div>
+                <div class="ad-popup-reward" id="ad-popup-reward">Reward: 2x coins for 30 minutes!</div>
+                <div class="ad-popup-actions">
+                    <button class="ad-popup-btn ad-popup-watch" id="ad-popup-watch">Watch Ad</button>
+                    <button class="ad-popup-btn ad-popup-skip" id="ad-popup-skip">Skip</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Multiple Monetag SDK Integration Options -->
-    <!-- Option 1: Direct SDK from libtl.com -->
+    <!-- Monetag SDK Integration -->
     <script src="//libtl.com/sdk.js" data-zone="10081114" data-sdk="show_10081114"></script>
-    
-    <!-- Option 2: Alternative domains for fallback -->
-    <script>
-        // Fallback SDK loading if primary fails
-        function loadMonetagFallback() {
-            const alternativeDomains = [
-                '//cdn.monetag.com/sdk.js',
-                '//monetag.s3.amazonaws.com/sdk.js',
-                '//sdk.monetag.com/sdk.js'
-            ];
-            
-            let loaded = false;
-            
-            alternativeDomains.forEach(domain => {
-                if (!loaded) {
-                    const script = document.createElement('script');
-                    script.src = domain;
-                    script.setAttribute('data-zone', '10081114');
-                    script.setAttribute('data-sdk', 'show_10081114');
-                    script.onload = function() {
-                        loaded = true;
-                        console.log('Monetag SDK loaded from: ' + domain);
-                        updateSDKStatus('loaded', 'SDK loaded from: ' + domain);
-                    };
-                    script.onerror = function() {
-                        console.log('Failed to load from: ' + domain);
-                    };
-                    document.head.appendChild(script);
-                }
-            });
-            
-            // If all domains fail, use mock SDK for testing
-            setTimeout(() => {
-                if (!loaded && typeof show_10081114 === 'undefined') {
-                    createMockSDK();
-                }
-            }, 3000);
-        }
-
-        // Create mock SDK for testing if real SDK fails
-        function createMockSDK() {
-            window.show_10081114 = function(options) {
-                console.log('Mock SDK called with:', options);
-                updateSDKStatus('mock', 'Using mock SDK for testing');
-                
-                return new Promise((resolve, reject) => {
-                    // Simulate ad loading
-                    setTimeout(() => {
-                        if (Math.random() > 0.2) { // 80% success rate for testing
-                            resolve({
-                                type: 'completed',
-                                reward: true,
-                                amount: 500
-                            });
-                        } else {
-                            reject(new Error('Mock ad failed to load'));
-                        }
-                    }, 2000);
-                });
-            };
-            updateSDKStatus('mock', 'Using mock SDK - real ads not available');
-        }
-    </script>
 
     <script>
         // Game state
@@ -507,6 +587,16 @@
         let energy = 80;
         let maxEnergy = 100;
         let doubleCoinsActive = false;
+        let tapCount = 0;
+        let lastInterstitialTime = 0;
+        
+        // Ad tracking
+        let adPreloaded = false;
+        let adActive = false;
+        let adTimer = 15;
+        let adInterval;
+        let currentAdType = '';
+        let currentAdFormat = '';
         
         // DOM elements
         const coinCountElement = document.getElementById('coin-count');
@@ -516,8 +606,12 @@
         const notificationElement = document.getElementById('notification');
         const notificationContent = document.getElementById('notification-content');
         const sdkStatusElement = document.getElementById('sdk-status');
-        const debugInfoElement = document.getElementById('debug-info');
-        const debugDetailsElement = document.getElementById('debug-details');
+        const adPopupOverlay = document.getElementById('ad-popup-overlay');
+        const adPopupTitle = document.getElementById('ad-popup-title');
+        const adPopupReward = document.getElementById('ad-popup-reward');
+        const adTimerElement = document.getElementById('ad-timer');
+        const adPopupWatch = document.getElementById('ad-popup-watch');
+        const adPopupSkip = document.getElementById('ad-popup-skip');
 
         // Update UI with current game state
         function updateUI() {
@@ -545,12 +639,6 @@
         function updateSDKStatus(status, message) {
             sdkStatusElement.textContent = message;
             sdkStatusElement.className = status;
-            
-            // Show debug info if there are issues
-            if (status === 'error' || status === 'mock') {
-                debugInfoElement.style.display = 'block';
-                debugDetailsElement.textContent = `SDK Status: ${status} - ${message}`;
-            }
         }
 
         // Handle hamster tap
@@ -567,6 +655,7 @@
             
             coins += earnedCoins;
             energy -= 1;
+            tapCount++;
             
             updateUI();
             showNotification(`+${earnedCoins} coins!`, "success");
@@ -575,74 +664,232 @@
             setTimeout(() => {
                 hamsterElement.classList.remove('pulse');
             }, 300);
+            
+            // Check for in-app interstitial (every 50 taps)
+            if (tapCount % 50 === 0) {
+                showInAppInterstitial();
+            }
         }
         
-        // Show Monetag ad
-        function showMonetagAd(adType) {
-            const button = document.getElementById(`ad-${adType}`);
+        // Preload Monetag ads
+        function preloadAds() {
+            if (typeof show_10081114 !== 'undefined') {
+                show_10081114({
+                    type: 'preload',
+                    ymid: 'user_' + Date.now(),
+                    timeout: 5
+                }).then(() => {
+                    adPreloaded = true;
+                    updateSDKStatus('success', 'Ads preloaded and ready');
+                }).catch((error) => {
+                    console.log('Ad preload failed:', error);
+                    updateSDKStatus('warning', 'Ads may load slowly');
+                });
+            }
+        }
+        
+        // Show Rewarded Interstitial Ad
+        function showRewardedInterstitial(adType) {
+            if (adActive) return;
+            
+            const button = document.getElementById(`ad-interstitial-${adType}`);
             const originalText = button.innerHTML;
             
             if (typeof show_10081114 === 'undefined') {
-                showNotification("Ad system not loaded. Please try again.", "error");
-                updateSDKStatus('error', 'SDK function not found');
-                loadMonetagFallback();
+                showNotification("Ad system not ready. Please try again.", "error");
                 return;
             }
             
             button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Ad...';
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            adActive = true;
+            currentAdFormat = 'interstitial';
+            currentAdType = adType;
+            
+            // Set up the ad popup
+            setupAdPopup(adType, 'interstitial');
+            
+            // Show the popup with countdown
+            adPopupOverlay.style.display = 'flex';
+            startAdCountdown();
+        }
+        
+        // Show Rewarded Popup Ad
+        function showRewardedPopup(adType) {
+            if (adActive) return;
+            
+            const button = document.getElementById(`ad-popup-${adType}`);
+            const originalText = button.innerHTML;
+            
+            if (typeof show_10081114 === 'undefined') {
+                showNotification("Ad system not ready. Please try again.", "error");
+                return;
+            }
+            
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            adActive = true;
+            currentAdFormat = 'popup';
+            currentAdType = adType;
+            
+            // For popup ads, we use a different approach
+            show_10081114({
+                type: 'pop',
+                ymid: 'user_' + Date.now(),
+                requestVar: `popup_${adType}`
+            }).then((result) => {
+                console.log('Popup ad completed:', result);
+                grantAdReward(adType, 'popup');
+            }).catch((error) => {
+                console.error('Popup ad error:', error);
+                showNotification("Popup ad failed to load", "error");
+            }).finally(() => {
+                button.disabled = false;
+                button.innerHTML = originalText;
+                adActive = false;
+            });
+        }
+        
+        // Show In-app Interstitial Ad
+        function showInAppInterstitial() {
+            // Only show if enough time has passed (3 minutes)
+            const currentTime = Date.now();
+            if (currentTime - lastInterstitialTime < 180000) { // 3 minutes
+                return;
+            }
+            
+            if (typeof show_10081114 === 'undefined') return;
+            
+            lastInterstitialTime = currentTime;
             
             show_10081114({
+                type: 'inApp',
+                ymid: 'user_' + Date.now(),
+                requestVar: 'auto_interstitial'
+            }).then((result) => {
+                console.log('In-app interstitial shown');
+                // No reward for auto interstitials
+            }).catch((error) => {
+                console.error('In-app interstitial error:', error);
+            });
+        }
+        
+        // Set up ad popup for interstitial ads
+        function setupAdPopup(adType, format) {
+            let title = '';
+            let rewardText = '';
+            
+            switch(adType) {
+                case '2x':
+                    title = '2x Coins Boost';
+                    rewardText = 'Reward: 2x coins for 30 minutes!';
+                    break;
+                case 'energy':
+                    title = 'Full Energy Refill';
+                    rewardText = 'Reward: Complete energy refill!';
+                    break;
+                case 'bonus':
+                    title = '500 Bonus Coins';
+                    rewardText = 'Reward: 500 coins instantly!';
+                    break;
+            }
+            
+            adPopupTitle.textContent = title;
+            adPopupReward.textContent = rewardText;
+            adTimer = 15;
+            adTimerElement.textContent = `${adTimer}s`;
+        }
+        
+        // Start ad countdown for interstitial
+        function startAdCountdown() {
+            adPopupWatch.disabled = true;
+            adPopupSkip.disabled = true;
+            
+            adInterval = setInterval(() => {
+                adTimer--;
+                adTimerElement.textContent = `${adTimer}s`;
+                
+                if (adTimer <= 0) {
+                    clearInterval(adInterval);
+                    completeAd();
+                }
+            }, 1000);
+        }
+        
+        // Complete ad and give reward
+        function completeAd() {
+            adPopupOverlay.style.display = 'none';
+            adActive = false;
+            adPopupWatch.disabled = false;
+            adPopupSkip.disabled = false;
+            
+            // Call the actual Monetag SDK
+            show_10081114({
                 type: 'end',
-                ymid: 'user_' + Date.now(), // Use timestamp as user ID for demo
-                requestVar: adType
+                ymid: 'user_' + Date.now(),
+                requestVar: `${currentAdFormat}_${currentAdType}`
             }).then((result) => {
                 console.log('Ad completed:', result);
-                button.innerHTML = '<i class="fas fa-check"></i> Ad Completed!';
-                
-                // Grant rewards based on ad type
-                grantAdReward(adType);
-                
-                setTimeout(() => {
-                    button.disabled = false;
-                    button.innerHTML = originalText;
-                }, 2000);
-                
+                grantAdReward(currentAdType, currentAdFormat);
             }).catch((error) => {
                 console.error('Ad error:', error);
-                button.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Ad Failed';
-                showNotification("Ad failed to load. Please try again.", "error");
-                
-                setTimeout(() => {
+                showNotification("Ad failed to complete", "error");
+            }).finally(() => {
+                // Reset buttons
+                const button = document.getElementById(`ad-${currentAdFormat}-${currentAdType}`);
+                if (button) {
                     button.disabled = false;
-                    button.innerHTML = originalText;
-                }, 2000);
+                    // Reset button text based on ad type
+                    switch(currentAdType) {
+                        case '2x':
+                            button.innerHTML = '<i class="fas fa-coins"></i><div><div>2x Coins Boost</div><div class="ad-info">Watch full ad for 30 minutes of 2x coins</div></div>';
+                            break;
+                        case 'energy':
+                            button.innerHTML = '<i class="fas fa-bolt"></i><div><div>Full Energy Refill</div><div class="ad-info">Watch ad to completely refill your energy</div></div>';
+                            break;
+                        case 'bonus':
+                            button.innerHTML = '<i class="fas fa-gem"></i><div><div>500 Bonus Coins</div><div class="ad-info">Watch ad to get 500 coins instantly</div></div>';
+                            break;
+                    }
+                }
             });
         }
         
         // Grant rewards for completed ads
-        function grantAdReward(adType) {
+        function grantAdReward(adType, format) {
             switch(adType) {
-                case 'double-coins':
+                case '2x':
                     doubleCoinsActive = true;
                     showNotification("2x coins activated for 30 minutes!", "success");
                     // Reset after 30 minutes
                     setTimeout(() => {
                         doubleCoinsActive = false;
                         showNotification("2x coins bonus has expired", "info");
-                    }, 30 * 60 * 1000); // 30 minutes
+                    }, 30 * 60 * 1000);
                     break;
                     
-                case 'refill-energy':
+                case 'energy':
                     energy = maxEnergy;
                     updateUI();
                     showNotification("Energy fully refilled!", "success");
                     break;
                     
-                case 'bonus-coins':
+                case 'bonus':
                     coins += 500;
                     updateUI();
                     showNotification("+500 bonus coins!", "success");
+                    break;
+                    
+                case 'daily':
+                    coins += 200;
+                    updateUI();
+                    showNotification("Daily bonus claimed! +200 coins", "success");
+                    break;
+                    
+                case 'special':
+                    coins += 300;
+                    updateUI();
+                    showNotification("Special offer! +300 coins", "success");
                     break;
             }
         }
@@ -650,25 +897,17 @@
         // Check SDK status on load
         function checkSDKStatus() {
             if (typeof show_10081114 !== 'undefined') {
-                updateSDKStatus('loaded', 'SDK loaded successfully');
+                updateSDKStatus('success', 'Monetag SDK loaded successfully');
+                preloadAds();
                 
-                // Test the SDK
-                show_10081114({ type: 'preload' })
-                    .then(() => {
-                        updateSDKStatus('loaded', 'SDK ready - ads can be shown');
-                    })
-                    .catch((error) => {
-                        updateSDKStatus('error', 'SDK preload failed: ' + error.message);
-                    });
+                // Start auto interstitials (every 3 minutes)
+                setInterval(() => {
+                    showInAppInterstitial();
+                }, 180000);
             } else {
-                updateSDKStatus('loading', 'Loading SDK...');
-                // Wait a bit then check again
-                setTimeout(() => {
-                    if (typeof show_10081114 === 'undefined') {
-                        updateSDKStatus('error', 'SDK failed to load - trying fallback');
-                        loadMonetagFallback();
-                    }
-                }, 2000);
+                updateSDKStatus('error', 'Monetag SDK failed to load');
+                // Retry after 3 seconds
+                setTimeout(checkSDKStatus, 3000);
             }
         }
         
@@ -677,32 +916,39 @@
             updateUI();
             hamsterElement.addEventListener('click', handleHamsterTap);
             
-            // Set up ad buttons
-            document.getElementById('ad-double-coins').addEventListener('click', () => showMonetagAd('double-coins'));
-            document.getElementById('ad-refill-energy').addEventListener('click', () => showMonetagAd('refill-energy'));
-            document.getElementById('ad-bonus-coins').addEventListener('click', () => showMonetagAd('bonus-coins'));
+            // Set up Rewarded Interstitial buttons
+            document.getElementById('ad-interstitial-2x').addEventListener('click', () => showRewardedInterstitial('2x'));
+            document.getElementById('ad-interstitial-energy').addEventListener('click', () => showRewardedInterstitial('energy'));
+            document.getElementById('ad-interstitial-bonus').addEventListener('click', () => showRewardedInterstitial('bonus'));
             
-            // Set up boosters
-            document.getElementById('booster1').addEventListener('click', () => {
-                if (coins >= 500) {
-                    coins -= 500;
-                    coinsPerTap += 2;
-                    updateUI();
-                    showNotification("Pickaxe upgraded!", "success");
-                } else {
-                    showNotification("Not enough coins!", "error");
-                }
-            });
+            // Set up Rewarded Popup buttons
+            document.getElementById('ad-popup-daily').addEventListener('click', () => showRewardedPopup('daily'));
+            document.getElementById('ad-popup-special').addEventListener('click', () => showRewardedPopup('special'));
             
-            document.getElementById('booster2').addEventListener('click', () => {
-                if (coins >= 800) {
-                    coins -= 800;
-                    maxEnergy += 20;
-                    energy += 20;
-                    updateUI();
-                    showNotification("Energy capacity increased!", "success");
-                } else {
-                    showNotification("Not enough coins!", "error");
+            // Set up popup buttons
+            adPopupWatch.addEventListener('click', completeAd);
+            adPopupSkip.addEventListener('click', () => {
+                adPopupOverlay.style.display = 'none';
+                adActive = false;
+                clearInterval(adInterval);
+                showNotification("Ad skipped", "warning");
+                
+                // Reset the button that triggered this ad
+                const button = document.getElementById(`ad-${currentAdFormat}-${currentAdType}`);
+                if (button) {
+                    button.disabled = false;
+                    // Reset button text based on ad type
+                    switch(currentAdType) {
+                        case '2x':
+                            button.innerHTML = '<i class="fas fa-coins"></i><div><div>2x Coins Boost</div><div class="ad-info">Watch full ad for 30 minutes of 2x coins</div></div>';
+                            break;
+                        case 'energy':
+                            button.innerHTML = '<i class="fas fa-bolt"></i><div><div>Full Energy Refill</div><div class="ad-info">Watch ad to completely refill your energy</div></div>';
+                            break;
+                        case 'bonus':
+                            button.innerHTML = '<i class="fas fa-gem"></i><div><div>500 Bonus Coins</div><div class="ad-info">Watch ad to get 500 coins instantly</div></div>';
+                            break;
+                    }
                 }
             });
             
