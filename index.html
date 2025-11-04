@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src='//libtl.com/sdk.js' data-zone='10139509' data-sdk='show_3099110'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hamster Miner - Complete Monetag Integration</title>
@@ -470,7 +470,7 @@
                         <i class="fas fa-coins"></i>
                         <div>
                             <div>2x Coins Boost</div>
-                            <div class="ad-info">Watch full ad for 30 minutes of 2x coins</div>
+                            <div class="ad-info">Watch full ad for 1 minutes of 2x coins</div>
                         </div>
                     </button>
                     
@@ -578,7 +578,7 @@
     </div>
 
     <!-- Monetag SDK Integration -->
-    <script src="//libtl.com/sdk.js" data-zone="10081114" data-sdk="show_10081114"></script>
+    <script src="//libtl.com/sdk.js" data-zone="10139509" data-sdk="show_10139509"></script>
 
     <script>
         // Game state
@@ -752,9 +752,9 @@
         
         // Show In-app Interstitial Ad
         function showInAppInterstitial() {
-            // Only show if enough time has passed (3 minutes)
+            // Only show if enough time has passed (1 minutes)
             const currentTime = Date.now();
-            if (currentTime - lastInterstitialTime < 180000) { // 3 minutes
+            if (currentTime - lastInterstitialTime < 180000) { // 1 minutes
                 return;
             }
             
@@ -782,7 +782,7 @@
             switch(adType) {
                 case '2x':
                     title = '2x Coins Boost';
-                    rewardText = 'Reward: 2x coins for 30 minutes!';
+                    rewardText = 'Reward: 2x coins for 1 minutes!';
                     break;
                 case 'energy':
                     title = 'Full Energy Refill';
@@ -824,7 +824,7 @@
             adPopupSkip.disabled = false;
             
             // Call the actual Monetag SDK
-            show_10081114({
+            show_10139509({
                 type: 'end',
                 ymid: 'user_' + Date.now(),
                 requestVar: `${currentAdFormat}_${currentAdType}`
@@ -896,11 +896,11 @@
         
         // Check SDK status on load
         function checkSDKStatus() {
-            if (typeof show_10081114 !== 'undefined') {
+            if (typeof show_10139509 !== 'undefined') {
                 updateSDKStatus('success', 'Monetag SDK loaded successfully');
                 preloadAds();
                 
-                // Start auto interstitials (every 3 minutes)
+                // Start auto interstitials (every 1 minutes)
                 setInterval(() => {
                     showInAppInterstitial();
                 }, 180000);
@@ -970,3 +970,4 @@
     </script>
 </body>
 </html>
+
