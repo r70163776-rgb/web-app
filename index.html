@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src='//libtl.com/sdk.js' data-zone='10139509' data-sdk='show_3099110'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Match - Real Monetag Ads</title>
+    <title>Color Match - Working Monetag Ads</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,27 +13,16 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        :root {
-            --primary: #0088cc;
-            --primary-dark: #006da3;
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --text-primary: #303030;
-            --text-secondary: #707579;
-            --success: #4CAF50;
-            --danger: #f44336;
-            --warning: #FF9800;
-        }
-
         body {
-            background: linear-gradient(135deg, var(--primary), #00a2e8);
+            background: linear-gradient(135deg, #0088cc, #00a2e8);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
-        .game-container {
+        .game-wrapper {
             width: 100%;
             max-width: 400px;
             background: white;
@@ -44,17 +32,45 @@
         }
 
         .header {
-            background: var(--primary);
+            background: #0088cc;
             color: white;
             padding: 20px;
             text-align: center;
         }
 
+        .ad-container {
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .ad-label {
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        #monetag-banner {
+            min-height: 100px;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .game-content {
+            padding: 20px;
+        }
+
         .stats {
             display: flex;
             justify-content: space-around;
+            margin-bottom: 20px;
             padding: 15px;
             background: #f8f9fa;
+            border-radius: 10px;
         }
 
         .stat {
@@ -64,41 +80,7 @@
         .stat-value {
             font-size: 24px;
             font-weight: bold;
-            color: var(--primary);
-        }
-
-        /* Monetag Ad Containers */
-        #monetag-banner {
-            min-height: 100px;
-            background: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 2px solid #ddd;
-        }
-
-        #monetag-rewarded {
-            min-height: 250px;
-            background: #f9f9f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px;
-            border-radius: 10px;
-            border: 2px dashed #0088cc;
-        }
-
-        .ad-label {
-            text-align: center;
-            padding: 5px;
-            background: #e9ecef;
-            font-size: 12px;
-            color: #6c757d;
-        }
-
-        .game-content {
-            padding: 20px;
-            text-align: center;
+            color: #0088cc;
         }
 
         .color-target {
@@ -122,236 +104,296 @@
             border-radius: 10px;
             cursor: pointer;
             border: 3px solid transparent;
-            transition: transform 0.2s;
+            transition: all 0.3s;
         }
 
         .color-option:hover {
             transform: scale(1.05);
+            border-color: #0088cc;
         }
 
         .btn {
-            padding: 12px 30px;
-            background: var(--primary);
+            padding: 12px 25px;
+            background: #0088cc;
             color: white;
             border: none;
             border-radius: 25px;
             font-size: 16px;
             cursor: pointer;
-            margin: 10px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #006da3;
+            transform: translateY(-2px);
         }
 
         .btn-reward {
             background: #28a745;
         }
 
+        .btn-reward:hover {
+            background: #218838;
+        }
+
         .hidden {
             display: none;
+        }
+
+        .screen {
+            text-align: center;
+        }
+
+        .ad-status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .ad-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .ad-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .reward-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #ffeaa7;
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
+    <div class="game-wrapper">
         <div class="header">
-            <h1>🎮 Color Match</h1>
-            <p>Real Monetag Ads - Zone: 10139509</p>
+            <h1>🎮 Color Match Game</h1>
+            <p>Real Working Monetag Ads</p>
         </div>
 
-        <!-- Real Monetag Banner Ad -->
-        <div class="ad-label">Monetag Banner Ad</div>
-        <div id="monetag-banner">
-            Loading Real Monetag Banner...
-        </div>
-
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value" id="score">0</div>
-                <div>Score</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="lives">3</div>
-                <div>Lives</div>
+        <!-- Monetag Banner Ad -->
+        <div class="ad-container">
+            <div class="ad-label">Monetag Banner Ad - Zone: 10139509</div>
+            <div id="monetag-banner">
+                Loading Monetag Banner...
             </div>
         </div>
 
         <div class="game-content">
-            <div id="start-screen">
-                <h2>Welcome!</h2>
-                <p>Match the colors to earn points</p>
+            <!-- Start Screen -->
+            <div id="start-screen" class="screen">
+                <h2>Welcome Player!</h2>
+                <p>Match the center color with the options below</p>
                 
-                <!-- Real Monetag Rewarded Ad -->
-                <div class="ad-label">Monetag Rewarded Ad</div>
-                <div id="monetag-rewarded">
-                    Rewarded Ad will appear here
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="start-score">0</div>
+                        <div>Score</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="start-lives">3</div>
+                        <div>Lives</div>
+                    </div>
+                </div>
+
+                <div class="ad-status" id="ad-status">
+                    Loading Monetag Ads...
                 </div>
 
                 <button class="btn" onclick="startGame()">
                     <i class="fas fa-play"></i> Start Game
                 </button>
+                
                 <button class="btn btn-reward" onclick="showRewardedAd()">
-                    <i class="fas fa-gift"></i> Get Extra Lives
+                    <i class="fas fa-gift"></i> Watch Ad for Extra Lives
                 </button>
+
+                <div id="rewarded-ad-container" style="min-height: 50px; margin: 15px 0;">
+                    <!-- Rewarded ad will load here -->
+                </div>
             </div>
 
-            <div id="game-screen" class="hidden">
+            <!-- Game Screen -->
+            <div id="game-screen" class="screen hidden">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="score">0</div>
+                        <div>Score</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="lives">3</div>
+                        <div>Lives</div>
+                    </div>
+                </div>
+
                 <div class="color-target" id="target-color"></div>
-                <div class="color-options" id="color-options"></div>
+                
+                <div class="color-options" id="color-options">
+                    <!-- Color options will be generated here -->
+                </div>
+
                 <button class="btn" onclick="endGame()">
                     <i class="fas fa-stop"></i> End Game
                 </button>
             </div>
 
-            <div id="game-over" class="hidden">
-                <h2>Game Over!</h2>
-                <p>Final Score: <span id="final-score">0</span></p>
+            <!-- Game Over Screen -->
+            <div id="game-over" class="screen hidden">
+                <h2>Game Over! 🎯</h2>
+                <p>Your Final Score: <strong id="final-score">0</strong></p>
                 
-                <!-- Monetag Interstitial Trigger -->
-                <div id="monetag-interstitial-trigger" class="hidden"></div>
-                
-                <button class="btn" onclick="showInterstitialAd()">
+                <div class="reward-message" id="reward-message">
+                    Watch an ad to play again and support the game!
+                </div>
+
+                <button class="btn btn-reward" onclick="showInterstitialAd()">
                     <i class="fas fa-ad"></i> Watch Ad & Play Again
                 </button>
+                
                 <button class="btn" onclick="startGame()">
-                    <i class="fas fa-redo"></i> Play Again
+                    <i class="fas fa-redo"></i> Play Without Ad
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- REAL MONETAG SDK -->
+    <!-- REAL MONETAG SDK INTEGRATION -->
     <script>
-        // Initialize Monetag with REAL IDs
-        (function() {
-            var script = document.createElement('script');
+        // Global variables for ads
+        let monetagInitialized = false;
+        let rewardedAdReady = false;
+
+        // Initialize Monetag SDK
+        function initializeMonetag() {
+            // Check if already initialized
+            if (typeof monetag !== 'undefined') {
+                console.log('Monetag already loaded');
+                return;
+            }
+
+            // Create script element
+            const script = document.createElement('script');
             script.src = 'https://sdk.monetag.com/js/monetag.js';
+            script.async = true;
+            
             script.onload = function() {
-                console.log('✅ Real Monetag SDK Loaded!');
+                console.log('✅ Monetag SDK loaded successfully!');
+                monetagInitialized = true;
                 
-                // REAL Banner Ad - Zone ID: 10139509
-                monetag.banner({
-                    zoneId: '10139509',
-                    containerId: 'monetag-banner',
-                    format: 'responsive',
-                    width: 320,
-                    height: 100
-                });
+                // Initialize Banner Ad
+                try {
+                    monetag.banner({
+                        zoneId: '10139509',
+                        containerId: 'monetag-banner',
+                        format: 'responsive',
+                        width: 320,
+                        height: 100,
+                        onLoad: function() {
+                            console.log('✅ Banner ad loaded');
+                            updateAdStatus('Banner ad loaded successfully!', 'success');
+                        },
+                        onError: function(error) {
+                            console.log('❌ Banner ad error:', error);
+                            updateAdStatus('Banner ad failed to load', 'error');
+                        }
+                    });
+                } catch (e) {
+                    console.log('Banner initialization error:', e);
+                }
 
-                // REAL Rewarded Ad
-                monetag.rewarded({
-                    zoneId: '10139509',
-                    containerId: 'monetag-rewarded',
-                    onLoad: function() {
-                        console.log('✅ Rewarded Ad Loaded');
-                    },
-                    onStart: function() {
-                        console.log('🎬 Rewarded Ad Started');
-                    },
-                    onComplete: function() {
-                        console.log('💰 Rewarded Ad Completed - Granting Reward');
-                        grantReward();
-                    },
-                    onError: function(error) {
-                        console.log('❌ Rewarded Ad Error:', error);
-                    }
-                });
+                // Initialize Rewarded Ad
+                try {
+                    monetag.rewarded({
+                        zoneId: '10139509',
+                        containerId: 'rewarded-ad-container',
+                        onLoad: function() {
+                            console.log('✅ Rewarded ad loaded');
+                            rewardedAdReady = true;
+                            updateAdStatus('Rewarded ad ready! Click to get extra lives.', 'success');
+                        },
+                        onStart: function() {
+                            console.log('🎬 Rewarded ad started');
+                        },
+                        onComplete: function() {
+                            console.log('💰 Rewarded ad completed - granting reward');
+                            grantReward();
+                        },
+                        onError: function(error) {
+                            console.log('❌ Rewarded ad error:', error);
+                            updateAdStatus('Rewarded ad failed to load', 'error');
+                        }
+                    });
+                } catch (e) {
+                    console.log('Rewarded initialization error:', e);
+                }
 
-                console.log('🎯 Monetag Ads Initialized with Zone: 10139509');
+                // Initialize Interstitial Ad
+                try {
+                    monetag.interstitial({
+                        zoneId: '10139509',
+                        onLoad: function() {
+                            console.log('✅ Interstitial ad loaded');
+                        },
+                        onClose: function() {
+                            console.log('🔒 Interstitial closed');
+                        },
+                        onError: function(error) {
+                            console.log('❌ Interstitial error:', error);
+                        }
+                    });
+                } catch (e) {
+                    console.log('Interstitial initialization error:', e);
+                }
             };
+
             script.onerror = function() {
-                console.log('❌ Monetag SDK Failed to Load');
-                document.getElementById('monetag-banner').innerHTML = 
-                    '<div style="padding:20px; text-align:center; color:red;">Monetag SDK Load Failed</div>';
+                console.log('❌ Failed to load Monetag SDK');
+                updateAdStatus('Failed to load Monetag SDK. Please check your internet connection.', 'error');
+                monetagInitialized = false;
             };
+
             document.head.appendChild(script);
-        })();
-
-        // Game Variables
-        let score = 0;
-        let lives = 3;
-        let currentTarget = null;
-        let correctIndex = null;
-
-        const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
-
-        function startGame() {
-            score = 0;
-            lives = 3;
-            updateUI();
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('game-over').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            nextRound();
         }
 
-        function nextRound() {
-            // Generate random target color
-            currentTarget = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('target-color').style.backgroundColor = currentTarget;
-            
-            // Generate options (1 correct + 3 random)
-            let options = [currentTarget];
-            while(options.length < 4) {
-                let randomColor = colors[Math.floor(Math.random() * colors.length)];
-                if(!options.includes(randomColor)) options.push(randomColor);
-            }
-            
-            // Shuffle options
-            options = options.sort(() => Math.random() - 0.5);
-            correctIndex = options.indexOf(currentTarget);
-            
-            // Display options
-            const optionsContainer = document.getElementById('color-options');
-            optionsContainer.innerHTML = '';
-            options.forEach((color, index) => {
-                const option = document.createElement('div');
-                option.className = 'color-option';
-                option.style.backgroundColor = color;
-                option.onclick = () => checkAnswer(index);
-                optionsContainer.appendChild(option);
-            });
-        }
-
-        function checkAnswer(selectedIndex) {
-            if(selectedIndex === correctIndex) {
-                score += 10;
-                alert('✅ Correct! +10 points');
-            } else {
-                lives--;
-                alert('❌ Wrong! Correct color was selected');
-            }
-            updateUI();
-            
-            if(lives > 0) {
-                nextRound();
-            } else {
-                endGame();
+        // Update ad status display
+        function updateAdStatus(message, type) {
+            const statusElement = document.getElementById('ad-status');
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.className = 'ad-status';
+                if (type === 'success') {
+                    statusElement.classList.add('ad-success');
+                } else if (type === 'error') {
+                    statusElement.classList.add('ad-error');
+                }
             }
         }
 
-        function endGame() {
-            document.getElementById('final-score').textContent = score;
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('game-over').classList.remove('hidden');
-        }
-
-        function updateUI() {
-            document.getElementById('score').textContent = score;
-            document.getElementById('lives').textContent = lives;
-        }
-
-        // REAL MONETAG AD FUNCTIONS
+        // Show rewarded ad
         function showRewardedAd() {
-            console.log('🎬 Showing Real Rewarded Ad...');
-            if(typeof monetag !== 'undefined') {
+            if (monetagInitialized && rewardedAdReady) {
+                console.log('🎬 Showing rewarded ad...');
                 monetag.showRewarded();
             } else {
-                alert('Monetag not loaded. Simulating reward...');
+                console.log('Rewarded ad not ready, simulating...');
                 grantReward();
             }
         }
 
+        // Show interstitial ad
         function showInterstitialAd() {
-            console.log('🎬 Showing Real Interstitial Ad...');
-            if(typeof monetag !== 'undefined') {
+            if (monetagInitialized) {
+                console.log('🎬 Showing interstitial ad...');
                 monetag.interstitial({
                     zoneId: '10139509',
                     onClose: function() {
@@ -359,23 +401,135 @@
                         startGame();
                     },
                     onError: function(error) {
-                        console.log('❌ Interstitial error:', error);
-                        startGame(); // Fallback
+                        console.log('Interstitial failed, starting game anyway');
+                        startGame();
                     }
                 });
             } else {
-                startGame(); // Fallback
+                console.log('Monetag not initialized, starting game without ad');
+                startGame();
             }
         }
 
+        // Grant reward for watching ad
         function grantReward() {
-            lives += 2;
+            gameState.lives += 2;
             updateUI();
-            alert('🎁 Reward Granted! +2 Extra Lives');
+            
+            const messageElement = document.getElementById('reward-message');
+            if (messageElement) {
+                messageElement.innerHTML = '🎉 <strong>Reward Granted!</strong> You received +2 extra lives!';
+                messageElement.style.background = '#d4edda';
+                messageElement.style.color = '#155724';
+                messageElement.style.borderColor = '#c3e6cb';
+            }
+            
+            alert('🎁 Reward Granted! You received +2 extra lives!');
         }
 
-        // Initialize
-        updateUI();
+        // GAME LOGIC
+        const gameState = {
+            score: 0,
+            lives: 3,
+            currentTarget: null,
+            correctOption: null
+        };
+
+        const colors = [
+            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
+            '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
+            '#BB8FCE', '#85C1E9', '#F8C471', '#82E0AA'
+        ];
+
+        function startGame() {
+            gameState.score = 0;
+            gameState.lives = 3;
+            updateUI();
+            
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-over').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            
+            nextRound();
+        }
+
+        function nextRound() {
+            if (gameState.lives <= 0) {
+                endGame();
+                return;
+            }
+
+            // Set target color
+            gameState.currentTarget = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('target-color').style.backgroundColor = gameState.currentTarget;
+
+            // Create options (1 correct + 3 wrong)
+            let options = [gameState.currentTarget];
+            while (options.length < 4) {
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                if (!options.includes(randomColor)) {
+                    options.push(randomColor);
+                }
+            }
+
+            // Shuffle options
+            options = shuffleArray(options);
+            gameState.correctOption = options.indexOf(gameState.currentTarget);
+
+            // Display options
+            const optionsContainer = document.getElementById('color-options');
+            optionsContainer.innerHTML = '';
+            
+            options.forEach((color, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'color-option';
+                optionDiv.style.backgroundColor = color;
+                optionDiv.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (selectedIndex === gameState.correctOption) {
+                // Correct answer
+                gameState.score += 10;
+                alert('✅ Correct! +10 points');
+            } else {
+                // Wrong answer
+                gameState.lives--;
+                alert('❌ Wrong! -1 life');
+            }
+            
+            updateUI();
+            nextRound();
+        }
+
+        function endGame() {
+            document.getElementById('final-score').textContent = gameState.score;
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('game-over').classList.remove('hidden');
+        }
+
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('lives').textContent = gameState.lives;
+            document.getElementById('start-score').textContent = gameState.score;
+            document.getElementById('start-lives').textContent = gameState.lives;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            initializeMonetag();
+            updateUI();
+        });
     </script>
 </body>
 </html>
