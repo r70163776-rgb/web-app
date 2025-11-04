@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src='//libtl.com/sdk.js' data-zone='10139509' data-sdk='show_3099110'></script>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamster Miner - Complete Monetag Integration</title>
+    <title>Color Match - Telegram Game</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -13,84 +13,65 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        :root {
+            --primary: #0088cc;
+            --primary-dark: #006da3;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-primary: #303030;
+            --text-secondary: #707579;
+            --success: #4CAF50;
+            --danger: #f44336;
+            --warning: #FF9800;
+            --ad-bg: #2c3e50;
+        }
+
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), #00a2e8);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            color: var(--text-primary);
         }
 
-        .telegram-app {
+        .telegram-game {
             width: 100%;
             max-width: 400px;
-            height: 700px;
-            background: #1e2a3a;
-            border-radius: 20px;
+            height: 90vh;
+            background: var(--bg-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
-        .header {
-            background: #2b5278;
-            padding: 15px;
+        .game-header {
+            padding: 15px 20px;
+            background: var(--primary);
+            color: white;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            align-items: center;
         }
 
-        .header-left {
+        .game-title {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .back-btn {
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
+        .game-title i {
+            font-size: 20px;
         }
 
-        .app-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .header-right {
+        .game-stats {
             display: flex;
             gap: 15px;
         }
 
-        .header-icon {
-            font-size: 18px;
-            color: white;
-            cursor: pointer;
-        }
-
-        .game-container {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat-item {
+        .stat {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -98,876 +79,1001 @@
 
         .stat-value {
             font-size: 18px;
-            font-weight: 700;
-            color: #ffcc00;
+            font-weight: bold;
         }
 
         .stat-label {
             font-size: 12px;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
-        .hamster-container {
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ad Containers */
+        #monetag-banner {
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .ad-placeholder {
+            padding: 10px;
+            text-align: center;
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 12px;
+        }
+
+        .ad-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 5px;
+            background: #f8f9fa;
+        }
+
+        .game-screen {
+            flex: 1;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 20px 0;
-        }
-
-        .hamster {
-            width: 180px;
-            height: 180px;
-            background: linear-gradient(135deg, #ff9a00 0%, #ffcc00 100%);
-            border-radius: 50%;
-            display: flex;
             justify-content: center;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.1s;
-            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
-            margin-bottom: 20px;
+            gap: 20px;
         }
 
-        .hamster:active {
-            transform: scale(0.95);
+        #start-screen, #game-over-screen {
+            text-align: center;
         }
 
-        .hamster-face {
-            position: relative;
+        .game-logo {
             width: 100px;
-            height: 80px;
+            height: 100px;
+            border-radius: 20px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
         }
 
-        .hamster-eye {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #333;
-            border-radius: 50%;
-            top: 20px;
+        .game-logo i {
+            font-size: 50px;
+            color: white;
         }
 
-        .hamster-eye.left {
-            left: 10px;
-        }
-
-        .hamster-eye.right {
-            right: 10px;
-        }
-
-        .hamster-nose {
-            position: absolute;
-            width: 15px;
-            height: 10px;
-            background: #ff6666;
-            border-radius: 50%;
-            bottom: 10px;
-            left: 42.5px;
-        }
-
-        .tap-text {
-            font-size: 16px;
-            margin-top: 10px;
-            color: #ffcc00;
-        }
-
-        .ad-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+        .game-instructions {
+            background: var(--card-bg);
             padding: 15px;
-            margin-top: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
         }
 
-        .section-title {
+        .game-instructions h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .game-instructions ul {
+            padding-left: 20px;
+        }
+
+        .game-instructions li {
+            margin-bottom: 8px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 25px;
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
         }
 
-        .section-title i {
-            color: #ffcc00;
-        }
-
-        .ad-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .ad-button {
-            background: #ffcc00;
-            color: #333;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 15px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .ad-button:hover {
-            background: #ffaa00;
+        .btn:hover {
+            background: var(--primary-dark);
             transform: translateY(-2px);
         }
 
-        .ad-button:disabled {
-            background: #666;
-            color: #999;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .ad-button i {
+        .btn i {
             font-size: 18px;
-            width: 24px;
+        }
+
+        .color-target {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 5px solid white;
+        }
+
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .color-option {
+            height: 100px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+
+        .color-option.selected {
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: var(--primary);
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+
+        .feedback {
+            font-size: 24px;
+            font-weight: bold;
+            height: 30px;
+            margin: 10px 0;
+        }
+
+        .correct {
+            color: var(--success);
+        }
+
+        .incorrect {
+            color: var(--danger);
+        }
+
+        .game-over-stats {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .share-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .telegram-share {
+            background: var(--primary);
+            color: white;
+        }
+
+        .twitter-share {
+            background: #1DA1F2;
+            color: white;
+        }
+
+        .share-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .reward-ad {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
             text-align: center;
+            border: 2px dashed var(--primary);
         }
 
-        .ad-info {
-            font-size: 11px;
-            opacity: 0.8;
-            margin-top: 5px;
-            padding-left: 34px;
+        .reward-ad h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
         }
 
-        .ad-status {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #aaa;
-            text-align: center;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
+        .reward-ad p {
+            margin-bottom: 15px;
+            font-size: 14px;
         }
 
-        .ad-popup-overlay {
-            position: absolute;
+        .reward-btn {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: white;
+        }
+
+        .interstitial-ad {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 200;
-        }
-
-        .ad-popup {
-            background: #1e2a3a;
-            border-radius: 15px;
-            padding: 20px;
-            width: 90%;
-            max-width: 320px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        }
-
-        .ad-popup-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #ffcc00;
-        }
-
-        .ad-popup-content {
-            background: #2b5278;
-            border-radius: 10px;
-            height: 180px;
+            background: rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ad-timer {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            z-index: 1000;
             color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
         }
 
-        .ad-popup-reward {
-            font-size: 16px;
+        .interstitial-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 300px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .interstitial-content h2 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .interstitial-content p {
             margin-bottom: 20px;
-            color: #ffcc00;
         }
 
-        .ad-popup-actions {
+        .interstitial-actions {
             display: flex;
             gap: 10px;
-            justify-content: center;
         }
 
-        .ad-popup-btn {
-            padding: 10px 20px;
+        .interstitial-btn {
+            flex: 1;
+            padding: 10px;
             border: none;
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            font-weight: 600;
         }
 
-        .ad-popup-watch {
-            background: #ffcc00;
-            color: #333;
-        }
-
-        .ad-popup-watch:hover {
-            background: #ffaa00;
-        }
-
-        .ad-popup-skip {
-            background: rgba(255, 255, 255, 0.1);
+        .watch-ad-btn {
+            background: var(--primary);
             color: white;
         }
 
-        .ad-popup-skip:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .skip-ad-btn {
+            background: #e0e0e0;
+            color: var(--text-primary);
         }
 
-        .notification {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 15px 25px;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #ffcc00;
-            z-index: 100;
-            display: none;
-            text-align: center;
+        .hidden {
+            display: none !important;
         }
 
-        .navigation {
-            display: flex;
-            justify-content: space-around;
-            background: #1e2a3a;
-            padding: 12px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 12px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .nav-item.active {
-            color: #5c9ce6;
-        }
-
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .ad-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        .success {
-            color: #4CAF50;
-        }
-
-        .error {
-            color: #f44336;
-        }
-
-        .warning {
-            color: #ff9800;
-        }
-
-        @keyframes pulse {
+        /* Animation for correct/incorrect feedback */
+        @keyframes pop {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
 
-        .pulse {
-            animation: pulse 0.5s ease-in-out;
+        .pop-animation {
+            animation: pop 0.3s ease;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .telegram-game {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .game-screen {
+                padding: 15px;
+            }
+            
+            .color-options {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .color-option {
+                height: 80px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="telegram-app">
-        <div class="header">
-            <div class="header-left">
-                <div class="back-btn"><i class="fas fa-arrow-left"></i></div>
-                <div class="app-title">Hamster Miner</div>
+    <div class="telegram-game">
+        <div class="game-header">
+            <div class="game-title">
+                <i class="fas fa-gamepad"></i>
+                <h2>Color Match</h2>
             </div>
-            <div class="header-right">
-                <div class="header-icon"><i class="fas fa-search"></i></div>
-                <div class="header-icon"><i class="fas fa-ellipsis-v"></i></div>
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-value" id="score">0</div>
+                    <div class="stat-label">Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="level">1</div>
+                    <div class="stat-label">Level</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monetag Banner Ad -->
+        <div class="ad-label">Advertisement</div>
+        <div id="monetag-banner">
+            <div class="ad-placeholder">
+                Monetag Banner Ad<br>
+                <small>Zone: 10139509</small>
             </div>
         </div>
 
         <div class="game-container">
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-value" id="coin-count">1,250</div>
-                    <div class="stat-label">COINS</div>
+            <!-- Start Screen -->
+            <div class="game-screen" id="start-screen">
+                <div class="game-logo">
+                    <i class="fas fa-palette"></i>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="per-tap">5</div>
-                    <div class="stat-label">PER TAP</div>
+                <h1>Color Match Challenge</h1>
+                <p>Test your color recognition skills!</p>
+                
+                <div class="game-instructions">
+                    <h3>How to Play:</h3>
+                    <ul>
+                        <li>Match the target color with one of the options</li>
+                        <li>You have 5 seconds for each round</li>
+                        <li>Each correct match increases your score</li>
+                        <li>Every 5 points levels you up</li>
+                        <li>Game ends when you make 3 mistakes</li>
+                    </ul>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="energy">80/100</div>
-                    <div class="stat-label">ENERGY</div>
+
+                <!-- Reward Ad Offer -->
+                <div class="reward-ad">
+                    <h3><i class="fas fa-gift"></i> Special Offer!</h3>
+                    <p>Watch a rewarded ad to start with +2 extra lives!</p>
+                    <button class="btn reward-btn" id="reward-ad-btn">
+                        <i class="fas fa-play-circle"></i> Watch Ad for Extra Lives
+                    </button>
                 </div>
+                
+                <button class="btn" id="start-btn">
+                    <i class="fas fa-play"></i> Start Game
+                </button>
             </div>
 
-            <div class="hamster-container">
-                <div class="hamster" id="hamster">
-                    <div class="hamster-face">
-                        <div class="hamster-eye left"></div>
-                        <div class="hamster-eye right"></div>
-                        <div class="hamster-nose"></div>
+            <!-- Game Screen -->
+            <div class="game-screen hidden" id="game-screen">
+                <div class="timer-bar">
+                    <div class="timer-progress" id="timer-progress"></div>
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+                
+                <div class="color-target" id="target-color"></div>
+                
+                <div class="color-options" id="color-options">
+                    <!-- Color options will be generated by JavaScript -->
+                </div>
+
+                <!-- In-game interstitial placeholder -->
+                <div id="monetag-interstitial-trigger" class="hidden"></div>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div class="game-screen hidden" id="game-over-screen">
+                <div class="game-logo">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h1>Game Over!</h1>
+                <p>Your color matching skills are impressive!</p>
+                
+                <div class="game-over-stats">
+                    <div class="stat-row">
+                        <span>Final Score:</span>
+                        <span id="final-score">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Level Reached:</span>
+                        <span id="final-level">1</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Correct Matches:</span>
+                        <span id="correct-matches">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Best Streak:</span>
+                        <span id="best-streak">0</span>
                     </div>
                 </div>
-                <div class="tap-text">Tap the hamster to mine coins!</div>
-            </div>
 
-            <!-- Rewarded Interstitial Ads Section -->
-            <div class="ad-section">
-                <div class="section-title">
-                    <i class="fas fa-play-circle"></i>
-                    Rewarded Interstitial Ads
-                </div>
-                <div class="ad-grid">
-                    <button class="ad-button" id="ad-interstitial-2x">
-                        <i class="fas fa-coins"></i>
-                        <div>
-                            <div>2x Coins Boost</div>
-                            <div class="ad-info">Watch full ad for 1 minutes of 2x coins</div>
-                        </div>
-                    </button>
-                    
-                    <button class="ad-button" id="ad-interstitial-energy">
-                        <i class="fas fa-bolt"></i>
-                        <div>
-                            <div>Full Energy Refill</div>
-                            <div class="ad-info">Watch ad to completely refill your energy</div>
-                        </div>
-                    </button>
-                    
-                    <button class="ad-button" id="ad-interstitial-bonus">
-                        <i class="fas fa-gem"></i>
-                        <div>
-                            <div>500 Bonus Coins</div>
-                            <div class="ad-info">Watch ad to get 500 coins instantly</div>
-                        </div>
+                <!-- Reward Ad for Continue -->
+                <div class="reward-ad">
+                    <h3><i class="fas fa-redo"></i> Continue Playing!</h3>
+                    <p>Watch a rewarded ad to continue with current score + 1 extra life</p>
+                    <button class="btn reward-btn" id="continue-ad-btn">
+                        <i class="fas fa-play-circle"></i> Watch Ad to Continue
                     </button>
                 </div>
-            </div>
-
-            <!-- Rewarded Popup Ads Section -->
-            <div class="ad-section">
-                <div class="section-title">
-                    <i class="fas fa-external-link-alt"></i>
-                    Rewarded Popup Ads
-                </div>
-                <div class="ad-grid">
-                    <button class="ad-button" id="ad-popup-daily">
-                        <i class="fas fa-calendar-day"></i>
-                        <div>
-                            <div>Daily Bonus</div>
-                            <div class="ad-info">Click for daily reward popup</div>
-                        </div>
-                    </button>
-                    
-                    <button class="ad-button" id="ad-popup-special">
-                        <i class="fas fa-gift"></i>
-                        <div>
-                            <div>Special Offer</div>
-                            <div class="ad-info">Limited time special offer popup</div>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- In-app Interstitial Info -->
-            <div class="ad-section">
-                <div class="section-title">
-                    <i class="fas fa-mobile-alt"></i>
-                    In-app Interstitial Ads
-                </div>
-                <div class="ad-info">
-                    These ads appear automatically during gameplay. You'll see them:
-                </div>
-                <div class="ad-stats">
-                    <div>• After every 50 taps</div>
-                    <div>• When leveling up</div>
-                    <div>• Every 3 minutes</div>
-                </div>
-            </div>
-
-            <!-- Ad Status -->
-            <div class="ad-status" id="ad-status">
-                <span id="sdk-status">Initializing Monetag SDK...</span>
-            </div>
-        </div>
-
-        <div class="navigation">
-            <div class="nav-item active">
-                <div class="nav-icon"><i class="fas fa-home"></i></div>
-                <div>Home</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon"><i class="fas fa-ad"></i></div>
-                <div>Ads</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon"><i class="fas fa-store"></i></div>
-                <div>Shop</div>
-            </div>
-        </div>
-
-        <!-- Notification -->
-        <div class="notification" id="notification">
-            <div id="notification-content">Notification</div>
-        </div>
-
-        <!-- Ad Popup Overlay -->
-        <div class="ad-popup-overlay" id="ad-popup-overlay">
-            <div class="ad-popup">
-                <div class="ad-popup-title" id="ad-popup-title">Watch Ad for Reward</div>
-                <div class="ad-popup-content">
-                    <div class="ad-timer" id="ad-timer">15s</div>
-                    <i class="fas fa-play-circle" style="font-size: 50px; color: #ffcc00; margin-bottom: 10px;"></i>
-                    <div>Video Advertisement</div>
-                </div>
-                <div class="ad-popup-reward" id="ad-popup-reward">Reward: 2x coins for 30 minutes!</div>
-                <div class="ad-popup-actions">
-                    <button class="ad-popup-btn ad-popup-watch" id="ad-popup-watch">Watch Ad</button>
-                    <button class="ad-popup-btn ad-popup-skip" id="ad-popup-skip">Skip</button>
+                
+                <button class="btn" id="restart-btn">
+                    <i class="fas fa-redo"></i> Play Again
+                </button>
+                
+                <div class="share-buttons">
+                    <div class="share-btn telegram-share" id="telegram-share">
+                        <i class="fab fa-telegram"></i> Share
+                    </div>
+                    <div class="share-btn twitter-share" id="twitter-share">
+                        <i class="fab fa-twitter"></i> Tweet
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Monetag SDK Integration -->
-    <script src="//libtl.com/sdk.js" data-zone="10139509" data-sdk="show_10139509"></script>
+    <!-- Interstitial Ad Modal -->
+    <div class="interstitial-ad hidden" id="interstitial-ad">
+        <div class="interstitial-content">
+            <h2>Rewarded Advertisement</h2>
+            <p>Watch a short video to get your reward!</p>
+            <div id="monetag-rewarded-container" class="ad-placeholder" style="width: 100%; margin: 15px 0; padding: 20px;">
+                Monetag Rewarded Ad<br>
+                <small>Zone: 10139509</small>
+            </div>
+            <p>Ad will complete in <span id="ad-timer">5</span> seconds</p>
+            <div class="interstitial-actions">
+                <button class="interstitial-btn watch-ad-btn" id="watch-ad">Watch Ad</button>
+                <button class="interstitial-btn skip-ad-btn" id="skip-ad">Skip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monetag SDK Script -->
+    <script>
+        // Initialize Monetag SDK
+        (function() {
+            var monetagScript = document.createElement('script');
+            monetagScript.src = 'https://sdk.monetag.com/js/monetag.js';
+            monetagScript.onload = function() {
+                console.log('Monetag SDK loaded successfully');
+                
+                // Initialize banner ad
+                if (typeof monetag !== 'undefined') {
+                    // Banner Ad - Zone ID: 10139509
+                    monetag.banner({
+                        zoneId: '10139509',
+                        containerId: 'monetag-banner',
+                        format: 'responsive',
+                        width: 320,
+                        height: 50
+                    });
+                    
+                    console.log('Monetag banner ad initialized');
+                }
+            };
+            document.head.appendChild(monetagScript);
+        })();
+    </script>
 
     <script>
         // Game state
-        let coins = 1250;
-        let coinsPerTap = 5;
-        let energy = 80;
-        let maxEnergy = 100;
-        let doubleCoinsActive = false;
-        let tapCount = 0;
-        let lastInterstitialTime = 0;
-        
-        // Ad tracking
-        let adPreloaded = false;
-        let adActive = false;
-        let adTimer = 15;
-        let adInterval;
-        let currentAdType = '';
-        let currentAdFormat = '';
-        
-        // DOM elements
-        const coinCountElement = document.getElementById('coin-count');
-        const perTapElement = document.getElementById('per-tap');
-        const energyElement = document.getElementById('energy');
-        const hamsterElement = document.getElementById('hamster');
-        const notificationElement = document.getElementById('notification');
-        const notificationContent = document.getElementById('notification-content');
-        const sdkStatusElement = document.getElementById('sdk-status');
-        const adPopupOverlay = document.getElementById('ad-popup-overlay');
-        const adPopupTitle = document.getElementById('ad-popup-title');
-        const adPopupReward = document.getElementById('ad-popup-reward');
-        const adTimerElement = document.getElementById('ad-timer');
-        const adPopupWatch = document.getElementById('ad-popup-watch');
-        const adPopupSkip = document.getElementById('ad-popup-skip');
+        const gameState = {
+            score: 0,
+            level: 1,
+            lives: 3,
+            currentTarget: null,
+            correctOption: null,
+            timer: null,
+            timeLeft: 5,
+            gameActive: false,
+            correctMatches: 0,
+            currentStreak: 0,
+            bestStreak: 0,
+            adsWatched: 0,
+            extraLives: 0
+        };
 
-        // Update UI with current game state
-        function updateUI() {
-            coinCountElement.textContent = formatNumber(coins);
-            perTapElement.textContent = coinsPerTap;
-            energyElement.textContent = `${energy}/${maxEnergy}`;
-        }
-        
-        // Format numbers with commas
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-        
-        // Show notification
-        function showNotification(text, type = 'info') {
-            notificationContent.textContent = text;
-            notificationContent.className = type;
-            notificationElement.style.display = 'block';
-            setTimeout(() => {
-                notificationElement.style.display = 'none';
-            }, 3000);
-        }
-        
-        // Update SDK status
-        function updateSDKStatus(status, message) {
-            sdkStatusElement.textContent = message;
-            sdkStatusElement.className = status;
+        // Ad configuration
+        const adConfig = {
+            interstitialFrequency: 5, // Show interstitial every X rounds
+            roundsPlayed: 0,
+            interstitialShown: false,
+            rewardedAdLoaded: false
+        };
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const scoreElement = document.getElementById('score');
+        const levelElement = document.getElementById('level');
+        const targetColorElement = document.getElementById('target-color');
+        const colorOptionsElement = document.getElementById('color-options');
+        const timerProgressElement = document.getElementById('timer-progress');
+        const feedbackElement = document.getElementById('feedback');
+        const finalScoreElement = document.getElementById('final-score');
+        const finalLevelElement = document.getElementById('final-level');
+        const correctMatchesElement = document.getElementById('correct-matches');
+        const bestStreakElement = document.getElementById('best-streak');
+        const telegramShareBtn = document.getElementById('telegram-share');
+        const twitterShareBtn = document.getElementById('twitter-share');
+        const rewardAdBtn = document.getElementById('reward-ad-btn');
+        const continueAdBtn = document.getElementById('continue-ad-btn');
+        const interstitialAd = document.getElementById('interstitial-ad');
+        const watchAdBtn = document.getElementById('watch-ad');
+        const skipAdBtn = document.getElementById('skip-ad');
+        const adTimer = document.getElementById('ad-timer');
+        const interstitialTrigger = document.getElementById('monetag-interstitial-trigger');
+        const rewardedContainer = document.getElementById('monetag-rewarded-container');
+
+        // Color options for the game
+        const colorPalette = [
+            '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE',
+            '#448AFF', '#40C4FF', '#18FFFF', '#64FFDA', '#69F0AE',
+            '#B2FF59', '#EEFF41', '#FFFF00', '#FFD740', '#FFAB40',
+            '#FF6E40', '#8D6E63', '#BDBDBD', '#78909C', '#455A64'
+        ];
+
+        // Initialize game
+        function initGame() {
+            startBtn.addEventListener('click', startGame);
+            restartBtn.addEventListener('click', startGame);
+            telegramShareBtn.addEventListener('click', shareOnTelegram);
+            twitterShareBtn.addEventListener('click', shareOnTwitter);
+            rewardAdBtn.addEventListener('click', showRewardAd);
+            continueAdBtn.addEventListener('click', showContinueAd);
+            watchAdBtn.addEventListener('click', watchAd);
+            skipAdBtn.addEventListener('click', skipAd);
+
+            // Preload rewarded ad
+            preloadRewardedAd();
         }
 
-        // Handle hamster tap
-        function handleHamsterTap() {
-            if (energy <= 0) {
-                showNotification("No energy! Watch an ad to refill", "error");
+        // Preload rewarded ad
+        function preloadRewardedAd() {
+            if (typeof monetag !== 'undefined') {
+                monetag.rewarded({
+                    zoneId: '10139509',
+                    containerId: 'monetag-rewarded-container',
+                    onLoad: function() {
+                        console.log('Rewarded ad loaded successfully');
+                        adConfig.rewardedAdLoaded = true;
+                    },
+                    onStart: function() {
+                        console.log('Rewarded ad started');
+                    },
+                    onComplete: function() {
+                        console.log('Rewarded ad completed');
+                        completeAd();
+                    },
+                    onError: function(error) {
+                        console.log('Rewarded ad error:', error);
+                        // Fallback to simulated ad
+                        simulateAdCompletion();
+                    }
+                });
+            } else {
+                console.log('Monetag SDK not available, using simulated ads');
+            }
+        }
+
+        // Start the game
+        function startGame() {
+            // Reset game state
+            gameState.score = 0;
+            gameState.level = 1;
+            gameState.lives = 3 + gameState.extraLives;
+            gameState.correctMatches = 0;
+            gameState.currentStreak = 0;
+            gameState.bestStreak = 0;
+            gameState.gameActive = true;
+            adConfig.roundsPlayed = 0;
+            adConfig.interstitialShown = false;
+            
+            // Update UI
+            updateScore();
+            updateLevel();
+            
+            // Show game screen
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            // Start first round
+            startRound();
+        }
+
+        // Start a new round
+        function startRound() {
+            if (!gameState.gameActive) return;
+            
+            // Increment rounds played
+            adConfig.roundsPlayed++;
+            
+            // Check if we should show interstitial ad
+            if (adConfig.roundsPlayed % adConfig.interstitialFrequency === 0 && !adConfig.interstitialShown) {
+                showInterstitialAd();
+                adConfig.interstitialShown = true;
                 return;
             }
             
-            let earnedCoins = coinsPerTap;
-            if (doubleCoinsActive) {
-                earnedCoins *= 2;
+            // Reset timer
+            gameState.timeLeft = 5;
+            updateTimer();
+            
+            // Clear feedback
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+            
+            // Generate target color
+            const targetIndex = Math.floor(Math.random() * colorPalette.length);
+            gameState.currentTarget = colorPalette[targetIndex];
+            targetColorElement.style.backgroundColor = gameState.currentTarget;
+            
+            // Generate color options (one correct, others random)
+            const options = [gameState.currentTarget];
+            while (options.length < 4) {
+                const randomColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                if (!options.includes(randomColor)) {
+                    options.push(randomColor);
+                }
             }
             
-            coins += earnedCoins;
-            energy -= 1;
-            tapCount++;
+            // Shuffle options
+            shuffleArray(options);
+            gameState.correctOption = options.indexOf(gameState.currentTarget);
             
-            updateUI();
-            showNotification(`+${earnedCoins} coins!`, "success");
+            // Render options
+            renderColorOptions(options);
             
-            hamsterElement.classList.add('pulse');
+            // Start timer
+            startTimer();
+        }
+
+        // Render color options
+        function renderColorOptions(colors) {
+            colorOptionsElement.innerHTML = '';
+            colors.forEach((color, index) => {
+                const option = document.createElement('div');
+                option.className = 'color-option';
+                option.style.backgroundColor = color;
+                option.dataset.index = index;
+                option.addEventListener('click', () => selectColor(index));
+                colorOptionsElement.appendChild(option);
+            });
+        }
+
+        // Handle color selection
+        function selectColor(selectedIndex) {
+            if (!gameState.gameActive) return;
+            
+            // Clear timer
+            clearInterval(gameState.timer);
+            
+            // Check if correct
+            const isCorrect = selectedIndex === gameState.correctOption;
+            
+            // Visual feedback
+            const selectedOption = colorOptionsElement.children[selectedIndex];
+            selectedOption.classList.add('selected');
+            
+            if (isCorrect) {
+                // Correct selection
+                feedbackElement.textContent = 'Correct!';
+                feedbackElement.className = 'feedback correct';
+                gameState.score += gameState.level;
+                gameState.correctMatches++;
+                gameState.currentStreak++;
+                
+                if (gameState.currentStreak > gameState.bestStreak) {
+                    gameState.bestStreak = gameState.currentStreak;
+                }
+                
+                // Level up every 5 points
+                if (gameState.score >= gameState.level * 5) {
+                    gameState.level++;
+                    updateLevel();
+                }
+                
+                updateScore();
+            } else {
+                // Incorrect selection
+                feedbackElement.textContent = 'Wrong!';
+                feedbackElement.className = 'feedback incorrect';
+                gameState.lives--;
+                gameState.currentStreak = 0;
+                
+                // Highlight correct option
+                const correctOption = colorOptionsElement.children[gameState.correctOption];
+                correctOption.classList.add('selected');
+            }
+            
+            // Animation
+            feedbackElement.classList.add('pop-animation');
             setTimeout(() => {
-                hamsterElement.classList.remove('pulse');
+                feedbackElement.classList.remove('pop-animation');
             }, 300);
             
-            // Check for in-app interstitial (every 50 taps)
-            if (tapCount % 50 === 0) {
-                showInAppInterstitial();
-            }
-        }
-        
-        // Preload Monetag ads
-        function preloadAds() {
-            if (typeof show_10081114 !== 'undefined') {
-                show_10081114({
-                    type: 'preload',
-                    ymid: 'user_' + Date.now(),
-                    timeout: 5
-                }).then(() => {
-                    adPreloaded = true;
-                    updateSDKStatus('success', 'Ads preloaded and ready');
-                }).catch((error) => {
-                    console.log('Ad preload failed:', error);
-                    updateSDKStatus('warning', 'Ads may load slowly');
-                });
-            }
-        }
-        
-        // Show Rewarded Interstitial Ad
-        function showRewardedInterstitial(adType) {
-            if (adActive) return;
-            
-            const button = document.getElementById(`ad-interstitial-${adType}`);
-            const originalText = button.innerHTML;
-            
-            if (typeof show_10081114 === 'undefined') {
-                showNotification("Ad system not ready. Please try again.", "error");
-                return;
-            }
-            
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-            adActive = true;
-            currentAdFormat = 'interstitial';
-            currentAdType = adType;
-            
-            // Set up the ad popup
-            setupAdPopup(adType, 'interstitial');
-            
-            // Show the popup with countdown
-            adPopupOverlay.style.display = 'flex';
-            startAdCountdown();
-        }
-        
-        // Show Rewarded Popup Ad
-        function showRewardedPopup(adType) {
-            if (adActive) return;
-            
-            const button = document.getElementById(`ad-popup-${adType}`);
-            const originalText = button.innerHTML;
-            
-            if (typeof show_10081114 === 'undefined') {
-                showNotification("Ad system not ready. Please try again.", "error");
-                return;
-            }
-            
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-            adActive = true;
-            currentAdFormat = 'popup';
-            currentAdType = adType;
-            
-            // For popup ads, we use a different approach
-            show_10081114({
-                type: 'pop',
-                ymid: 'user_' + Date.now(),
-                requestVar: `popup_${adType}`
-            }).then((result) => {
-                console.log('Popup ad completed:', result);
-                grantAdReward(adType, 'popup');
-            }).catch((error) => {
-                console.error('Popup ad error:', error);
-                showNotification("Popup ad failed to load", "error");
-            }).finally(() => {
-                button.disabled = false;
-                button.innerHTML = originalText;
-                adActive = false;
-            });
-        }
-        
-        // Show In-app Interstitial Ad
-        function showInAppInterstitial() {
-            // Only show if enough time has passed (1 minutes)
-            const currentTime = Date.now();
-            if (currentTime - lastInterstitialTime < 180000) { // 1 minutes
-                return;
-            }
-            
-            if (typeof show_10081114 === 'undefined') return;
-            
-            lastInterstitialTime = currentTime;
-            
-            show_10081114({
-                type: 'inApp',
-                ymid: 'user_' + Date.now(),
-                requestVar: 'auto_interstitial'
-            }).then((result) => {
-                console.log('In-app interstitial shown');
-                // No reward for auto interstitials
-            }).catch((error) => {
-                console.error('In-app interstitial error:', error);
-            });
-        }
-        
-        // Set up ad popup for interstitial ads
-        function setupAdPopup(adType, format) {
-            let title = '';
-            let rewardText = '';
-            
-            switch(adType) {
-                case '2x':
-                    title = '2x Coins Boost';
-                    rewardText = 'Reward: 2x coins for 1 minutes!';
-                    break;
-                case 'energy':
-                    title = 'Full Energy Refill';
-                    rewardText = 'Reward: Complete energy refill!';
-                    break;
-                case 'bonus':
-                    title = '500 Bonus Coins';
-                    rewardText = 'Reward: 500 coins instantly!';
-                    break;
-            }
-            
-            adPopupTitle.textContent = title;
-            adPopupReward.textContent = rewardText;
-            adTimer = 15;
-            adTimerElement.textContent = `${adTimer}s`;
-        }
-        
-        // Start ad countdown for interstitial
-        function startAdCountdown() {
-            adPopupWatch.disabled = true;
-            adPopupSkip.disabled = true;
-            
-            adInterval = setInterval(() => {
-                adTimer--;
-                adTimerElement.textContent = `${adTimer}s`;
-                
-                if (adTimer <= 0) {
-                    clearInterval(adInterval);
-                    completeAd();
+            // Next round or game over
+            setTimeout(() => {
+                if (isCorrect) {
+                    startRound();
+                } else if (gameState.lives > 0) {
+                    startRound();
+                } else {
+                    endGame();
                 }
             }, 1000);
         }
-        
-        // Complete ad and give reward
-        function completeAd() {
-            adPopupOverlay.style.display = 'none';
-            adActive = false;
-            adPopupWatch.disabled = false;
-            adPopupSkip.disabled = false;
-            
-            // Call the actual Monetag SDK
-            show_10139509({
-                type: 'end',
-                ymid: 'user_' + Date.now(),
-                requestVar: `${currentAdFormat}_${currentAdType}`
-            }).then((result) => {
-                console.log('Ad completed:', result);
-                grantAdReward(currentAdType, currentAdFormat);
-            }).catch((error) => {
-                console.error('Ad error:', error);
-                showNotification("Ad failed to complete", "error");
-            }).finally(() => {
-                // Reset buttons
-                const button = document.getElementById(`ad-${currentAdFormat}-${currentAdType}`);
-                if (button) {
-                    button.disabled = false;
-                    // Reset button text based on ad type
-                    switch(currentAdType) {
-                        case '2x':
-                            button.innerHTML = '<i class="fas fa-coins"></i><div><div>2x Coins Boost</div><div class="ad-info">Watch full ad for 30 minutes of 2x coins</div></div>';
-                            break;
-                        case 'energy':
-                            button.innerHTML = '<i class="fas fa-bolt"></i><div><div>Full Energy Refill</div><div class="ad-info">Watch ad to completely refill your energy</div></div>';
-                            break;
-                        case 'bonus':
-                            button.innerHTML = '<i class="fas fa-gem"></i><div><div>500 Bonus Coins</div><div class="ad-info">Watch ad to get 500 coins instantly</div></div>';
-                            break;
+
+        // Start the timer for the current round
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft -= 0.1;
+                updateTimer();
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    // Time's up - count as wrong answer
+                    gameState.lives--;
+                    gameState.currentStreak = 0;
+                    
+                    if (gameState.lives > 0) {
+                        feedbackElement.textContent = 'Time\'s up!';
+                        feedbackElement.className = 'feedback incorrect';
+                        startRound();
+                    } else {
+                        endGame();
                     }
                 }
-            });
+            }, 100);
         }
-        
-        // Grant rewards for completed ads
-        function grantAdReward(adType, format) {
-            switch(adType) {
-                case '2x':
-                    doubleCoinsActive = true;
-                    showNotification("2x coins activated for 30 minutes!", "success");
-                    // Reset after 30 minutes
-                    setTimeout(() => {
-                        doubleCoinsActive = false;
-                        showNotification("2x coins bonus has expired", "info");
-                    }, 30 * 60 * 1000);
-                    break;
-                    
-                case 'energy':
-                    energy = maxEnergy;
-                    updateUI();
-                    showNotification("Energy fully refilled!", "success");
-                    break;
-                    
-                case 'bonus':
-                    coins += 500;
-                    updateUI();
-                    showNotification("+500 bonus coins!", "success");
-                    break;
-                    
-                case 'daily':
-                    coins += 200;
-                    updateUI();
-                    showNotification("Daily bonus claimed! +200 coins", "success");
-                    break;
-                    
-                case 'special':
-                    coins += 300;
-                    updateUI();
-                    showNotification("Special offer! +300 coins", "success");
-                    break;
-            }
-        }
-        
-        // Check SDK status on load
-        function checkSDKStatus() {
-            if (typeof show_10139509 !== 'undefined') {
-                updateSDKStatus('success', 'Monetag SDK loaded successfully');
-                preloadAds();
-                
-                // Start auto interstitials (every 1 minutes)
-                setInterval(() => {
-                    showInAppInterstitial();
-                }, 180000);
+
+        // Update timer display
+        function updateTimer() {
+            timerProgressElement.style.width = `${(gameState.timeLeft / 5) * 100}%`;
+            
+            // Change color when time is running out
+            if (gameState.timeLeft < 1.5) {
+                timerProgressElement.style.background = 'var(--danger)';
+            } else if (gameState.timeLeft < 2.5) {
+                timerProgressElement.style.background = 'var(--warning)';
             } else {
-                updateSDKStatus('error', 'Monetag SDK failed to load');
-                // Retry after 3 seconds
-                setTimeout(checkSDKStatus, 3000);
+                timerProgressElement.style.background = 'var(--primary)';
             }
         }
-        
-        // Initialize the game
-        function initGame() {
-            updateUI();
-            hamsterElement.addEventListener('click', handleHamsterTap);
-            
-            // Set up Rewarded Interstitial buttons
-            document.getElementById('ad-interstitial-2x').addEventListener('click', () => showRewardedInterstitial('2x'));
-            document.getElementById('ad-interstitial-energy').addEventListener('click', () => showRewardedInterstitial('energy'));
-            document.getElementById('ad-interstitial-bonus').addEventListener('click', () => showRewardedInterstitial('bonus'));
-            
-            // Set up Rewarded Popup buttons
-            document.getElementById('ad-popup-daily').addEventListener('click', () => showRewardedPopup('daily'));
-            document.getElementById('ad-popup-special').addEventListener('click', () => showRewardedPopup('special'));
-            
-            // Set up popup buttons
-            adPopupWatch.addEventListener('click', completeAd);
-            adPopupSkip.addEventListener('click', () => {
-                adPopupOverlay.style.display = 'none';
-                adActive = false;
-                clearInterval(adInterval);
-                showNotification("Ad skipped", "warning");
-                
-                // Reset the button that triggered this ad
-                const button = document.getElementById(`ad-${currentAdFormat}-${currentAdType}`);
-                if (button) {
-                    button.disabled = false;
-                    // Reset button text based on ad type
-                    switch(currentAdType) {
-                        case '2x':
-                            button.innerHTML = '<i class="fas fa-coins"></i><div><div>2x Coins Boost</div><div class="ad-info">Watch full ad for 30 minutes of 2x coins</div></div>';
-                            break;
-                        case 'energy':
-                            button.innerHTML = '<i class="fas fa-bolt"></i><div><div>Full Energy Refill</div><div class="ad-info">Watch ad to completely refill your energy</div></div>';
-                            break;
-                        case 'bonus':
-                            button.innerHTML = '<i class="fas fa-gem"></i><div><div>500 Bonus Coins</div><div class="ad-info">Watch ad to get 500 coins instantly</div></div>';
-                            break;
-                    }
-                }
-            });
-            
-            // Set up navigation
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    navItems.forEach(nav => nav.classList.remove('active'));
-                    item.classList.add('active');
-                });
-            });
-            
-            // Check SDK status after page loads
-            setTimeout(checkSDKStatus, 1000);
+
+        // Update score display
+        function updateScore() {
+            scoreElement.textContent = gameState.score;
         }
+
+        // Update level display
+        function updateLevel() {
+            levelElement.textContent = gameState.level;
+        }
+
+        // End the game
+        function endGame() {
+            gameState.gameActive = false;
+            
+            // Update final stats
+            finalScoreElement.textContent = gameState.score;
+            finalLevelElement.textContent = gameState.level;
+            correctMatchesElement.textContent = gameState.correctMatches;
+            bestStreakElement.textContent = gameState.bestStreak;
+            
+            // Show game over screen
+            gameScreen.classList.add('hidden');
+            gameOverScreen.classList.remove('hidden');
+            
+            // Show interstitial ad after game over
+            setTimeout(showInterstitialAd, 1000);
+        }
+
+        // Show reward ad for extra lives
+        function showRewardAd() {
+            if (adConfig.rewardedAdLoaded && typeof monetag !== 'undefined') {
+                // Show actual rewarded ad
+                monetag.showRewarded();
+            } else {
+                // Fallback to simulated ad
+                showSimulatedAd('reward');
+            }
+        }
+
+        // Show continue ad
+        function showContinueAd() {
+            if (adConfig.rewardedAdLoaded && typeof monetag !== 'undefined') {
+                // Show actual rewarded ad
+                monetag.showRewarded();
+            } else {
+                // Fallback to simulated ad
+                showSimulatedAd('continue');
+            }
+        }
+
+        // Show interstitial ad
+        function showInterstitialAd() {
+            if (typeof monetag !== 'undefined') {
+                // Show Monetag interstitial ad
+                monetag.interstitial({
+                    zoneId: '10139509',
+                    onClose: function() {
+                        console.log('Interstitial ad closed');
+                    },
+                    onError: function(error) {
+                        console.log('Interstitial ad error:', error);
+                    }
+                });
+            } else {
+                console.log('Monetag SDK not available for interstitial');
+            }
+        }
+
+        // Show simulated ad (fallback)
+        function showSimulatedAd(type) {
+            interstitialAd.classList.remove('hidden');
+            startAdTimer(type);
+        }
+
+        // Start ad timer for simulated ad
+        function startAdTimer(type) {
+            let timeLeft = 5;
+            adTimer.textContent = timeLeft;
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                adTimer.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    // Auto-complete ad after timer
+                    if (type === 'reward') {
+                        grantReward();
+                    } else if (type === 'continue') {
+                        continueGame();
+                    }
+                    interstitialAd.classList.add('hidden');
+                }
+            }, 1000);
+        }
+
+        // Watch ad button handler
+        function watchAd() {
+            interstitialAd.classList.add('hidden');
+            // In real implementation, this would trigger the actual ad
+            simulateAdCompletion();
+        }
+
+        // Skip ad button handler
+        function skipAd() {
+            interstitialAd.classList.add('hidden');
+        }
+
+        // Complete ad viewing
+        function completeAd() {
+            interstitialAd.classList.add('hidden');
+            gameState.adsWatched++;
+            
+            // Grant reward based on context
+            if (gameOverScreen.classList.contains('hidden')) {
+                // If we're on start screen, grant extra lives
+                grantReward();
+            } else {
+                // If we're on game over screen, continue game
+                continueGame();
+            }
+        }
+
+        // Simulate ad completion (fallback)
+        function simulateAdCompletion() {
+            if (gameOverScreen.classList.contains('hidden')) {
+                grantReward();
+            } else {
+                continueGame();
+            }
+        }
+
+        // Grant reward for watching ad
+        function grantReward() {
+            gameState.extraLives += 2;
+            alert('Thank you for watching! You now have +2 extra lives!');
+        }
+
+        // Continue game after watching ad
+        function continueGame() {
+            gameState.lives = 1;
+            gameState.gameActive = true;
+            gameOverScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            startRound();
+        }
+
+        // Share on Telegram
+        function shareOnTelegram() {
+            const text = `I scored ${gameState.score} points in Color Match! Can you beat me?`;
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://t.me/share/url?url=${url}&text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // Share on Twitter
+        function shareOnTwitter() {
+            const text = `I scored ${gameState.score} points in Color Match! Can you beat me?`;
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`, '_blank');
+        }
+
+        // Utility function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize the game when page loads
+
+
         
-        // Start the game when page loads
-        window.onload = initGame;
+        window.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
 </html>
-
