@@ -23,7 +23,7 @@
             --success: #4CAF50;
             --danger: #f44336;
             --warning: #FF9800;
-            --ad-bg: #2c3e50;
+            --ad-color: #FF6B35;
         }
 
         body {
@@ -93,32 +93,77 @@
             flex-direction: column;
         }
 
-        /* Ad Containers */
-        #monetag-banner {
-            min-height: 50px;
+        /* Ad Styles */
+        .ad-container {
+            padding: 8px 12px;
+            background: linear-gradient(45deg, #FF6B35, #FF8E53);
+            color: white;
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .ad-placeholder {
-            padding: 10px;
-            text-align: center;
-            background: linear-gradient(45deg, #ff6b6b, #ffa726);
-            color: white;
-            border-radius: 5px;
-            margin: 5px;
+            justify-content: space-between;
             font-size: 12px;
         }
 
-        .ad-label {
+        .ad-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ad-icon {
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ad-color);
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .ad-text {
+            flex: 1;
+        }
+
+        .ad-title {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .ad-description {
             font-size: 10px;
-            color: var(--text-secondary);
-            text-align: center;
-            padding: 5px;
-            background: #f8f9fa;
+            opacity: 0.9;
+        }
+
+        .ad-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .ad-btn {
+            padding: 4px 8px;
+            background: white;
+            color: var(--ad-color);
+            border: none;
+            border-radius: 3px;
+            font-size: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .ad-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .game-screen {
@@ -128,7 +173,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         #start-screen, #game-over-screen {
@@ -136,108 +181,99 @@
         }
 
         .game-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
             background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
         }
 
         .game-logo i {
-            font-size: 50px;
+            font-size: 40px;
             color: white;
         }
 
         .game-instructions {
             background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
             text-align: left;
+            font-size: 14px;
         }
 
         .game-instructions h3 {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: var(--primary);
+            font-size: 16px;
         }
 
         .game-instructions ul {
-            padding-left: 20px;
+            padding-left: 18px;
         }
 
         .game-instructions li {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .btn {
-            padding: 12px 25px;
+            padding: 10px 20px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 25px;
-            font-size: 16px;
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
+            gap: 6px;
         }
 
         .btn i {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .color-target {
-            width: 120px;
-            height: 120px;
-            border-radius: 60px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            border: 5px solid white;
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 4px solid white;
         }
 
         .color-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 12px;
             width: 100%;
-            max-width: 300px;
+            max-width: 280px;
         }
 
         .color-option {
-            height: 100px;
-            border-radius: 10px;
+            height: 80px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 3px solid transparent;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .color-option:hover {
-            transform: scale(1.05);
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .color-option.selected {
-            border: 3px solid white;
+            border: 2px solid white;
             box-shadow: 0 0 0 3px var(--primary);
         }
 
         .timer-bar {
             width: 100%;
-            height: 10px;
+            height: 8px;
             background: #e0e0e0;
-            border-radius: 5px;
+            border-radius: 4px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
         .timer-progress {
@@ -248,10 +284,10 @@
         }
 
         .feedback {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            height: 30px;
-            margin: 10px 0;
+            height: 25px;
+            margin: 8px 0;
         }
 
         .correct {
@@ -264,136 +300,22 @@
 
         .game-over-stats {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             width: 100%;
-            margin: 20px 0;
+            margin: 15px 0;
+            font-size: 14px;
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid #f0f0f0;
         }
 
         .stat-row:last-child {
             border-bottom: none;
-        }
-
-        .share-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .share-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .telegram-share {
-            background: var(--primary);
-            color: white;
-        }
-
-        .twitter-share {
-            background: #1DA1F2;
-            color: white;
-        }
-
-        .share-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .reward-ad {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: center;
-            border: 2px dashed var(--primary);
-        }
-
-        .reward-ad h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .reward-ad p {
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        .reward-btn {
-            background: linear-gradient(135deg, #FF9800, #FF5722);
-            color: white;
-        }
-
-        .interstitial-ad {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            color: white;
-        }
-
-        .interstitial-content {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            max-width: 300px;
-            text-align: center;
-            color: var(--text-primary);
-        }
-
-        .interstitial-content h2 {
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-
-        .interstitial-content p {
-            margin-bottom: 20px;
-        }
-
-        .interstitial-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .interstitial-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .watch-ad-btn {
-            background: var(--primary);
-            color: white;
-        }
-
-        .skip-ad-btn {
-            background: #e0e0e0;
-            color: var(--text-primary);
         }
 
         .hidden {
@@ -403,7 +325,7 @@
         /* Animation for correct/incorrect feedback */
         @keyframes pop {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
 
@@ -411,7 +333,6 @@
             animation: pop 0.3s ease;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 480px) {
             .telegram-game {
                 height: 100vh;
@@ -420,15 +341,6 @@
             
             .game-screen {
                 padding: 15px;
-            }
-            
-            .color-options {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
-            
-            .color-option {
-                height: 80px;
             }
         }
     </style>
@@ -452,12 +364,20 @@
             </div>
         </div>
 
-        <!-- Monetag Banner Ad -->
-        <div class="ad-label">Advertisement</div>
-        <div id="monetag-banner">
-            <div class="ad-placeholder">
-                Monetag Banner Ad<br>
-                <small>Zone: 10139509</small>
+        <!-- Simple Banner Ad -->
+        <div class="ad-container" id="banner-ad">
+            <div class="ad-content">
+                <div class="ad-icon">
+                    <i class="fas fa-ad"></i>
+                </div>
+                <div class="ad-text">
+                    <div class="ad-title">Try Monster Dash!</div>
+                    <div class="ad-description">New exciting game</div>
+                </div>
+            </div>
+            <div class="ad-actions">
+                <button class="ad-btn">PLAY</button>
+                <button class="ad-close" id="close-ad">×</button>
             </div>
         </div>
 
@@ -467,27 +387,17 @@
                 <div class="game-logo">
                     <i class="fas fa-palette"></i>
                 </div>
-                <h1>Color Match Challenge</h1>
-                <p>Test your color recognition skills!</p>
+                <h1>Color Match</h1>
+                <p>Test your color skills!</p>
                 
                 <div class="game-instructions">
                     <h3>How to Play:</h3>
                     <ul>
-                        <li>Match the target color with one of the options</li>
-                        <li>You have 5 seconds for each round</li>
-                        <li>Each correct match increases your score</li>
-                        <li>Every 5 points levels you up</li>
-                        <li>Game ends when you make 3 mistakes</li>
+                        <li>Match the center color with options</li>
+                        <li>5 seconds per round</li>
+                        <li>Correct = +points</li>
+                        <li>3 mistakes = Game Over</li>
                     </ul>
-                </div>
-
-                <!-- Reward Ad Offer -->
-                <div class="reward-ad">
-                    <h3><i class="fas fa-gift"></i> Special Offer!</h3>
-                    <p>Watch a rewarded ad to start with +2 extra lives!</p>
-                    <button class="btn reward-btn" id="reward-ad-btn">
-                        <i class="fas fa-play-circle"></i> Watch Ad for Extra Lives
-                    </button>
                 </div>
                 
                 <button class="btn" id="start-btn">
@@ -508,9 +418,6 @@
                 <div class="color-options" id="color-options">
                     <!-- Color options will be generated by JavaScript -->
                 </div>
-
-                <!-- In-game interstitial placeholder -->
-                <div id="monetag-interstitial-trigger" class="hidden"></div>
             </div>
 
             <!-- Game Over Screen -->
@@ -519,7 +426,7 @@
                     <i class="fas fa-trophy"></i>
                 </div>
                 <h1>Game Over!</h1>
-                <p>Your color matching skills are impressive!</p>
+                <p>Great job!</p>
                 
                 <div class="game-over-stats">
                     <div class="stat-row">
@@ -527,90 +434,24 @@
                         <span id="final-score">0</span>
                     </div>
                     <div class="stat-row">
-                        <span>Level Reached:</span>
+                        <span>Level:</span>
                         <span id="final-level">1</span>
                     </div>
                     <div class="stat-row">
-                        <span>Correct Matches:</span>
+                        <span>Correct:</span>
                         <span id="correct-matches">0</span>
                     </div>
-                    <div class="stat-row">
-                        <span>Best Streak:</span>
-                        <span id="best-streak">0</span>
-                    </div>
-                </div>
-
-                <!-- Reward Ad for Continue -->
-                <div class="reward-ad">
-                    <h3><i class="fas fa-redo"></i> Continue Playing!</h3>
-                    <p>Watch a rewarded ad to continue with current score + 1 extra life</p>
-                    <button class="btn reward-btn" id="continue-ad-btn">
-                        <i class="fas fa-play-circle"></i> Watch Ad to Continue
-                    </button>
                 </div>
                 
                 <button class="btn" id="restart-btn">
                     <i class="fas fa-redo"></i> Play Again
                 </button>
-                
-                <div class="share-buttons">
-                    <div class="share-btn telegram-share" id="telegram-share">
-                        <i class="fab fa-telegram"></i> Share
-                    </div>
-                    <div class="share-btn twitter-share" id="twitter-share">
-                        <i class="fab fa-twitter"></i> Tweet
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Interstitial Ad Modal -->
-    <div class="interstitial-ad hidden" id="interstitial-ad">
-        <div class="interstitial-content">
-            <h2>Rewarded Advertisement</h2>
-            <p>Watch a short video to get your reward!</p>
-            <div id="monetag-rewarded-container" class="ad-placeholder" style="width: 100%; margin: 15px 0; padding: 20px;">
-                Monetag Rewarded Ad<br>
-                <small>Zone: 10139509</small>
-            </div>
-            <p>Ad will complete in <span id="ad-timer">5</span> seconds</p>
-            <div class="interstitial-actions">
-                <button class="interstitial-btn watch-ad-btn" id="watch-ad">Watch Ad</button>
-                <button class="interstitial-btn skip-ad-btn" id="skip-ad">Skip</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Monetag SDK Script -->
     <script>
-        // Initialize Monetag SDK
-        (function() {
-            var monetagScript = document.createElement('script');
-            monetagScript.src = 'https://sdk.monetag.com/js/monetag.js';
-            monetagScript.onload = function() {
-                console.log('Monetag SDK loaded successfully');
-                
-                // Initialize banner ad
-                if (typeof monetag !== 'undefined') {
-                    // Banner Ad - Zone ID: 10139509
-                    monetag.banner({
-                        zoneId: '10139509',
-                        containerId: 'monetag-banner',
-                        format: 'responsive',
-                        width: 320,
-                        height: 50
-                    });
-                    
-                    console.log('Monetag banner ad initialized');
-                }
-            };
-            document.head.appendChild(monetagScript);
-        })();
-    </script>
-
-    <script>
-        // Game state
+        // Game state - SIMPLIFIED
         const gameState = {
             score: 0,
             level: 1,
@@ -620,19 +461,7 @@
             timer: null,
             timeLeft: 5,
             gameActive: false,
-            correctMatches: 0,
-            currentStreak: 0,
-            bestStreak: 0,
-            adsWatched: 0,
-            extraLives: 0
-        };
-
-        // Ad configuration
-        const adConfig = {
-            interstitialFrequency: 5, // Show interstitial every X rounds
-            roundsPlayed: 0,
-            interstitialShown: false,
-            rewardedAdLoaded: false
+            correctMatches: 0
         };
 
         // DOM Elements
@@ -650,81 +479,40 @@
         const finalScoreElement = document.getElementById('final-score');
         const finalLevelElement = document.getElementById('final-level');
         const correctMatchesElement = document.getElementById('correct-matches');
-        const bestStreakElement = document.getElementById('best-streak');
-        const telegramShareBtn = document.getElementById('telegram-share');
-        const twitterShareBtn = document.getElementById('twitter-share');
-        const rewardAdBtn = document.getElementById('reward-ad-btn');
-        const continueAdBtn = document.getElementById('continue-ad-btn');
-        const interstitialAd = document.getElementById('interstitial-ad');
-        const watchAdBtn = document.getElementById('watch-ad');
-        const skipAdBtn = document.getElementById('skip-ad');
-        const adTimer = document.getElementById('ad-timer');
-        const interstitialTrigger = document.getElementById('monetag-interstitial-trigger');
-        const rewardedContainer = document.getElementById('monetag-rewarded-container');
+        const closeAdBtn = document.getElementById('close-ad');
+        const bannerAd = document.getElementById('banner-ad');
 
-        // Color options for the game
+        // Color options
         const colorPalette = [
-            '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE',
-            '#448AFF', '#40C4FF', '#18FFFF', '#64FFDA', '#69F0AE',
-            '#B2FF59', '#EEFF41', '#FFFF00', '#FFD740', '#FFAB40',
-            '#FF6E40', '#8D6E63', '#BDBDBD', '#78909C', '#455A64'
+            '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', 
+            '#448AFF', '#40C4FF', '#18FFFF', '#64FFDA', 
+            '#B2FF59', '#EEFF41', '#FFFF00', '#FFD740'
         ];
 
         // Initialize game
         function initGame() {
+            console.log("Game initializing...");
+            
+            // Event listeners
             startBtn.addEventListener('click', startGame);
             restartBtn.addEventListener('click', startGame);
-            telegramShareBtn.addEventListener('click', shareOnTelegram);
-            twitterShareBtn.addEventListener('click', shareOnTwitter);
-            rewardAdBtn.addEventListener('click', showRewardAd);
-            continueAdBtn.addEventListener('click', showContinueAd);
-            watchAdBtn.addEventListener('click', watchAd);
-            skipAdBtn.addEventListener('click', skipAd);
+            closeAdBtn.addEventListener('click', () => {
+                bannerAd.classList.add('hidden');
+            });
 
-            // Preload rewarded ad
-            preloadRewardedAd();
-        }
-
-        // Preload rewarded ad
-        function preloadRewardedAd() {
-            if (typeof monetag !== 'undefined') {
-                monetag.rewarded({
-                    zoneId: '10139509',
-                    containerId: 'monetag-rewarded-container',
-                    onLoad: function() {
-                        console.log('Rewarded ad loaded successfully');
-                        adConfig.rewardedAdLoaded = true;
-                    },
-                    onStart: function() {
-                        console.log('Rewarded ad started');
-                    },
-                    onComplete: function() {
-                        console.log('Rewarded ad completed');
-                        completeAd();
-                    },
-                    onError: function(error) {
-                        console.log('Rewarded ad error:', error);
-                        // Fallback to simulated ad
-                        simulateAdCompletion();
-                    }
-                });
-            } else {
-                console.log('Monetag SDK not available, using simulated ads');
-            }
+            console.log("Game ready!");
         }
 
         // Start the game
         function startGame() {
+            console.log("Starting game...");
+            
             // Reset game state
             gameState.score = 0;
             gameState.level = 1;
-            gameState.lives = 3 + gameState.extraLives;
+            gameState.lives = 3;
             gameState.correctMatches = 0;
-            gameState.currentStreak = 0;
-            gameState.bestStreak = 0;
             gameState.gameActive = true;
-            adConfig.roundsPlayed = 0;
-            adConfig.interstitialShown = false;
             
             // Update UI
             updateScore();
@@ -743,15 +531,7 @@
         function startRound() {
             if (!gameState.gameActive) return;
             
-            // Increment rounds played
-            adConfig.roundsPlayed++;
-            
-            // Check if we should show interstitial ad
-            if (adConfig.roundsPlayed % adConfig.interstitialFrequency === 0 && !adConfig.interstitialShown) {
-                showInterstitialAd();
-                adConfig.interstitialShown = true;
-                return;
-            }
+            console.log("New round starting...");
             
             // Reset timer
             gameState.timeLeft = 5;
@@ -766,7 +546,7 @@
             gameState.currentTarget = colorPalette[targetIndex];
             targetColorElement.style.backgroundColor = gameState.currentTarget;
             
-            // Generate color options (one correct, others random)
+            // Generate options (1 correct + 3 random)
             const options = [gameState.currentTarget];
             while (options.length < 4) {
                 const randomColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
@@ -775,7 +555,7 @@
                 }
             }
             
-            // Shuffle options
+            // Shuffle and find correct index
             shuffleArray(options);
             gameState.correctOption = options.indexOf(gameState.currentTarget);
             
@@ -793,7 +573,6 @@
                 const option = document.createElement('div');
                 option.className = 'color-option';
                 option.style.backgroundColor = color;
-                option.dataset.index = index;
                 option.addEventListener('click', () => selectColor(index));
                 colorOptionsElement.appendChild(option);
             });
@@ -803,7 +582,7 @@
         function selectColor(selectedIndex) {
             if (!gameState.gameActive) return;
             
-            // Clear timer
+            // Stop timer
             clearInterval(gameState.timer);
             
             // Check if correct
@@ -814,16 +593,11 @@
             selectedOption.classList.add('selected');
             
             if (isCorrect) {
-                // Correct selection
-                feedbackElement.textContent = 'Correct!';
+                // Correct
+                feedbackElement.textContent = 'Correct! +' + gameState.level;
                 feedbackElement.className = 'feedback correct';
                 gameState.score += gameState.level;
                 gameState.correctMatches++;
-                gameState.currentStreak++;
-                
-                if (gameState.currentStreak > gameState.bestStreak) {
-                    gameState.bestStreak = gameState.currentStreak;
-                }
                 
                 // Level up every 5 points
                 if (gameState.score >= gameState.level * 5) {
@@ -833,22 +607,18 @@
                 
                 updateScore();
             } else {
-                // Incorrect selection
+                // Incorrect
                 feedbackElement.textContent = 'Wrong!';
                 feedbackElement.className = 'feedback incorrect';
                 gameState.lives--;
-                gameState.currentStreak = 0;
                 
-                // Highlight correct option
+                // Show correct option
                 const correctOption = colorOptionsElement.children[gameState.correctOption];
                 correctOption.classList.add('selected');
             }
             
             // Animation
             feedbackElement.classList.add('pop-animation');
-            setTimeout(() => {
-                feedbackElement.classList.remove('pop-animation');
-            }, 300);
             
             // Next round or game over
             setTimeout(() => {
@@ -862,7 +632,7 @@
             }, 1000);
         }
 
-        // Start the timer for the current round
+        // Start timer
         function startTimer() {
             gameState.timer = setInterval(() => {
                 gameState.timeLeft -= 0.1;
@@ -870,9 +640,8 @@
                 
                 if (gameState.timeLeft <= 0) {
                     clearInterval(gameState.timer);
-                    // Time's up - count as wrong answer
+                    // Time's up - wrong answer
                     gameState.lives--;
-                    gameState.currentStreak = 0;
                     
                     if (gameState.lives > 0) {
                         feedbackElement.textContent = 'Time\'s up!';
@@ -887,9 +656,10 @@
 
         // Update timer display
         function updateTimer() {
-            timerProgressElement.style.width = `${(gameState.timeLeft / 5) * 100}%`;
+            const percentage = (gameState.timeLeft / 5) * 100;
+            timerProgressElement.style.width = percentage + '%';
             
-            // Change color when time is running out
+            // Color change
             if (gameState.timeLeft < 1.5) {
                 timerProgressElement.style.background = 'var(--danger)';
             } else if (gameState.timeLeft < 2.5) {
@@ -917,147 +687,10 @@
             finalScoreElement.textContent = gameState.score;
             finalLevelElement.textContent = gameState.level;
             correctMatchesElement.textContent = gameState.correctMatches;
-            bestStreakElement.textContent = gameState.bestStreak;
             
             // Show game over screen
             gameScreen.classList.add('hidden');
             gameOverScreen.classList.remove('hidden');
-            
-            // Show interstitial ad after game over
-            setTimeout(showInterstitialAd, 1000);
-        }
-
-        // Show reward ad for extra lives
-        function showRewardAd() {
-            if (adConfig.rewardedAdLoaded && typeof monetag !== 'undefined') {
-                // Show actual rewarded ad
-                monetag.showRewarded();
-            } else {
-                // Fallback to simulated ad
-                showSimulatedAd('reward');
-            }
-        }
-
-        // Show continue ad
-        function showContinueAd() {
-            if (adConfig.rewardedAdLoaded && typeof monetag !== 'undefined') {
-                // Show actual rewarded ad
-                monetag.showRewarded();
-            } else {
-                // Fallback to simulated ad
-                showSimulatedAd('continue');
-            }
-        }
-
-        // Show interstitial ad
-        function showInterstitialAd() {
-            if (typeof monetag !== 'undefined') {
-                // Show Monetag interstitial ad
-                monetag.interstitial({
-                    zoneId: '10139509',
-                    onClose: function() {
-                        console.log('Interstitial ad closed');
-                    },
-                    onError: function(error) {
-                        console.log('Interstitial ad error:', error);
-                    }
-                });
-            } else {
-                console.log('Monetag SDK not available for interstitial');
-            }
-        }
-
-        // Show simulated ad (fallback)
-        function showSimulatedAd(type) {
-            interstitialAd.classList.remove('hidden');
-            startAdTimer(type);
-        }
-
-        // Start ad timer for simulated ad
-        function startAdTimer(type) {
-            let timeLeft = 5;
-            adTimer.textContent = timeLeft;
-            
-            const timer = setInterval(() => {
-                timeLeft--;
-                adTimer.textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    // Auto-complete ad after timer
-                    if (type === 'reward') {
-                        grantReward();
-                    } else if (type === 'continue') {
-                        continueGame();
-                    }
-                    interstitialAd.classList.add('hidden');
-                }
-            }, 1000);
-        }
-
-        // Watch ad button handler
-        function watchAd() {
-            interstitialAd.classList.add('hidden');
-            // In real implementation, this would trigger the actual ad
-            simulateAdCompletion();
-        }
-
-        // Skip ad button handler
-        function skipAd() {
-            interstitialAd.classList.add('hidden');
-        }
-
-        // Complete ad viewing
-        function completeAd() {
-            interstitialAd.classList.add('hidden');
-            gameState.adsWatched++;
-            
-            // Grant reward based on context
-            if (gameOverScreen.classList.contains('hidden')) {
-                // If we're on start screen, grant extra lives
-                grantReward();
-            } else {
-                // If we're on game over screen, continue game
-                continueGame();
-            }
-        }
-
-        // Simulate ad completion (fallback)
-        function simulateAdCompletion() {
-            if (gameOverScreen.classList.contains('hidden')) {
-                grantReward();
-            } else {
-                continueGame();
-            }
-        }
-
-        // Grant reward for watching ad
-        function grantReward() {
-            gameState.extraLives += 2;
-            alert('Thank you for watching! You now have +2 extra lives!');
-        }
-
-        // Continue game after watching ad
-        function continueGame() {
-            gameState.lives = 1;
-            gameState.gameActive = true;
-            gameOverScreen.classList.add('hidden');
-            gameScreen.classList.remove('hidden');
-            startRound();
-        }
-
-        // Share on Telegram
-        function shareOnTelegram() {
-            const text = `I scored ${gameState.score} points in Color Match! Can you beat me?`;
-            const url = encodeURIComponent(window.location.href);
-            window.open(`https://t.me/share/url?url=${url}&text=${encodeURIComponent(text)}`, '_blank');
-        }
-
-        // Share on Twitter
-        function shareOnTwitter() {
-            const text = `I scored ${gameState.score} points in Color Match! Can you beat me?`;
-            const url = encodeURIComponent(window.location.href);
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`, '_blank');
         }
 
         // Utility function to shuffle array
@@ -1066,13 +699,9 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
-            return array;
         }
 
-        // Initialize the game when page loads
-
-
-        
+        // Initialize when page loads
         window.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
