@@ -3,533 +3,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Match - Working Monetag Ads</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Color Match Game</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0088cc, #00a2e8);
-            height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        .game-wrapper {
-            width: 100%;
-            max-width: 400px;
+        .game-container {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
         }
 
         .header {
-            background: #0088cc;
-            color: white;
-            padding: 20px;
-            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
         }
 
         .ad-container {
-            padding: 10px;
             background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .ad-label {
-            text-align: center;
-            font-size: 12px;
-            color: #6c757d;
-            margin-bottom: 5px;
-        }
-
-        #monetag-banner {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
             min-height: 100px;
-            background: #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
         }
 
-        .game-content {
-            padding: 20px;
+        .ad-loading {
+            color: #6c757d;
+            font-size: 14px;
         }
 
-        .stats {
+        .ad-error {
+            color: #dc3545;
+            font-size: 14px;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .game-info {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 24px;
+            justify-content: space-between;
+            margin: 20px 0;
+            font-size: 18px;
             font-weight: bold;
-            color: #0088cc;
         }
 
-        .color-target {
-            width: 120px;
-            height: 120px;
-            border-radius: 60px;
+        .score { color: #28a745; }
+        .lives { color: #dc3545; }
+
+        .color-display {
+            width: 150px;
+            height: 150px;
             margin: 20px auto;
-            border: 5px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            border: 3px solid #333;
+            transition: all 0.3s ease;
         }
 
         .color-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin: 20px 0;
+            margin: 25px 0;
         }
 
         .color-option {
             height: 80px;
-            border-radius: 10px;
+            border-radius: 8px;
+            border: 3px solid #ddd;
             cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
         }
 
         .color-option:hover {
             transform: scale(1.05);
-            border-color: #0088cc;
+            border-color: #333;
+        }
+
+        .controls {
+            margin: 25px 0;
         }
 
         .btn {
-            padding: 12px 25px;
-            background: #0088cc;
+            background: #007bff;
             color: white;
             border: none;
-            border-radius: 25px;
+            padding: 12px 25px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             margin: 5px;
-            transition: all 0.3s;
+            transition: background 0.3s ease;
         }
 
         .btn:hover {
-            background: #006da3;
-            transform: translateY(-2px);
+            background: #0056b3;
         }
 
-        .btn-reward {
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .btn-watch-ad {
             background: #28a745;
         }
 
-        .btn-reward:hover {
-            background: #218838;
+        .btn-watch-ad:hover {
+            background: #1e7e34;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        .screen {
-            text-align: center;
-        }
-
-        .ad-status {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .ad-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .ad-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .reward-message {
-            background: #fff3cd;
-            color: #856404;
+        .game-message {
+            margin: 15px 0;
             padding: 10px;
             border-radius: 5px;
-            margin: 10px 0;
-            border: 1px solid #ffeaa7;
+            font-weight: bold;
+        }
+
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+
+        .retry-btn {
+            background: #ffc107;
+            color: #212529;
+            margin-top: 10px;
+        }
+
+        .retry-btn:hover {
+            background: #e0a800;
         }
     </style>
 </head>
 <body>
-    <div class="game-wrapper">
+    <div class="game-container">
         <div class="header">
-            <h1>🎮 Color Match Game</h1>
-            <p>Real Working Monetag Ads</p>
+            <h1>Color Match Game</h1>
+            <p>Match the center color with the options below</p>
         </div>
 
-        <!-- Monetag Banner Ad -->
+        <!-- Monetag Ad Container -->
         <div class="ad-container">
-            <div class="ad-label">Monetag Banner Ad - Zone: 10139509</div>
-            <div id="monetag-banner">
+            <div id="monetag-banner" class="ad-loading">
                 Loading Monetag Banner...
             </div>
         </div>
 
-        <div class="game-content">
-            <!-- Start Screen -->
-            <div id="start-screen" class="screen">
-                <h2>Welcome Player!</h2>
-                <p>Match the center color with the options below</p>
-                
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-value" id="start-score">0</div>
-                        <div>Score</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value" id="start-lives">3</div>
-                        <div>Lives</div>
-                    </div>
-                </div>
+        <!-- Game Info -->
+        <div class="game-info">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="lives">Lives: <span id="lives">3</span></div>
+        </div>
 
-                <div class="ad-status" id="ad-status">
-                    Loading Monetag Ads...
-                </div>
+        <!-- Color Display -->
+        <div class="color-display" id="targetColor"></div>
 
-                <button class="btn" onclick="startGame()">
-                    <i class="fas fa-play"></i> Start Game
-                </button>
-                
-                <button class="btn btn-reward" onclick="showRewardedAd()">
-                    <i class="fas fa-gift"></i> Watch Ad for Extra Lives
-                </button>
+        <!-- Color Options -->
+        <div class="color-options" id="colorOptions">
+            <!-- Color options will be generated here -->
+        </div>
 
-                <div id="rewarded-ad-container" style="min-height: 50px; margin: 15px 0;">
-                    <!-- Rewarded ad will load here -->
-                </div>
-            </div>
+        <!-- Game Messages -->
+        <div id="gameMessage" class="game-message"></div>
 
-            <!-- Game Screen -->
-            <div id="game-screen" class="screen hidden">
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-value" id="score">0</div>
-                        <div>Score</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value" id="lives">3</div>
-                        <div>Lives</div>
-                    </div>
-                </div>
-
-                <div class="color-target" id="target-color"></div>
-                
-                <div class="color-options" id="color-options">
-                    <!-- Color options will be generated here -->
-                </div>
-
-                <button class="btn" onclick="endGame()">
-                    <i class="fas fa-stop"></i> End Game
-                </button>
-            </div>
-
-            <!-- Game Over Screen -->
-            <div id="game-over" class="screen hidden">
-                <h2>Game Over! 🎯</h2>
-                <p>Your Final Score: <strong id="final-score">0</strong></p>
-                
-                <div class="reward-message" id="reward-message">
-                    Watch an ad to play again and support the game!
-                </div>
-
-                <button class="btn btn-reward" onclick="showInterstitialAd()">
-                    <i class="fas fa-ad"></i> Watch Ad & Play Again
-                </button>
-                
-                <button class="btn" onclick="startGame()">
-                    <i class="fas fa-redo"></i> Play Without Ad
-                </button>
-            </div>
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn" id="startBtn">Start Game</button>
+            <button class="btn btn-watch-ad" id="watchAdBtn" disabled>
+                Watch Ad for Extra Lives
+            </button>
+            <button class="btn retry-btn" id="retryAdBtn" style="display: none;">
+                Retry Loading Ads
+            </button>
         </div>
     </div>
 
-    <!-- REAL MONETAG SDK INTEGRATION -->
+    <!-- Monetag SDK -->
+    <script src="https://sdk.monetag.com/script/" data-zone="10139509" async></script>
+
     <script>
-        // Global variables for ads
-        let monetagInitialized = false;
-        let rewardedAdReady = false;
+        // Game variables
+        let score = 0;
+        let lives = 3;
+        let gameStarted = false;
+        let targetColor = '';
+        let colorOptions = [];
 
-        // Initialize Monetag SDK
-        function initializeMonetag() {
-            // Check if already initialized
-            if (typeof monetag !== 'undefined') {
-                console.log('Monetag already loaded');
-                return;
-            }
+        // DOM elements
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const targetColorElement = document.getElementById('targetColor');
+        const colorOptionsElement = document.getElementById('colorOptions');
+        const startBtn = document.getElementById('startBtn');
+        const watchAdBtn = document.getElementById('watchAdBtn');
+        const retryAdBtn = document.getElementById('retryAdBtn');
+        const gameMessage = document.getElementById('gameMessage');
+        const monetagBanner = document.getElementById('monetag-banner');
 
-            // Create script element
-            const script = document.createElement('script');
-            script.src = 'https://sdk.monetag.com/js/monetag.js';
-            script.async = true;
-            
-            script.onload = function() {
-                console.log('✅ Monetag SDK loaded successfully!');
-                monetagInitialized = true;
-                
-                // Initialize Banner Ad
-                try {
-                    monetag.banner({
-                        zoneId: '10139509',
-                        containerId: 'monetag-banner',
-                        format: 'responsive',
-                        width: 320,
-                        height: 100,
-                        onLoad: function() {
-                            console.log('✅ Banner ad loaded');
-                            updateAdStatus('Banner ad loaded successfully!', 'success');
-                        },
-                        onError: function(error) {
-                            console.log('❌ Banner ad error:', error);
-                            updateAdStatus('Banner ad failed to load', 'error');
-                        }
-                    });
-                } catch (e) {
-                    console.log('Banner initialization error:', e);
+        // Check if Monetag SDK loaded
+        function checkMonetagSDK() {
+            setTimeout(() => {
+                if (typeof Monetag !== 'undefined') {
+                    monetagBanner.innerHTML = 'Monetag Banner Ad - Zone: 10139509';
+                    monetagBanner.className = 'ad-success';
+                    watchAdBtn.disabled = false;
+                    retryAdBtn.style.display = 'none';
+                    console.log('Monetag SDK loaded successfully');
+                } else {
+                    monetagBanner.innerHTML = 'Failed to load Monetag SDK. Please check your internet connection or disable ad blocker.';
+                    monetagBanner.className = 'ad-error';
+                    watchAdBtn.disabled = true;
+                    retryAdBtn.style.display = 'inline-block';
                 }
-
-                // Initialize Rewarded Ad
-                try {
-                    monetag.rewarded({
-                        zoneId: '10139509',
-                        containerId: 'rewarded-ad-container',
-                        onLoad: function() {
-                            console.log('✅ Rewarded ad loaded');
-                            rewardedAdReady = true;
-                            updateAdStatus('Rewarded ad ready! Click to get extra lives.', 'success');
-                        },
-                        onStart: function() {
-                            console.log('🎬 Rewarded ad started');
-                        },
-                        onComplete: function() {
-                            console.log('💰 Rewarded ad completed - granting reward');
-                            grantReward();
-                        },
-                        onError: function(error) {
-                            console.log('❌ Rewarded ad error:', error);
-                            updateAdStatus('Rewarded ad failed to load', 'error');
-                        }
-                    });
-                } catch (e) {
-                    console.log('Rewarded initialization error:', e);
-                }
-
-                // Initialize Interstitial Ad
-                try {
-                    monetag.interstitial({
-                        zoneId: '10139509',
-                        onLoad: function() {
-                            console.log('✅ Interstitial ad loaded');
-                        },
-                        onClose: function() {
-                            console.log('🔒 Interstitial closed');
-                        },
-                        onError: function(error) {
-                            console.log('❌ Interstitial error:', error);
-                        }
-                    });
-                } catch (e) {
-                    console.log('Interstitial initialization error:', e);
-                }
-            };
-
-            script.onerror = function() {
-                console.log('❌ Failed to load Monetag SDK');
-                updateAdStatus('Failed to load Monetag SDK. Please check your internet connection.', 'error');
-                monetagInitialized = false;
-            };
-
-            document.head.appendChild(script);
+            }, 2000);
         }
 
-        // Update ad status display
-        function updateAdStatus(message, type) {
-            const statusElement = document.getElementById('ad-status');
-            if (statusElement) {
-                statusElement.textContent = message;
-                statusElement.className = 'ad-status';
-                if (type === 'success') {
-                    statusElement.classList.add('ad-success');
-                } else if (type === 'error') {
-                    statusElement.classList.add('ad-error');
-                }
+        // Retry loading ads
+        retryAdBtn.addEventListener('click', function() {
+            monetagBanner.innerHTML = 'Retrying to load Monetag Banner...';
+            monetagBanner.className = 'ad-loading';
+            location.reload();
+        });
+
+        // Generate random color
+        function generateRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
             }
+            return color;
         }
 
-        // Show rewarded ad
-        function showRewardedAd() {
-            if (monetagInitialized && rewardedAdReady) {
-                console.log('🎬 Showing rewarded ad...');
-                monetag.showRewarded();
-            } else {
-                console.log('Rewarded ad not ready, simulating...');
-                grantReward();
-            }
-        }
-
-        // Show interstitial ad
-        function showInterstitialAd() {
-            if (monetagInitialized) {
-                console.log('🎬 Showing interstitial ad...');
-                monetag.interstitial({
-                    zoneId: '10139509',
-                    onClose: function() {
-                        console.log('💰 Interstitial completed - starting game');
-                        startGame();
-                    },
-                    onError: function(error) {
-                        console.log('Interstitial failed, starting game anyway');
-                        startGame();
-                    }
-                });
-            } else {
-                console.log('Monetag not initialized, starting game without ad');
-                startGame();
-            }
-        }
-
-        // Grant reward for watching ad
-        function grantReward() {
-            gameState.lives += 2;
-            updateUI();
-            
-            const messageElement = document.getElementById('reward-message');
-            if (messageElement) {
-                messageElement.innerHTML = '🎉 <strong>Reward Granted!</strong> You received +2 extra lives!';
-                messageElement.style.background = '#d4edda';
-                messageElement.style.color = '#155724';
-                messageElement.style.borderColor = '#c3e6cb';
-            }
-            
-            alert('🎁 Reward Granted! You received +2 extra lives!');
-        }
-
-        // GAME LOGIC
-        const gameState = {
-            score: 0,
-            lives: 3,
-            currentTarget: null,
-            correctOption: null
-        };
-
-        const colors = [
-            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-            '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
-            '#BB8FCE', '#85C1E9', '#F8C471', '#82E0AA'
-        ];
-
+        // Start game
         function startGame() {
-            gameState.score = 0;
-            gameState.lives = 3;
-            updateUI();
-            
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('game-over').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            
-            nextRound();
+            if (!gameStarted) {
+                gameStarted = true;
+                startBtn.disabled = true;
+                score = 0;
+                lives = 3;
+                updateUI();
+                generateNewRound();
+            }
         }
 
-        function nextRound() {
-            if (gameState.lives <= 0) {
-                endGame();
-                return;
-            }
+        // Generate new round
+        function generateNewRound() {
+            // Clear previous options
+            colorOptionsElement.innerHTML = '';
+            colorOptions = [];
 
-            // Set target color
-            gameState.currentTarget = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('target-color').style.backgroundColor = gameState.currentTarget;
+            // Generate target color
+            targetColor = generateRandomColor();
+            targetColorElement.style.backgroundColor = targetColor;
 
-            // Create options (1 correct + 3 wrong)
-            let options = [gameState.currentTarget];
-            while (options.length < 4) {
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                if (!options.includes(randomColor)) {
-                    options.push(randomColor);
+            // Generate color options (one correct, others wrong)
+            const correctOptionIndex = Math.floor(Math.random() * 4);
+            
+            for (let i = 0; i < 4; i++) {
+                let color;
+                if (i === correctOptionIndex) {
+                    color = targetColor;
+                } else {
+                    // Generate similar but different color
+                    color = generateSimilarColor(targetColor);
                 }
+
+                colorOptions.push(color);
+
+                const colorOption = document.createElement('div');
+                colorOption.className = 'color-option';
+                colorOption.style.backgroundColor = color;
+                colorOption.addEventListener('click', () => checkAnswer(color));
+                colorOptionsElement.appendChild(colorOption);
             }
-
-            // Shuffle options
-            options = shuffleArray(options);
-            gameState.correctOption = options.indexOf(gameState.currentTarget);
-
-            // Display options
-            const optionsContainer = document.getElementById('color-options');
-            optionsContainer.innerHTML = '';
-            
-            options.forEach((color, index) => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'color-option';
-                optionDiv.style.backgroundColor = color;
-                optionDiv.onclick = () => checkAnswer(index);
-                optionsContainer.appendChild(optionDiv);
-            });
         }
 
-        function checkAnswer(selectedIndex) {
-            if (selectedIndex === gameState.correctOption) {
+        // Generate similar color for wrong options
+        function generateSimilarColor(baseColor) {
+            const colorNum = parseInt(baseColor.slice(1), 16);
+            const variation = 30 + Math.random() * 60;
+            const newColorNum = colorNum + (Math.random() > 0.5 ? variation : -variation);
+            return '#' + Math.max(0, Math.min(0xFFFFFF, newColorNum)).toString(16).padStart(6, '0');
+        }
+
+        // Check answer
+        function checkAnswer(selectedColor) {
+            if (!gameStarted) return;
+
+            if (selectedColor === targetColor) {
                 // Correct answer
-                gameState.score += 10;
-                alert('✅ Correct! +10 points');
+                score += 10;
+                showMessage('Correct! +10 points', 'success');
+                generateNewRound();
             } else {
                 // Wrong answer
-                gameState.lives--;
-                alert('❌ Wrong! -1 life');
+                lives--;
+                showMessage('Wrong! Try again', 'error');
+                
+                if (lives <= 0) {
+                    endGame();
+                }
             }
-            
             updateUI();
-            nextRound();
         }
 
-        function endGame() {
-            document.getElementById('final-score').textContent = gameState.score;
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('game-over').classList.remove('hidden');
-        }
-
+        // Update UI
         function updateUI() {
-            document.getElementById('score').textContent = gameState.score;
-            document.getElementById('lives').textContent = gameState.lives;
-            document.getElementById('start-score').textContent = gameState.score;
-            document.getElementById('start-lives').textContent = gameState.lives;
+            scoreElement.textContent = score;
+            livesElement.textContent = lives;
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+        // Show message
+        function showMessage(text, type) {
+            gameMessage.textContent = text;
+            gameMessage.className = `game-message ${type}`;
+            setTimeout(() => {
+                gameMessage.textContent = '';
+                gameMessage.className = 'game-message';
+            }, 2000);
+        }
+
+        // End game
+        function endGame() {
+            gameStarted = false;
+            startBtn.disabled = false;
+            showMessage(`Game Over! Final Score: ${score}`, 'error');
+            targetColorElement.style.backgroundColor = '#f0f0f0';
+            colorOptionsElement.innerHTML = '';
+        }
+
+        // Watch ad for extra lives
+        watchAdBtn.addEventListener('click', function() {
+            if (typeof Monetag !== 'undefined') {
+                showMessage('Ad loading...', 'success');
+                // Here you would typically call Monetag ad display function
+                setTimeout(() => {
+                    lives += 2;
+                    updateUI();
+                    showMessage('+2 Extra Lives!', 'success');
+                }, 3000);
+            } else {
+                showMessage('Ads not available. Please check connection.', 'error');
             }
-            return array;
-        }
-
-        // Initialize when page loads
-        window.addEventListener('load', function() {
-            initializeMonetag();
-            updateUI();
         });
+
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+
+        // Initialize
+        checkMonetagSDK();
     </script>
 </body>
 </html>
