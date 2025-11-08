@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src='//libtl.com/sdk.js' data-zone='10139509' data-sdk='show_10139509'></script>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MiniPlay — High CPM</title>
@@ -13,6 +13,8 @@
             --text: #e2e8f0;
             --text-muted: #94a3b8;
             --border: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
         
         * {
@@ -234,12 +236,55 @@
             font-size: 13px;
             color: var(--primary);
         }
+        
+        .reward-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1003;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .reward-notification.show {
+            transform: translateX(0);
+        }
+        
+        .ad-config {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(245, 158, 11, 0.05);
+            border-radius: 8px;
+            border: 1px dashed var(--warning);
+        }
+        
+        .ad-config h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--warning);
+        }
+        
+        .config-item {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .config-value {
+            color: var(--warning);
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>MiniPlay — High CPM</h1>
-        <p>Popunder + Interstitial + In-Page Push — Target: USA + Global</p>
+        <p>Rewarded Popup + Rewarded Interstitial + In-App Interstitial — Target: USA + Global</p>
     </div>
     
     <div class="container">
@@ -260,10 +305,19 @@
             <div class="ad-preview">
                 <h3>Ad Formats Preview</h3>
                 <div class="ad-types">
-                    <div class="ad-type">Popunder</div>
-                    <div class="ad-type">Interstitial</div>
-                    <div class="ad-type">In-Page Push</div>
+                    <div class="ad-type">Rewarded Popup</div>
+                    <div class="ad-type">Rewarded Interstitial</div>
+                    <div class="ad-type">In-App Interstitial</div>
                 </div>
+            </div>
+            
+            <div class="ad-config">
+                <h3>In-App Interstitial Settings</h3>
+                <div class="config-item">Frequency: <span class="config-value">2 ads</span></div>
+                <div class="config-item">Capping: <span class="config-value">0.1 hours (6 minutes)</span></div>
+                <div class="config-item">Interval: <span class="config-value">30 seconds</span></div>
+                <div class="config-item">Timeout: <span class="config-value">5 seconds</span></div>
+                <div class="config-item">Every Page: <span class="config-value">false</span></div>
             </div>
         </main>
         
@@ -283,8 +337,9 @@
                     <div class="manual-triggers">
                         <h2>Manual Triggers</h2>
                         <div class="trigger-buttons">
-                            <button class="primary" id="manualPop">Trigger Popunder</button>
-                            <button class="secondary" id="manualInterstitial">Show Interstitial</button>
+                            <button class="primary" id="manualRewardedPopup">Rewarded Popup</button>
+                            <button class="secondary" id="manualRewardedInterstitial">Rewarded Interstitial</button>
+                            <button class="secondary" id="manualInAppInterstitial">In-App Interstitial</button>
                         </div>
                     </div>
                 </div>
@@ -296,68 +351,18 @@
         Deploy to Vercel • Add domain to Monetag dashboard • Test in incognito & real devices
     </div>
 
+    <div class="reward-notification" id="rewardNotification">
+        +50 Points! Ad completed successfully.
+    </div>
+
     <script>
         // Configuration
         const CONFIG = {
-            // Monetag integration placeholders
-            monetagGlobal: 'REPLACE_MONETAG_GLOBAL_SCRIPT',
-            monetagPopunder: '
-
-// Rewarded Popup
-
-show_10139509('pop').then(() => {
-    // user watch ad till the end or close it in interstitial format
-    // your code to reward user for rewarded format
-}).catch(e => {
-    // user get error during playing ad
-    // do nothing or whatever you want
-})
-
-        ',
-            monetagInterstitial: '
-
-// Rewarded interstitial
-
-show_10139509().then(() => {
-    // You need to add your user reward function here, which will be executed after the user watches the ad.
-    // For more details, please refer to the detailed instructions.
-    alert('You have seen an ad!');
-})
-
-        ',
-            monetagPush: '
-
-// In-App Interstitial
-
-show_10139509({
-  type: 'inApp',
-  inAppSettings: {
-    frequency: 2,
-    capping: 0.1,
-    interval: 30,
-    timeout: 5,
-    everyPage: false
-  }
-})
-
-/*
-This value is decoded as follows:
-- show automatically 2 ads
-  within 0.1 hours (6 minutes)
-  with a 30-second interval between them
-  and a 5-second delay before the first one is shown.
-  The last digit, 0, means that the session will be saved when you navigate between pages.
-  If you set the last digit as 1, then at any transition between pages,
-  the session will be reset, and the ads will start again.
-*/
-
-        ',
-            
             // Ad frequency settings
             capPerSession: {
-                popunder: 2,
-                interstitial: 2,
-                push: 3
+                rewardedPopup: 2,
+                rewardedInterstitial: 2,
+                inAppInterstitial: 2
             },
             
             // Timing settings
@@ -378,11 +383,11 @@ This value is decoded as follows:
             score: 0,
             sessionTime: 0,
             adCounts: {
-                popunder: 0,
-                interstitial: 0,
-                push: 0
+                rewardedPopup: 0,
+                rewardedInterstitial: 0,
+                inAppInterstitial: 0
             },
-            lastPush: 0,
+            lastInAppInterstitial: 0,
             firstGestureDone: false
         };
 
@@ -392,8 +397,10 @@ This value is decoded as follows:
         const engineStatusEl = document.getElementById('engineStatus');
         const playBtn = document.getElementById('playBtn');
         const claimBtn = document.getElementById('claimBtn');
-        const manualPop = document.getElementById('manualPop');
-        const manualInterstitial = document.getElementById('manualInterstitial');
+        const manualRewardedPopup = document.getElementById('manualRewardedPopup');
+        const manualRewardedInterstitial = document.getElementById('manualRewardedInterstitial');
+        const manualInAppInterstitial = document.getElementById('manualInAppInterstitial');
+        const rewardNotification = document.getElementById('rewardNotification');
 
         // Timer
         let sessionTimer = null;
@@ -420,8 +427,9 @@ This value is decoded as follows:
             // Set up event listeners
             playBtn.addEventListener('click', handlePlay);
             claimBtn.addEventListener('click', handleClaim);
-            manualPop.addEventListener('click', triggerPopunder);
-            manualInterstitial.addEventListener('click', triggerInterstitial);
+            manualRewardedPopup.addEventListener('click', triggerRewardedPopup);
+            manualRewardedInterstitial.addEventListener('click', triggerRewardedInterstitial);
+            manualInAppInterstitial.addEventListener('click', triggerInAppInterstitial);
             
             // Start session timer if we have an active session
             if (sessionData.sessionTime > 0) {
@@ -447,10 +455,10 @@ This value is decoded as follows:
                 sessionTimeEl.textContent = `${sessionData.sessionTime}s`;
                 saveSession();
                 
-                // Check for interstitial after engagement period
+                // Check for in-app interstitial after engagement period
                 if (sessionData.sessionTime === CONFIG.interstitialAfterSec) {
-                    if (sessionData.adCounts.interstitial < CONFIG.capPerSession.interstitial) {
-                        triggerInterstitial();
+                    if (canTriggerInAppInterstitial()) {
+                        triggerInAppInterstitial();
                     }
                 }
             }, 1000);
@@ -498,82 +506,123 @@ This value is decoded as follows:
         function triggerInitialAd() {
             const isTier1 = sessionData.userTier === 'tier1';
             
-            // Prefer popunder for Tier-1 users, push for others
-            if (isTier1 && sessionData.adCounts.popunder < CONFIG.capPerSession.popunder) {
-                triggerPopunder();
-            } else if (sessionData.adCounts.push < CONFIG.capPerSession.push) {
-                triggerPush();
+            // Prefer rewarded popup for Tier-1 users, rewarded interstitial for others
+            if (isTier1 && sessionData.adCounts.rewardedPopup < CONFIG.capPerSession.rewardedPopup) {
+                triggerRewardedPopup();
+            } else if (sessionData.adCounts.rewardedInterstitial < CONFIG.capPerSession.rewardedInterstitial) {
+                triggerRewardedInterstitial();
             }
         }
 
-        // Trigger popunder ad
-        function triggerPopunder() {
-            if (sessionData.adCounts.popunder >= CONFIG.capPerSession.popunder) {
-                engineStatusEl.textContent = 'Popunder cap reached';
+        // Trigger rewarded popup ad
+        function triggerRewardedPopup() {
+            if (sessionData.adCounts.rewardedPopup >= CONFIG.capPerSession.rewardedPopup) {
+                engineStatusEl.textContent = 'Rewarded popup cap reached';
                 return;
             }
             
-            // In a real implementation, this would call the Monetag script
-            const url = CONFIG.monetagPopunder;
-            if (!url || url.startsWith('REPLACE')) {
-                // Simulate popunder for demo
-                engineStatusEl.textContent = 'Popunder triggered (demo)';
-                simulatePopunder();
-            } else {
-                // Real implementation would go here
-                // window.open(url, '_blank');
-            }
+            // Simulate the rewarded popup ad
+            engineStatusEl.textContent = 'Showing rewarded popup...';
             
-            sessionData.adCounts.popunder++;
-            saveSession();
+            // This is where you would integrate the actual ad code:
+            // show_10139509('pop').then(() => {
+            //     // User watched ad till the end
+            //     rewardUser(50, 'Rewarded Popup');
+            //     sessionData.adCounts.rewardedPopup++;
+            //     saveSession();
+            // }).catch(e => {
+            //     // User got error during playing ad
+            //     engineStatusEl.textContent = 'Rewarded popup failed';
+            // });
+            
+            // For demo, we'll simulate the ad
+            simulateRewardedPopup();
         }
 
-        // Trigger interstitial ad
-        function triggerInterstitial() {
-            if (sessionData.adCounts.interstitial >= CONFIG.capPerSession.interstitial) {
-                engineStatusEl.textContent = 'Interstitial cap reached';
+        // Trigger rewarded interstitial ad
+        function triggerRewardedInterstitial() {
+            if (sessionData.adCounts.rewardedInterstitial >= CONFIG.capPerSession.rewardedInterstitial) {
+                engineStatusEl.textContent = 'Rewarded interstitial cap reached';
                 return;
             }
             
-            // In a real implementation, this would call the Monetag script
-            const url = CONFIG.monetagInterstitial;
-            if (!url || url.startsWith('REPLACE')) {
-                // Simulate interstitial for demo
-                engineStatusEl.textContent = 'Interstitial shown (demo)';
-                simulateInterstitial();
-            } else {
-                // Real implementation would go here
-            }
+            // Simulate the rewarded interstitial ad
+            engineStatusEl.textContent = 'Showing rewarded interstitial...';
             
-            sessionData.adCounts.interstitial++;
-            saveSession();
+            // This is where you would integrate the actual ad code:
+            // show_10139509().then(() => {
+            //     // You need to add your user reward function here
+            //     rewardUser(100, 'Rewarded Interstitial');
+            //     sessionData.adCounts.rewardedInterstitial++;
+            //     saveSession();
+            // });
+            
+            // For demo, we'll simulate the ad
+            simulateRewardedInterstitial();
         }
 
-        // Trigger push ad
-        function triggerPush() {
+        // Check if we can trigger in-app interstitial
+        function canTriggerInAppInterstitial() {
             const now = Date.now();
-            if (sessionData.adCounts.push >= CONFIG.capPerSession.push) {
+            const timeSinceLast = now - sessionData.lastInAppInterstitial;
+            
+            // Check if we've reached the cap
+            if (sessionData.adCounts.inAppInterstitial >= CONFIG.capPerSession.inAppInterstitial) {
+                return false;
+            }
+            
+            // Check if enough time has passed since last interstitial (30 seconds)
+            if (timeSinceLast < 30000) {
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Trigger in-app interstitial ad
+        function triggerInAppInterstitial() {
+            if (!canTriggerInAppInterstitial()) {
+                engineStatusEl.textContent = 'In-app interstitial not available';
                 return;
             }
             
-            // Check push interval
-            if (now - sessionData.lastPush < CONFIG.pushIntervalSec * 1000) {
-                return;
-            }
+            // Simulate the in-app interstitial ad
+            engineStatusEl.textContent = 'Showing in-app interstitial...';
             
-            // In a real implementation, this would call the Monetag script
-            const url = CONFIG.monetagPush;
-            if (!url || url.startsWith('REPLACE')) {
-                // Simulate push for demo
-                engineStatusEl.textContent = 'Push notification sent (demo)';
-                simulatePush();
-            } else {
-                // Real implementation would go here
-            }
+            // This is where you would integrate the actual ad code:
+            // show_10139509({
+            //   type: 'inApp',
+            //   inAppSettings: {
+            //     frequency: 2,
+            //     capping: 0.1,
+            //     interval: 30,
+            //     timeout: 5,
+            //     everyPage: false
+            //   }
+            // });
             
-            sessionData.adCounts.push++;
-            sessionData.lastPush = now;
+            // For demo, we'll simulate the ad
+            simulateInAppInterstitial();
+            
+            sessionData.adCounts.inAppInterstitial++;
+            sessionData.lastInAppInterstitial = Date.now();
             saveSession();
+        }
+
+        // Reward user function
+        function rewardUser(points, adType) {
+            sessionData.score += points;
+            updateUI();
+            
+            // Show reward notification
+            rewardNotification.textContent = `+${points} Points! ${adType} completed successfully.`;
+            rewardNotification.classList.add('show');
+            
+            setTimeout(() => {
+                rewardNotification.classList.remove('show');
+            }, 3000);
+            
+            engineStatusEl.textContent = `Rewarded ${points} points from ${adType}`;
         }
 
         // Detect user tier (simplified)
@@ -600,44 +649,68 @@ This value is decoded as follows:
             localStorage.setItem(CONFIG.storageKey, JSON.stringify(sessionData));
         }
 
-        // Simulate popunder for demo
-        function simulatePopunder() {
+        // Simulate rewarded popup for demo
+        function simulateRewardedPopup() {
             const popup = document.createElement('div');
             popup.style.position = 'fixed';
             popup.style.top = '0';
             popup.style.left = '0';
             popup.style.width = '100%';
             popup.style.height = '100%';
-            popup.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            popup.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
             popup.style.zIndex = '1000';
             popup.style.display = 'flex';
             popup.style.alignItems = 'center';
             popup.style.justifyContent = 'center';
             
             const content = document.createElement('div');
-            content.style.background = 'white';
-            content.style.padding = '20px';
-            content.style.borderRadius = '8px';
+            content.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
+            content.style.padding = '30px';
+            content.style.borderRadius = '12px';
             content.style.maxWidth = '400px';
             content.style.textAlign = 'center';
-            content.style.color = 'black';
+            content.style.color = 'white';
+            content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
             
             content.innerHTML = `
-                <h3 style="margin-bottom: 10px; color: #06b6d4;">Advertisement</h3>
-                <p style="margin-bottom: 15px;">This would be a popunder ad in production</p>
-                <button id="closePopup" style="padding: 8px 16px; background: #06b6d4; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+                <h3 style="margin-bottom: 15px; color: #06b6d4; font-size: 24px;">Rewarded Popup Ad</h3>
+                <p style="margin-bottom: 20px; font-size: 16px;">Watch this ad to earn 50 points!</p>
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(6, 182, 212, 0.1); border-radius: 8px;">
+                    <p style="margin-bottom: 10px;">Simulating ad playback...</p>
+                    <div style="height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden;">
+                        <div id="adProgress" style="height: 100%; width: 0%; background: #06b6d4; transition: width 5s linear;"></div>
+                    </div>
+                </div>
+                <button id="completeAd" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: none;">Complete Ad</button>
+                <button id="closeAd" style="padding: 10px 20px; background: transparent; color: #94a3b8; border: 1px solid #94a3b8; border-radius: 6px; cursor: pointer; font-weight: 600; margin-left: 10px;">Skip Ad</button>
             `;
             
             popup.appendChild(content);
             document.body.appendChild(popup);
             
-            document.getElementById('closePopup').addEventListener('click', () => {
+            // Simulate ad progress
+            const progressBar = document.getElementById('adProgress');
+            progressBar.style.width = '100%';
+            
+            setTimeout(() => {
+                document.getElementById('completeAd').style.display = 'inline-block';
+            }, 5000);
+            
+            document.getElementById('completeAd').addEventListener('click', () => {
                 document.body.removeChild(popup);
+                rewardUser(50, 'Rewarded Popup');
+                sessionData.adCounts.rewardedPopup++;
+                saveSession();
+            });
+            
+            document.getElementById('closeAd').addEventListener('click', () => {
+                document.body.removeChild(popup);
+                engineStatusEl.textContent = 'Ad skipped - no reward';
             });
         }
 
-        // Simulate interstitial for demo
-        function simulateInterstitial() {
+        // Simulate rewarded interstitial for demo
+        function simulateRewardedInterstitial() {
             const interstitial = document.createElement('div');
             interstitial.style.position = 'fixed';
             interstitial.style.top = '0';
@@ -661,9 +734,67 @@ This value is decoded as follows:
             content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
             
             content.innerHTML = `
-                <h3 style="margin-bottom: 15px; color: #06b6d4; font-size: 24px;">Special Offer</h3>
-                <p style="margin-bottom: 20px; font-size: 16px;">This would be an interstitial ad in production</p>
-                <button id="closeInterstitial" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Continue</button>
+                <h3 style="margin-bottom: 15px; color: #06b6d4; font-size: 24px;">Rewarded Interstitial</h3>
+                <p style="margin-bottom: 20px; font-size: 16px;">Complete this ad to earn 100 points!</p>
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(6, 182, 212, 0.1); border-radius: 8px;">
+                    <p style="margin-bottom: 10px;">Advertisement content playing...</p>
+                    <div style="height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden;">
+                        <div id="interstitialProgress" style="height: 100%; width: 0%; background: #06b6d4; transition: width 3s linear;"></div>
+                    </div>
+                </div>
+                <button id="completeInterstitial" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: none;">Claim 100 Points</button>
+            `;
+            
+            interstitial.appendChild(content);
+            document.body.appendChild(interstitial);
+            
+            // Simulate ad progress
+            const progressBar = document.getElementById('interstitialProgress');
+            progressBar.style.width = '100%';
+            
+            setTimeout(() => {
+                document.getElementById('completeInterstitial').style.display = 'inline-block';
+            }, 3000);
+            
+            document.getElementById('completeInterstitial').addEventListener('click', () => {
+                document.body.removeChild(interstitial);
+                rewardUser(100, 'Rewarded Interstitial');
+                sessionData.adCounts.rewardedInterstitial++;
+                saveSession();
+            });
+        }
+
+        // Simulate in-app interstitial for demo
+        function simulateInAppInterstitial() {
+            const interstitial = document.createElement('div');
+            interstitial.style.position = 'fixed';
+            interstitial.style.top = '0';
+            interstitial.style.left = '0';
+            interstitial.style.width = '100%';
+            interstitial.style.height = '100%';
+            interstitial.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            interstitial.style.zIndex = '1002';
+            interstitial.style.display = 'flex';
+            interstitial.style.alignItems = 'center';
+            interstitial.style.justifyContent = 'center';
+            interstitial.style.flexDirection = 'column';
+            
+            const content = document.createElement('div');
+            content.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
+            content.style.padding = '30px';
+            content.style.borderRadius = '12px';
+            content.style.maxWidth = '500px';
+            content.style.textAlign = 'center';
+            content.style.color = 'white';
+            content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
+            
+            content.innerHTML = `
+                <h3 style="margin-bottom: 15px; color: #f59e0b; font-size: 24px;">In-App Interstitial</h3>
+                <p style="margin-bottom: 20px; font-size: 16px;">This is an automatic interstitial ad</p>
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
+                    <p style="margin-bottom: 10px;">Advertisement content</p>
+                </div>
+                <button id="closeInterstitial" style="padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Continue</button>
             `;
             
             interstitial.appendChild(content);
@@ -671,47 +802,16 @@ This value is decoded as follows:
             
             document.getElementById('closeInterstitial').addEventListener('click', () => {
                 document.body.removeChild(interstitial);
+                engineStatusEl.textContent = 'In-app interstitial completed';
             });
-        }
-
-        // Simulate push notification for demo
-        function simulatePush() {
-            const notification = document.createElement('div');
-            notification.style.position = 'fixed';
-            notification.style.bottom = '20px';
-            notification.style.right = '20px';
-            notification.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
-            notification.style.color = 'white';
-            notification.style.padding = '15px';
-            notification.style.borderRadius = '8px';
-            notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-            notification.style.zIndex = '1002';
-            notification.style.maxWidth = '300px';
-            notification.style.borderLeft = '4px solid #06b6d4';
-            notification.style.transform = 'translateX(400px)';
-            notification.style.transition = 'transform 0.3s ease';
             
-            notification.innerHTML = `
-                <div style="font-weight: 600; margin-bottom: 5px;">Advertisement</div>
-                <div style="font-size: 14px; color: #94a3b8;">This would be a push notification in production</div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Animate in
+            // Auto-close after 7 seconds
             setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            // Auto close after 5 seconds
-            setTimeout(() => {
-                notification.style.transform = 'translateX(400px)';
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                    }
-                }, 300);
-            }, 5000);
+                if (document.body.contains(interstitial)) {
+                    document.body.removeChild(interstitial);
+                    engineStatusEl.textContent = 'In-app interstitial completed';
+                }
+            }, 7000);
         }
 
         // Initialize the app
@@ -719,4 +819,3 @@ This value is decoded as follows:
     </script>
 </body>
 </html>
-
