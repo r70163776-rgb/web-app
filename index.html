@@ -1,751 +1,673 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src='//libtl.com/sdk.js' data-zone='10139509' data-sdk='show_3099110'></script>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniPlay — Ultimate High-CPM</title>
+    <title>MiniPlay — High CPM</title>
     <style>
         :root {
-            --bg: #071026;
-            --card: #081028;
-            --accent: #06b6d4;
-            --muted: #9aa4b2;
+            --primary: #06b6d4;
+            --primary-dark: #0891b2;
+            --background: #071026;
+            --card-bg: #0f172a;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
         }
-
-        html, body {
-            height: 100%;
+        
+        * {
             margin: 0;
-            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
-            color: #eaf2ff;
-            background: linear-gradient(180deg, #071026, #051025);
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-
-        .wrap {
-            max-width: 980px;
-            margin: 14px auto;
-            padding: 14px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 12px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .play-area {
-            height: 360px;
-            border-radius: 12px;
+        
+        body {
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
         }
-
-        .score {
-            font-size: 48px;
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header h1 {
+            font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(90deg, var(--accent), #7c3aed);
+            background: linear-gradient(90deg, var(--primary), #7c3aed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
+        
+        .header p {
+            color: var(--text-muted);
+            font-size: 15px;
         }
-
-        button {
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 0;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .primary {
-            background: linear-gradient(90deg, var(--accent), #7c3aed);
-            color: white;
-        }
-
-        .ghost {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: var(--muted);
-        }
-
-        footer {
-            margin-top: 12px;
-            color: var(--muted);
-            font-size: 13px;
-            text-align: center;
-        }
-
-        .status-panel {
+        
+        .play-area {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-
-        .status-item {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            justify-content: center;
+            height: 320px;
+            text-align: center;
         }
-
-        .status-label {
-            font-weight: 600;
-            color: var(--muted);
-        }
-
-        .status-value {
-            font-weight: 600;
-        }
-
-        .tier-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 6px;
-        }
-
-        .tier-1 {
-            background-color: #10b981;
-        }
-
-        .tier-other {
-            background-color: #f59e0b;
-        }
-
-        .ad-history {
-            margin-top: 16px;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-
-        .ad-history-item {
-            font-size: 12px;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .ad-type {
-            color: var(--accent);
-        }
-
-        .ad-time {
-            color: var(--muted);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        
+        .score {
+            font-size: 72px;
+            font-weight: 800;
             margin-bottom: 16px;
+            background: linear-gradient(90deg, var(--primary), #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        .logo {
+        
+        .instructions {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 16px;
+            max-width: 300px;
+        }
+        
+        .instructions strong {
+            color: var(--primary);
+        }
+        
+        .actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 15px;
+        }
+        
+        button.primary {
+            background: linear-gradient(90deg, var(--primary), #7c3aed);
+            color: white;
+        }
+        
+        button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+        }
+        
+        button.secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        
+        button.secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--text);
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
-        .logo-circle {
-            width: 24px;
-            height: 24px;
+        
+        .sidebar h2::before {
+            content: "";
+            display: block;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: linear-gradient(90deg, var(--accent), #7c3aed);
+            background: var(--primary);
+        }
+        
+        .session-info {
+            margin-bottom: 24px;
+        }
+        
+        .session-time {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .ad-status {
+            margin-bottom: 24px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--primary);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+        
+        .manual-triggers {
+            margin-bottom: 24px;
+        }
+        
+        .trigger-buttons {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .trigger-buttons button {
+            width: 100%;
             justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
         }
-
-        .stats {
-            display: flex;
-            gap: 16px;
-        }
-
-        .stat {
+        
+        .footer {
             text-align: center;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 14px;
         }
-
-        .stat-value {
-            font-weight: 700;
-            font-size: 18px;
+        
+        .ad-preview {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(6, 182, 212, 0.05);
+            border-radius: 8px;
+            border: 1px dashed var(--primary);
         }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--muted);
+        
+        .ad-preview h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--primary);
         }
-
-        @media (max-width: 768px) {
-            main {
-                grid-template-columns: 1fr !important;
-            }
-            
-            .stats {
-                display: none;
-            }
+        
+        .ad-types {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .ad-type {
+            padding: 8px 12px;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--primary);
         }
     </style>
 </head>
 <body>
-    <div class="wrap">
-        <div class="header">
-            <div class="logo">
-                <div class="logo-circle">MP</div>
-                <div>MiniPlay — Ultimate High-CPM</div>
-            </div>
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-value" id="totalClicks">0</div>
-                    <div class="stat-label">Total Clicks</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="totalAds">0</div>
-                    <div class="stat-label">Ads Shown</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="tierValue">Global</div>
-                    <div class="stat-label">Tier</div>
-                </div>
-            </div>
-        </div>
-
-        <main style="display: grid; grid-template-columns: 1fr 320px; gap: 12px;">
-            <section class="card">
-                <div class="play-area" id="playArea">
+    <div class="header">
+        <h1>MiniPlay — High CPM</h1>
+        <p>Popunder + Interstitial + In-Page Push — Target: USA + Global</p>
+    </div>
+    
+    <div class="container">
+        <main>
+            <div class="card">
+                <div class="play-area">
                     <div class="score" id="score">0</div>
-                    <div style="color: var(--muted); margin-top: 6px; text-align: center;">
-                        Tap <strong>PLAY</strong> to start — first gesture unlocks ad rotation
+                    <div class="instructions">
+                        Tap <strong>PLAY</strong> to start — first gesture will unlock ad triggers
                     </div>
                     <div class="actions">
-                        <button id="playBtn" class="primary">PLAY</button>
-                        <button id="claimBtn" class="ghost">CLAIM</button>
+                        <button class="primary" id="playBtn">PLAY</button>
+                        <button class="secondary" id="claimBtn">CLAIM</button>
                     </div>
                 </div>
-            </section>
+            </div>
             
-            <aside class="card">
-                <div class="status-panel">
-                    <div class="status-item">
-                        <div class="status-label">Session</div>
-                        <div id="sessionTime" class="status-value">0s</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-label">Ad Engine</div>
-                        <div id="engineStatus" class="status-value">Idle</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-label">User Tier</div>
-                        <div id="userTier" class="status-value">
-                            <span class="tier-indicator" id="tierIndicator"></span>
-                            <span id="tierText">Detecting...</span>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 12px;">
-                        <strong>Manual Triggers</strong>
-                        <div style="margin-top: 8px; display: flex; gap: 8px;">
-                            <button id="manualPop" class="primary">Popunder</button>
-                            <button id="manualInterstitial" class="ghost">Interstitial</button>
-                        </div>
-                    </div>
-                    
-                    <div class="ad-history">
-                        <div style="font-size: 12px; color: var(--muted); margin-bottom: 6px;">Ad History</div>
-                        <div id="adHistoryList"></div>
-                    </div>
+            <div class="ad-preview">
+                <h3>Ad Formats Preview</h3>
+                <div class="ad-types">
+                    <div class="ad-type">Popunder</div>
+                    <div class="ad-type">Interstitial</div>
+                    <div class="ad-type">In-Page Push</div>
                 </div>
-            </aside>
+            </div>
         </main>
         
-        <footer>
-            Deploy to Vercel • Replace placeholders in CONFIG • Test on real users
-        </footer>
+        <aside>
+            <div class="card">
+                <div class="sidebar">
+                    <div class="session-info">
+                        <h2>Session</h2>
+                        <div class="session-time" id="sessionTime">0s</div>
+                    </div>
+                    
+                    <div class="ad-status">
+                        <h2>Ad Status</h2>
+                        <div class="status-indicator" id="engineStatus">Waiting for gesture</div>
+                    </div>
+                    
+                    <div class="manual-triggers">
+                        <h2>Manual Triggers</h2>
+                        <div class="trigger-buttons">
+                            <button class="primary" id="manualPop">Trigger Popunder</button>
+                            <button class="secondary" id="manualInterstitial">Show Interstitial</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <div class="footer">
+        Deploy to Vercel • Add domain to Monetag dashboard • Test in incognito & real devices
     </div>
 
     <script>
-        // ---------------- CONFIG ----------------
+        // Configuration
         const CONFIG = {
-            // If Monetag gives a single global script that handles everything, put its URL here (optional):
+            // Monetag integration placeholders
             monetagGlobal: 'REPLACE_MONETAG_GLOBAL_SCRIPT',
+            monetagPopunder: 'REPLACE_POPUNDER_HANDLER',
+            monetagInterstitial: 'REPLACE_INTERSTITIAL_HANDLER',
+            monetagPush: 'REPLACE_PUSH_HANDLER',
             
-            // If Monetag requires per-format handlers, put them here (placeholders):
-            monetagPopunder: '// Rewarded Popup
-
-show_10139509('pop').then(() => {
-    // user watch ad till the end or close it in interstitial format
-    // your code to reward user for rewarded format
-}).catch(e => {
-    // user get error during playing ad
-    // do nothing or whatever you want
-})',
-            monetagInterstitial: '// Rewarded interstitial
-
-show_10139509().then(() => {
-    // You need to add your user reward function here, which will be executed after the user watches the ad.
-    // For more details, please refer to the detailed instructions.
-    alert('You have seen an ad!');
-})',
-            monetagPush: '// In-App Interstitial
-
-show_10139509({
-  type: 'inApp',
-  inAppSettings: {
-    frequency: 2,
-    capping: 0.1,
-    interval: 30,
-    timeout: 5,
-    everyPage: false
-  }
-})
-
-/*
-This value is decoded as follows:
-- show automatically 2 ads
-  within 0.1 hours (6 minutes)
-  with a 30-second interval between them
-  and a 5-second delay before the first one is shown.
-  The last digit, 0, means that the session will be saved when you navigate between pages.
-  If you set the last digit as 1, then at any transition between pages,
-  the session will be reset, and the ads will start again.
-*/',
-            
-            // Frequency caps and timings (tweak after testing):
+            // Ad frequency settings
             capPerSession: {
-                popunder: 1,
-                interstitial: 1,
+                popunder: 2,
+                interstitial: 2,
                 push: 3
             },
             
+            // Timing settings
             popunderDelayMs: 700,
-            interstitialAfterSec: 25, // show interstitial only after user engaged for this long
-            pushIntervalSec: 40, // minimum seconds between push triggers in session
+            interstitialAfterSec: 25,
+            pushIntervalSec: 40,
             
-            // Tier-1 preference multiplier (higher => more aggressive for Tier-1 visitors)
+            // Tier settings
             tier1Multiplier: 1.0,
             
-            // local storage key
-            storageKey: 'mp_highcpm_caps_v1'
+            // Storage
+            storageKey: 'mp_highcpm_session'
         };
 
-        // ---------------- UTILITIES ----------------
-        function isLikelyTier1() {
-            // Heuristic: use timeZone, language, and UA hints
-            try {
-                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-                const lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-                const ua = (navigator.userAgent || '').toLowerCase();
-                
-                // quick timezone checks for USA/Canada/Australia/UK
-                const tzTier1 = /america|pacific|eastern|central|mountain|canada|british|london|australia/.test(tz.toLowerCase());
-                const langTier1 = /en-us|en-gb|en-ca|en-au/.test(lang);
-                const uaTier1 = /(iphone|ipad|macintosh|windows nt|android)/.test(ua);
-                
-                return (tzTier1 && langTier1) || langTier1 || uaTier1;
-            } catch(e) {
-                return false;
-            }
-        }
+        // State management
+        let sessionData = {
+            sessionId: Date.now(),
+            score: 0,
+            sessionTime: 0,
+            adCounts: {
+                popunder: 0,
+                interstitial: 0,
+                push: 0
+            },
+            lastPush: 0,
+            firstGestureDone: false
+        };
 
-        function nowSec() {
-            return Math.floor(Date.now() / 1000);
-        }
-
-        function readCaps() {
-            try {
-                const s = localStorage.getItem(CONFIG.storageKey);
-                return s ? JSON.parse(s) : {
-                    sessionId: nowSec(), 
-                    counts: {popunder: 0, interstitial: 0, push: 0}, 
-                    lastPush: 0,
-                    totalClicks: 0,
-                    totalAds: 0
-                };
-            } catch(e) {
-                return {
-                    sessionId: nowSec(), 
-                    counts: {popunder: 0, interstitial: 0, push: 0}, 
-                    lastPush: 0,
-                    totalClicks: 0,
-                    totalAds: 0
-                };
-            }
-        }
-
-        function writeCaps(obj) {
-            try {
-                localStorage.setItem(CONFIG.storageKey, JSON.stringify(obj));
-            } catch(e) {}
-        }
-
-        // ---------------- LOAD MONETAG (GLOBAL) ----------------
-        function loadScriptAsync(url, attrs = {}) {
-            return new Promise((resolve, reject) => {
-                if (!url || url.startsWith('REPLACE')) return resolve('placeholder');
-                
-                const s = document.createElement('script');
-                s.async = true;
-                s.setAttribute('data-cfasync', 'false');
-                s.src = url;
-                Object.keys(attrs).forEach(k => s.setAttribute(k, attrs[k]));
-                s.onload = () => resolve('loaded');
-                s.onerror = (e) => reject(e);
-                document.head.appendChild(s);
-            });
-        }
-
-        // ---------------- AD CONTROLLERS ----------------
-        const caps = readCaps();
-        const tier1 = isLikelyTier1();
-        if (tier1) CONFIG.tier1Multiplier = 1.25; // be slightly more aggressive for Tier-1
-
-        // Update UI with tier info
-        document.getElementById('tierIndicator').className = tier1 ? 'tier-indicator tier-1' : 'tier-indicator tier-other';
-        document.getElementById('tierText').textContent = tier1 ? 'Tier-1 (USA/Global)' : 'Global';
-        document.getElementById('tierValue').textContent = tier1 ? 'Tier-1' : 'Global';
-        document.getElementById('totalClicks').textContent = caps.totalClicks || 0;
-        document.getElementById('totalAds').textContent = caps.totalAds || 0;
-
-        async function initMonetagGlobal() {
-            if (CONFIG.monetagGlobal && !CONFIG.monetagGlobal.startsWith('REPLACE')) {
-                try {
-                    await loadScriptAsync(CONFIG.monetagGlobal);
-                    console.log('Monetag global loaded');
-                } catch(e) {
-                    console.warn('Monetag global failed', e);
-                }
-            } else {
-                console.log('No global Monetag script configured — per-format handlers will be used');
-            }
-        }
-
-        function canFire(format) {
-            const c = caps.counts[format] || 0;
-            return c < CONFIG.capPerSession[format];
-        }
-
-        function recordFire(format) {
-            caps.counts[format] = (caps.counts[format] || 0) + 1;
-            caps.totalAds = (caps.totalAds || 0) + 1;
-            writeCaps(caps);
-            
-            // Update UI
-            document.getElementById('totalAds').textContent = caps.totalAds;
-            
-            // Add to ad history
-            addAdHistory(format);
-        }
-
-        function addAdHistory(format) {
-            const historyList = document.getElementById('adHistoryList');
-            const now = new Date();
-            const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-            
-            const historyItem = document.createElement('div');
-            historyItem.className = 'ad-history-item';
-            historyItem.innerHTML = `
-                <span class="ad-type">${format.charAt(0).toUpperCase() + format.slice(1)}</span>
-                <span class="ad-time">${timeString}</span>
-            `;
-            
-            historyList.insertBefore(historyItem, historyList.firstChild);
-            
-            // Limit history to 5 items
-            if (historyList.children.length > 5) {
-                historyList.removeChild(historyList.lastChild);
-            }
-        }
-
-        function openPopunder() {
-            if (!canFire('popunder')) {
-                console.log('popunder cap reached');
-                document.getElementById('engineStatus').textContent = 'Popunder cap reached';
-                return;
-            }
-            
-            const url = CONFIG.monetagPopunder;
-            if (!url || url.startsWith('REPLACE')) {
-                console.log('POPUNDER placeholder - replace before production');
-                
-                // Simulate popunder behavior for demo
-                document.getElementById('engineStatus').textContent = 'Popunder simulated (demo)';
-                setTimeout(() => {
-                    alert('Popunder would open here in production');
-                }, 100);
-                
-                recordFire('popunder');
-                return;
-            }
-            
-            const w = window.open(url + (url.includes('?') ? '&' : '?') + 'pd=1', '_blank');
-            if (w) {
-                w.blur();
-                window.focus();
-                recordFire('popunder');
-                document.getElementById('engineStatus').textContent = 'Popunder fired';
-            } else {
-                document.getElementById('engineStatus').textContent = 'Popunder blocked';
-            }
-        }
-
-        function showInterstitial() {
-            if (!canFire('interstitial')) {
-                console.log('interstitial cap reached');
-                document.getElementById('engineStatus').textContent = 'Interstitial cap reached';
-                return;
-            }
-            
-            const url = CONFIG.monetagInterstitial;
-            if (!url || url.startsWith('REPLACE')) {
-                console.log('INTERSTITIAL placeholder - replace before production');
-                
-                // Simulate interstitial for demo
-                document.getElementById('engineStatus').textContent = 'Interstitial simulated (demo)';
-                
-                // Create a modal overlay for the interstitial simulation
-                const overlay = document.createElement('div');
-                overlay.style.position = 'fixed';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100%';
-                overlay.style.height = '100%';
-                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-                overlay.style.zIndex = '1000';
-                overlay.style.display = 'flex';
-                overlay.style.alignItems = 'center';
-                overlay.style.justifyContent = 'center';
-                overlay.style.flexDirection = 'column';
-                
-                const content = document.createElement('div');
-                content.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
-                content.style.padding = '20px';
-                content.style.borderRadius = '12px';
-                content.style.maxWidth = '80%';
-                content.style.textAlign = 'center';
-                content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
-                
-                content.innerHTML = `
-                    <h3 style="margin-top: 0; color: #06b6d4;">Advertisement</h3>
-                    <p>This would be an interstitial ad in production</p>
-                    <button id="closeInterstitial" class="primary" style="margin-top: 15px;">Close</button>
-                `;
-                
-                overlay.appendChild(content);
-                document.body.appendChild(overlay);
-                
-                document.getElementById('closeInterstitial').addEventListener('click', () => {
-                    document.body.removeChild(overlay);
-                });
-                
-                recordFire('interstitial');
-                return;
-            }
-            
-            // open a centered window (Monetag SDK often provides better APIs; replace with that if available)
-            const width = Math.min(900, Math.round(window.innerWidth * 0.9));
-            const height = Math.min(700, Math.round(window.innerHeight * 0.9));
-            const left = Math.round((screen.width - width) / 2);
-            const top = Math.round((screen.height - height) / 2);
-            
-            const win = window.open(url, 'mp_interstitial', `width=${width},height=${height},left=${left},top=${top}`);
-            if (win) {
-                win.focus();
-                recordFire('interstitial');
-                document.getElementById('engineStatus').textContent = 'Interstitial shown';
-            } else {
-                document.getElementById('engineStatus').textContent = 'Interstitial blocked';
-            }
-        }
-
-        function triggerPush() {
-            const now = nowSec();
-            if (!canFire('push')) {
-                console.log('push cap reached');
-                return;
-            }
-            
-            if (now - caps.lastPush < CONFIG.pushIntervalSec) {
-                console.log('push interval not reached');
-                return;
-            }
-            
-            const url = CONFIG.monetagPush;
-            if (!url || url.startsWith('REPLACE')) {
-                console.log('PUSH placeholder - replace before production');
-                
-                // Simulate push notification for demo
-                document.getElementById('engineStatus').textContent = 'Push simulated (demo)';
-                
-                // Create a notification-like element
-                const notification = document.createElement('div');
-                notification.style.position = 'fixed';
-                notification.style.bottom = '20px';
-                notification.style.right = '20px';
-                notification.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
-                notification.style.color = 'white';
-                notification.style.padding = '12px 16px';
-                notification.style.borderRadius = '8px';
-                notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-                notification.style.zIndex = '1000';
-                notification.style.maxWidth = '300px';
-                notification.style.borderLeft = '4px solid #06b6d4';
-                
-                notification.innerHTML = `
-                    <div style="font-weight: 600; margin-bottom: 4px;">Advertisement</div>
-                    <div style="font-size: 14px; color: #9aa4b2;">This would be a push notification in production</div>
-                `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                    }
-                }, 4000);
-                
-                caps.lastPush = now;
-                recordFire('push');
-                writeCaps(caps);
-                return;
-            }
-            
-            // call push endpoint — many networks accept a fetch to trigger a push-like event
-            fetch(url, {method: 'GET', mode: 'no-cors'}).catch(() => {});
-            caps.lastPush = now;
-            recordFire('push');
-            writeCaps(caps);
-            document.getElementById('engineStatus').textContent = 'Push triggered';
-        }
-
-        // ---------------- ROTATION STRATEGY ----------------
-        // First gesture: prefer popunder if Tier-1, else push. Later show interstitial after engagement.
-        let firstGestureDone = false;
-
-        function onFirstGesture() {
-            if (firstGestureDone) return;
-            firstGestureDone = true;
-            
-            // small jitter to mimic natural behavior (avoid 'instant' open patterns which get blocked)
-            setTimeout(() => {
-                const rand = Math.random();
-                
-                // prioritize popunder for Tier-1 visitors
-                if (tier1 && canFire('popunder') && rand < 0.85 * CONFIG.tier1Multiplier) {
-                    openPopunder();
-                } else if (canFire('push')) {
-                    triggerPush();
-                } else if (canFire('interstitial')) {
-                    showInterstitial();
-                }
-            }, CONFIG.popunderDelayMs + Math.round(Math.random() * 400));
-            
-            // schedule interstitial after user engagement threshold
-            setTimeout(() => {
-                if (canFire('interstitial')) showInterstitial();
-            }, CONFIG.interstitialAfterSec * 1000);
-        }
-
-        // ---------------- UI + Interaction ----------------
+        // DOM elements
         const scoreEl = document.getElementById('score');
+        const sessionTimeEl = document.getElementById('sessionTime');
+        const engineStatusEl = document.getElementById('engineStatus');
         const playBtn = document.getElementById('playBtn');
         const claimBtn = document.getElementById('claimBtn');
         const manualPop = document.getElementById('manualPop');
         const manualInterstitial = document.getElementById('manualInterstitial');
-        
-        let score = 0;
-        let sessionSec = 0;
+
+        // Timer
         let sessionTimer = null;
 
+        // Initialize
+        function init() {
+            // Load saved session data
+            const saved = localStorage.getItem(CONFIG.storageKey);
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // Only restore if session is from today
+                    const today = new Date().toDateString();
+                    const savedDay = new Date(parsed.sessionId).toDateString();
+                    if (today === savedDay) {
+                        sessionData = parsed;
+                        updateUI();
+                    }
+                } catch (e) {
+                    console.log('No valid session data found');
+                }
+            }
+            
+            // Set up event listeners
+            playBtn.addEventListener('click', handlePlay);
+            claimBtn.addEventListener('click', handleClaim);
+            manualPop.addEventListener('click', triggerPopunder);
+            manualInterstitial.addEventListener('click', triggerInterstitial);
+            
+            // Start session timer if we have an active session
+            if (sessionData.sessionTime > 0) {
+                startSessionTimer();
+            }
+            
+            // Detect user tier
+            detectUserTier();
+        }
+
+        // Update UI with current state
+        function updateUI() {
+            scoreEl.textContent = sessionData.score;
+            sessionTimeEl.textContent = `${sessionData.sessionTime}s`;
+        }
+
+        // Start session timer
         function startSessionTimer() {
             if (sessionTimer) return;
+            
             sessionTimer = setInterval(() => {
-                sessionSec++;
-                document.getElementById('sessionTime').textContent = sessionSec + 's';
+                sessionData.sessionTime++;
+                sessionTimeEl.textContent = `${sessionData.sessionTime}s`;
+                saveSession();
+                
+                // Check for interstitial after engagement period
+                if (sessionData.sessionTime === CONFIG.interstitialAfterSec) {
+                    if (sessionData.adCounts.interstitial < CONFIG.capPerSession.interstitial) {
+                        triggerInterstitial();
+                    }
+                }
             }, 1000);
         }
 
+        // Stop session timer
         function stopSessionTimer() {
-            clearInterval(sessionTimer);
-            sessionTimer = null;
-            sessionSec = 0;
-            document.getElementById('sessionTime').textContent = '0s';
+            if (sessionTimer) {
+                clearInterval(sessionTimer);
+                sessionTimer = null;
+            }
         }
 
-        playBtn.addEventListener('click', () => {
-            score += Math.floor(Math.random() * 9) + 1;
-            scoreEl.textContent = score;
-            startSessionTimer();
-            onFirstGesture();
+        // Handle play button click
+        function handlePlay() {
+            // Increase score
+            sessionData.score += Math.floor(Math.random() * 10) + 1;
+            scoreEl.textContent = sessionData.score;
             
-            // Update total clicks
-            caps.totalClicks = (caps.totalClicks || 0) + 1;
-            writeCaps(caps);
-            document.getElementById('totalClicks').textContent = caps.totalClicks;
-        });
-
-        claimBtn.addEventListener('click', () => {
-            alert('Reward claimed (demo)');
-        });
-
-        manualPop.addEventListener('click', () => {
-            openPopunder();
-        });
-
-        manualInterstitial.addEventListener('click', () => {
-            showInterstitial();
-        });
-
-        // ---------------- INITIALIZE ----------------
-        (function init() {
-            // load global Monetag if present (best practice: let Monetag handle formats if it offers it)
-            initMonetagGlobal().catch(() => {});
+            // Start session if not already started
+            if (sessionData.sessionTime === 0) {
+                startSessionTimer();
+            }
             
-            // small anti-bot heuristic: wait for human interaction to enable heavy ad actions
+            // Handle first gesture for ad rotation
+            if (!sessionData.firstGestureDone) {
+                sessionData.firstGestureDone = true;
+                engineStatusEl.textContent = 'Ad rotation active';
+                
+                // Trigger initial ad with delay
+                setTimeout(() => {
+                    triggerInitialAd();
+                }, CONFIG.popunderDelayMs);
+            }
+            
+            saveSession();
+        }
+
+        // Handle claim button click
+        function handleClaim() {
+            alert(`Congratulations! You've earned ${sessionData.score} points.`);
+        }
+
+        // Trigger initial ad based on user tier and availability
+        function triggerInitialAd() {
+            const isTier1 = sessionData.userTier === 'tier1';
+            
+            // Prefer popunder for Tier-1 users, push for others
+            if (isTier1 && sessionData.adCounts.popunder < CONFIG.capPerSession.popunder) {
+                triggerPopunder();
+            } else if (sessionData.adCounts.push < CONFIG.capPerSession.push) {
+                triggerPush();
+            }
+        }
+
+        // Trigger popunder ad
+        function triggerPopunder() {
+            if (sessionData.adCounts.popunder >= CONFIG.capPerSession.popunder) {
+                engineStatusEl.textContent = 'Popunder cap reached';
+                return;
+            }
+            
+            // In a real implementation, this would call the Monetag script
+            const url = CONFIG.monetagPopunder;
+            if (!url || url.startsWith('REPLACE')) {
+                // Simulate popunder for demo
+                engineStatusEl.textContent = 'Popunder triggered (demo)';
+                simulatePopunder();
+            } else {
+                // Real implementation would go here
+                // window.open(url, '_blank');
+            }
+            
+            sessionData.adCounts.popunder++;
+            saveSession();
+        }
+
+        // Trigger interstitial ad
+        function triggerInterstitial() {
+            if (sessionData.adCounts.interstitial >= CONFIG.capPerSession.interstitial) {
+                engineStatusEl.textContent = 'Interstitial cap reached';
+                return;
+            }
+            
+            // In a real implementation, this would call the Monetag script
+            const url = CONFIG.monetagInterstitial;
+            if (!url || url.startsWith('REPLACE')) {
+                // Simulate interstitial for demo
+                engineStatusEl.textContent = 'Interstitial shown (demo)';
+                simulateInterstitial();
+            } else {
+                // Real implementation would go here
+            }
+            
+            sessionData.adCounts.interstitial++;
+            saveSession();
+        }
+
+        // Trigger push ad
+        function triggerPush() {
+            const now = Date.now();
+            if (sessionData.adCounts.push >= CONFIG.capPerSession.push) {
+                return;
+            }
+            
+            // Check push interval
+            if (now - sessionData.lastPush < CONFIG.pushIntervalSec * 1000) {
+                return;
+            }
+            
+            // In a real implementation, this would call the Monetag script
+            const url = CONFIG.monetagPush;
+            if (!url || url.startsWith('REPLACE')) {
+                // Simulate push for demo
+                engineStatusEl.textContent = 'Push notification sent (demo)';
+                simulatePush();
+            } else {
+                // Real implementation would go here
+            }
+            
+            sessionData.adCounts.push++;
+            sessionData.lastPush = now;
+            saveSession();
+        }
+
+        // Detect user tier (simplified)
+        function detectUserTier() {
+            // In a real implementation, this would use more sophisticated detection
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const language = navigator.language;
+            
+            // Simple detection for demo purposes
+            const isUSTier = timezone.includes('America') || 
+                            language.includes('en-US') || 
+                            language.includes('en_CA');
+            
+            sessionData.userTier = isUSTier ? 'tier1' : 'global';
+            
+            // Adjust multiplier for Tier-1
+            if (isUSTier) {
+                CONFIG.tier1Multiplier = 1.25;
+            }
+        }
+
+        // Save session data to localStorage
+        function saveSession() {
+            localStorage.setItem(CONFIG.storageKey, JSON.stringify(sessionData));
+        }
+
+        // Simulate popunder for demo
+        function simulatePopunder() {
+            const popup = document.createElement('div');
+            popup.style.position = 'fixed';
+            popup.style.top = '0';
+            popup.style.left = '0';
+            popup.style.width = '100%';
+            popup.style.height = '100%';
+            popup.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            popup.style.zIndex = '1000';
+            popup.style.display = 'flex';
+            popup.style.alignItems = 'center';
+            popup.style.justifyContent = 'center';
+            
+            const content = document.createElement('div');
+            content.style.background = 'white';
+            content.style.padding = '20px';
+            content.style.borderRadius = '8px';
+            content.style.maxWidth = '400px';
+            content.style.textAlign = 'center';
+            content.style.color = 'black';
+            
+            content.innerHTML = `
+                <h3 style="margin-bottom: 10px; color: #06b6d4;">Advertisement</h3>
+                <p style="margin-bottom: 15px;">This would be a popunder ad in production</p>
+                <button id="closePopup" style="padding: 8px 16px; background: #06b6d4; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+            `;
+            
+            popup.appendChild(content);
+            document.body.appendChild(popup);
+            
+            document.getElementById('closePopup').addEventListener('click', () => {
+                document.body.removeChild(popup);
+            });
+        }
+
+        // Simulate interstitial for demo
+        function simulateInterstitial() {
+            const interstitial = document.createElement('div');
+            interstitial.style.position = 'fixed';
+            interstitial.style.top = '0';
+            interstitial.style.left = '0';
+            interstitial.style.width = '100%';
+            interstitial.style.height = '100%';
+            interstitial.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            interstitial.style.zIndex = '1001';
+            interstitial.style.display = 'flex';
+            interstitial.style.alignItems = 'center';
+            interstitial.style.justifyContent = 'center';
+            interstitial.style.flexDirection = 'column';
+            
+            const content = document.createElement('div');
+            content.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
+            content.style.padding = '30px';
+            content.style.borderRadius = '12px';
+            content.style.maxWidth = '500px';
+            content.style.textAlign = 'center';
+            content.style.color = 'white';
+            content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
+            
+            content.innerHTML = `
+                <h3 style="margin-bottom: 15px; color: #06b6d4; font-size: 24px;">Special Offer</h3>
+                <p style="margin-bottom: 20px; font-size: 16px;">This would be an interstitial ad in production</p>
+                <button id="closeInterstitial" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Continue</button>
+            `;
+            
+            interstitial.appendChild(content);
+            document.body.appendChild(interstitial);
+            
+            document.getElementById('closeInterstitial').addEventListener('click', () => {
+                document.body.removeChild(interstitial);
+            });
+        }
+
+        // Simulate push notification for demo
+        function simulatePush() {
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
+            notification.style.color = 'white';
+            notification.style.padding = '15px';
+            notification.style.borderRadius = '8px';
+            notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+            notification.style.zIndex = '1002';
+            notification.style.maxWidth = '300px';
+            notification.style.borderLeft = '4px solid #06b6d4';
+            notification.style.transform = 'translateX(400px)';
+            notification.style.transition = 'transform 0.3s ease';
+            
+            notification.innerHTML = `
+                <div style="font-weight: 600; margin-bottom: 5px;">Advertisement</div>
+                <div style="font-size: 14px; color: #94a3b8;">This would be a push notification in production</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
             setTimeout(() => {
-                document.getElementById('engineStatus').textContent = 'Waiting for gesture';
-            }, 6000);
+                notification.style.transform = 'translateX(0)';
+            }, 100);
             
-            // reset caps daily (optional): simple expiry check
-            const state = readCaps();
-            if (nowSec() - (state.sessionId || 0) > 24 * 3600) { // new day
-                const fresh = {
-                    sessionId: nowSec(),
-                    counts: {popunder: 0, interstitial: 0, push: 0},
-                    lastPush: 0,
-                    totalClicks: state.totalClicks || 0,
-                    totalAds: state.totalAds || 0
-                };
-                writeCaps(fresh);
-            }
-            
-            // quick visual flag if Tier-1
-            if (tier1) {
-                document.getElementById('engineStatus').textContent = 'Tier-1 detected';
-            }
-        })();
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
 
-        // ---------------- DEBUG / LOGGING ----------------
-        // Keep console logging minimal in production; use a remote analytics endpoint if needed.
+        // Initialize the app
+        init();
     </script>
 </body>
 </html>
-
