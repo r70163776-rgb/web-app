@@ -1,384 +1,239 @@
-<!DOCTYPE html>
+--><!doctype html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Match Game</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .game-container {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .header {
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-
-        .ad-container {
-            background: #f8f9fa;
-            border: 2px dashed #dee2e6;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ad-loading {
-            color: #6c757d;
-            font-size: 14px;
-        }
-
-        .ad-error {
-            color: #dc3545;
-            font-size: 14px;
-            background: #f8d7da;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #f5c6cb;
-        }
-
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .score { color: #28a745; }
-        .lives { color: #dc3545; }
-
-        .color-display {
-            width: 150px;
-            height: 150px;
-            margin: 20px auto;
-            border-radius: 10px;
-            border: 3px solid #333;
-            transition: all 0.3s ease;
-        }
-
-        .color-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 25px 0;
-        }
-
-        .color-option {
-            height: 80px;
-            border-radius: 8px;
-            border: 3px solid #ddd;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .color-option:hover {
-            transform: scale(1.05);
-            border-color: #333;
-        }
-
-        .controls {
-            margin: 25px 0;
-        }
-
-        .btn {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 5px;
-            transition: background 0.3s ease;
-        }
-
-        .btn:hover {
-            background: #0056b3;
-        }
-
-        .btn:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
-
-        .btn-watch-ad {
-            background: #28a745;
-        }
-
-        .btn-watch-ad:hover {
-            background: #1e7e34;
-        }
-
-        .game-message {
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-
-        .retry-btn {
-            background: #ffc107;
-            color: #212529;
-            margin-top: 10px;
-        }
-
-        .retry-btn:hover {
-            background: #e0a800;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MiniPlay — High CPM (Popunder + Interstitial + Push)</title>
+  <meta name="description" content="High-CPM Telegram Web App optimized for Monetag — Popunder + Interstitial + In-Page Push" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#071026;--card:#081028;--accent:#ff6b6b;--muted:#9aa4b2}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#eaf2ff;background:linear-gradient(180deg,#071026,#051025)}
+    .wrap{max-width:980px;margin:16px auto;padding:16px}
+    .card{background:rgba(255,255,255,0.02);padding:12px;border-radius:12px}
+    .play-area{height:360px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+    .score{font-size:48px;font-weight:700}
+    .actions{display:flex;gap:8px;margin-top:12px}
+    button{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .primary{background:linear-gradient(90deg,var(--accent),#1fb6ff);color:white}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    footer{margin-top:12px;color:var(--muted);font-size:13px;text-align:center}
+  </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="header">
-            <h1>Color Match Game</h1>
-            <p>Match the center color with the options below</p>
-        </div>
-
-        <!-- Monetag Ad Container -->
-        <div class="ad-container">
-            <div id="monetag-banner" class="ad-loading">
-                Loading Monetag Banner...
-            </div>
-        </div>
-
-        <!-- Game Info -->
-        <div class="game-info">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="lives">Lives: <span id="lives">3</span></div>
-        </div>
-
-        <!-- Color Display -->
-        <div class="color-display" id="targetColor"></div>
-
-        <!-- Color Options -->
-        <div class="color-options" id="colorOptions">
-            <!-- Color options will be generated here -->
-        </div>
-
-        <!-- Game Messages -->
-        <div id="gameMessage" class="game-message"></div>
-
-        <!-- Controls -->
-        <div class="controls">
-            <button class="btn" id="startBtn">Start Game</button>
-            <button class="btn btn-watch-ad" id="watchAdBtn" disabled>
-                Watch Ad for Extra Lives
-            </button>
-            <button class="btn retry-btn" id="retryAdBtn" style="display: none;">
-                Retry Loading Ads
-            </button>
-        </div>
+  <div class="wrap">
+    <header style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+      <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#ff6b6b,#1fb6ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700">MP</div>
+      <div>
+        <h1 style="margin:0;font-size:20px">MiniPlay — High CPM</h1>
+        <p style="margin:6px 0;color:var(--muted)">Popunder + Interstitial + In-Page Push — Target: USA + Global</p>
+      </div>
+    </header><main style="display:grid;grid-template-columns:1fr 320px;gap:12px">
+  <section class="card">
+    <div class="play-area" id="playArea">
+      <div class="score" id="score">0</div>
+      <div style="color:var(--muted);margin-top:6px">Tap <strong>PLAY</strong> to start — first gesture will unlock ad triggers</div>
+      <div class="actions">
+        <button id="playBtn" class="primary">PLAY</button>
+        <button id="interstitialBtn" class="ghost">Show Interstitial</button>
+      </div>
     </div>
+  </section>
 
-    <!-- Monetag SDK -->
-    <script src="https://sdk.monetag.com/script/" data-zone="10139509" async></script>
+  <aside class="card">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div><strong>Session</strong><div id="sessionTime" style="color:var(--muted)">0s</div></div>
+      <div><strong>Ad Status</strong><div id="adStatus" style="color:var(--muted)">Waiting for gesture</div></div>
+      <div><strong>Manual Triggers</strong>
+        <div style="margin-top:8px;display:flex;gap:8px"><button id="manualPop" class="primary">Trigger Popunder</button><button id="pushBtn" class="ghost">Trigger Push</button></div>
+      </div>
+    </div>
+  </aside>
+</main>
 
-    <script>
-        // Game variables
-        let score = 0;
-        let lives = 3;
-        let gameStarted = false;
-        let targetColor = '';
-        let colorOptions = [];
+<footer>Deploy to Vercel • Add domain to Monetag dashboard • Test in incognito & real devices</footer>
 
-        // DOM elements
-        const scoreElement = document.getElementById('score');
-        const livesElement = document.getElementById('lives');
-        const targetColorElement = document.getElementById('targetColor');
-        const colorOptionsElement = document.getElementById('colorOptions');
-        const startBtn = document.getElementById('startBtn');
-        const watchAdBtn = document.getElementById('watchAdBtn');
-        const retryAdBtn = document.getElementById('retryAdBtn');
-        const gameMessage = document.getElementById('gameMessage');
-        const monetagBanner = document.getElementById('monetag-banner');
+  </div>  <script>
+    // ================= CONFIG =================
+    const CONFIG = {
+      monetagPopunder: '// Rewarded Popup
 
-        // Check if Monetag SDK loaded
-        function checkMonetagSDK() {
-            setTimeout(() => {
-                if (typeof Monetag !== 'undefined') {
-                    monetagBanner.innerHTML = 'Monetag Banner Ad - Zone: 10139509';
-                    monetagBanner.className = 'ad-success';
-                    watchAdBtn.disabled = false;
-                    retryAdBtn.style.display = 'none';
-                    console.log('Monetag SDK loaded successfully');
-                } else {
-                    monetagBanner.innerHTML = 'Failed to load Monetag SDK. Please check your internet connection or disable ad blocker.';
-                    monetagBanner.className = 'ad-error';
-                    watchAdBtn.disabled = true;
-                    retryAdBtn.style.display = 'inline-block';
-                }
-            }, 2000);
-        }
+show_10139509('pop').then(() => {
+    // user watch ad till the end or close it in interstitial format
+    // your code to reward user for rewarded format
+}).catch(e => {
+    // user get error during playing ad
+    // do nothing or whatever you want
+})',
+      monetagInterstitial: '// Rewarded interstitial
 
-        // Retry loading ads
-        retryAdBtn.addEventListener('click', function() {
-            monetagBanner.innerHTML = 'Retrying to load Monetag Banner...';
-            monetagBanner.className = 'ad-loading';
-            location.reload();
-        });
+show_10139509().then(() => {
+    // You need to add your user reward function here, which will be executed after the user watches the ad.
+    // For more details, please refer to the detailed instructions.
+    alert('You have seen an ad!');
+})',
+      monetagPush: '// In-App Interstitial
 
-        // Generate random color
-        function generateRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
+show_10139509({
+  type: 'inApp',
+  inAppSettings: {
+    frequency: 2,
+    capping: 0.1,
+    interval: 30,
+    timeout: 5,
+    everyPage: false
+  }
+})
 
-        // Start game
-        function startGame() {
-            if (!gameStarted) {
-                gameStarted = true;
-                startBtn.disabled = true;
-                score = 0;
-                lives = 3;
-                updateUI();
-                generateNewRound();
-            }
-        }
+/*
+This value is decoded as follows:
+- show automatically 2 ads
+  within 0.1 hours (6 minutes)
+  with a 30-second interval between them
+  and a 5-second delay before the first one is shown.
+  The last digit, 0, means that the session will be saved when you navigate between pages.
+  If you set the last digit as 1, then at any transition between pages,
+  the session will be reset, and the ads will start again.
+*/',
+      popunderDelayMs: 700,
+      interstitialDelayMs: 1500,
+      adRefreshSec: 60,
+      targetCountries: ['US','CA','GB','AU']
+    };
 
-        // Generate new round
-        function generateNewRound() {
-            // Clear previous options
-            colorOptionsElement.innerHTML = '';
-            colorOptions = [];
+    // ================ STATE ==================
+    let score = 0;
+    let sessionSeconds = 0;
+    let sessionTimer = null;
+    let popunderFired = false;
+    let interstitialFired = false;
 
-            // Generate target color
-            targetColor = generateRandomColor();
-            targetColorElement.style.backgroundColor = targetColor;
+    const scoreEl = document.getElementById('score');
+    const playBtn = document.getElementById('playBtn');
+    const interstitialBtn = document.getElementById('interstitialBtn');
+    const manualPop = document.getElementById('manualPop');
+    const pushBtn = document.getElementById('pushBtn');
+    const sessionTimeEl = document.getElementById('sessionTime');
+    const adStatusEl = document.getElementById('adStatus');
 
-            // Generate color options (one correct, others wrong)
-            const correctOptionIndex = Math.floor(Math.random() * 4);
-            
-            for (let i = 0; i < 4; i++) {
-                let color;
-                if (i === correctOptionIndex) {
-                    color = targetColor;
-                } else {
-                    // Generate similar but different color
-                    color = generateSimilarColor(targetColor);
-                }
+    // ================ SESSION HELPERS ==============
+    function startSession(){
+      if(sessionTimer) return;
+      sessionTimer = setInterval(()=>{
+        sessionSeconds++;
+        sessionTimeEl.textContent = sessionSeconds + 's';
+      },1000);
+    }
 
-                colorOptions.push(color);
+    function stopSession(){ clearInterval(sessionTimer); sessionTimer = null; sessionSeconds = 0; sessionTimeEl.textContent = '0s'; }
 
-                const colorOption = document.createElement('div');
-                colorOption.className = 'color-option';
-                colorOption.style.backgroundColor = color;
-                colorOption.addEventListener('click', () => checkAnswer(color));
-                colorOptionsElement.appendChild(colorOption);
-            }
-        }
+    // ================ AD TRIGGERS ================
+    function loadMonetagScript(url, attrs={}){
+      if(!url || url.startsWith('REPLACE')) return console.log('Monetag script placeholder, replace before production');
+      return new Promise((res,rej)=>{
+        const s = document.createElement('script');
+        s.async = true; s.setAttribute('data-cfasync','false');
+        s.src = url;
+        Object.keys(attrs).forEach(k=>s.setAttribute(k,attrs[k]));
+        s.onload = ()=>res(); s.onerror = (e)=>rej(e);
+        document.head.appendChild(s);
+      });
+    }
 
-        // Generate similar color for wrong options
-        function generateSimilarColor(baseColor) {
-            const colorNum = parseInt(baseColor.slice(1), 16);
-            const variation = 30 + Math.random() * 60;
-            const newColorNum = colorNum + (Math.random() > 0.5 ? variation : -variation);
-            return '#' + Math.max(0, Math.min(0xFFFFFF, newColorNum)).toString(16).padStart(6, '0');
-        }
+    function openPopunder(url){
+      // open in new tab/window from user gesture
+      try{
+        if(!url || url.startsWith('REPLACE')){ console.log('// Rewarded Popup
 
-        // Check answer
-        function checkAnswer(selectedColor) {
-            if (!gameStarted) return;
+show_10139509('pop').then(() => {
+    // user watch ad till the end or close it in interstitial format
+    // your code to reward user for rewarded format
+}).catch(e => {
+    // user get error during playing ad
+    // do nothing or whatever you want
+})'); return false; }
+        const w = window.open(url + (url.includes('?') ? '&' : '?') + 'pd=1', '_blank');
+        if(w){ w.blur(); window.focus(); adStatusEl.textContent = 'Popunder opened'; return true; }
+        adStatusEl.textContent = 'Popunder blocked'; return false;
+      }catch(e){ console.warn('Popunder error', e); adStatusEl.textContent = 'Popunder error'; return false; }
+    }
 
-            if (selectedColor === targetColor) {
-                // Correct answer
-                score += 10;
-                showMessage('Correct! +10 points', 'success');
-                generateNewRound();
-            } else {
-                // Wrong answer
-                lives--;
-                showMessage('Wrong! Try again', 'error');
-                
-                if (lives <= 0) {
-                    endGame();
-                }
-            }
-            updateUI();
-        }
+    function showInterstitial(url){
+      // Many monetag interstitials require a script/API — this is a fallback that opens a centered popup
+      try{
+        if(!url || url.startsWith('REPLACE')){ console.log('Interstitial placeholder'); return false; }
+        const width = Math.min(900, Math.round(window.innerWidth * 0.9));
+        const height = Math.min(700, Math.round(window.innerHeight * 0.9));
+        const left = Math.round((screen.width - width) / 2);
+        const top = Math.round((screen.height - height) / 2);
+        const win = window.open(url, 'interstitial', `width=${width},height=${height},left=${left},top=${top}`);
+        if(win){ win.focus(); adStatusEl.textContent = 'Interstitial shown'; return true; }
+        adStatusEl.textContent = 'Interstitial blocked'; return false;
+      }catch(e){ console.warn('Interstitial error', e); adStatusEl.textContent = 'Interstitial error'; return false; }
+    }
 
-        // Update UI
-        function updateUI() {
-            scoreElement.textContent = score;
-            livesElement.textContent = lives;
-        }
+    function triggerPush(url){
+      // If Monetag exposes a push API, call it. Otherwise simulate by opening a small notice or endpoint.
+      if(!url || url.startsWith('REPLACE')){ console.log('Push placeholder'); alert('Simulated push event (demo)'); return false; }
+      // example: fetch push endpoint
+      fetch(url).then(r=>{ adStatusEl.textContent = 'Push triggered'; }).catch(e=>{ adStatusEl.textContent = 'Push failed'; });
+      return true;
+    }
 
-        // Show message
-        function showMessage(text, type) {
-            gameMessage.textContent = text;
-            gameMessage.className = `game-message ${type}`;
-            setTimeout(() => {
-                gameMessage.textContent = '';
-                gameMessage.className = 'game-message';
-            }, 2000);
-        }
+    // ================ USER GESTURE BINDINGS ================
+    playBtn.addEventListener('click', async (e)=>{
+      score += Math.floor(Math.random()*7)+3; scoreEl.textContent = score; startSession();
 
-        // End game
-        function endGame() {
-            gameStarted = false;
-            startBtn.disabled = false;
-            showMessage(`Game Over! Final Score: ${score}`, 'error');
-            targetColorElement.style.backgroundColor = '#f0f0f0';
-            colorOptionsElement.innerHTML = '';
-        }
+      // Fire popunder once on first user gesture
+      if(!popunderFired){
+        popunderFired = true;
+        adStatusEl.textContent = 'Firing Popunder...';
+        setTimeout(()=>{
+          openPopunder(CONFIG.monetagPopunder);
+        }, CONFIG.popunderDelayMs);
+      }
 
-        // Watch ad for extra lives
-        watchAdBtn.addEventListener('click', function() {
-            if (typeof Monetag !== 'undefined') {
-                showMessage('Ad loading...', 'success');
-                // Here you would typically call Monetag ad display function
-                setTimeout(() => {
-                    lives += 2;
-                    updateUI();
-                    showMessage('+2 Extra Lives!', 'success');
-                }, 3000);
-            } else {
-                showMessage('Ads not available. Please check connection.', 'error');
-            }
-        });
+      // Preload interstitial script if provided (non-blocking)
+      if(CONFIG.monetagInterstitial && CONFIG.monetagInterstitial.indexOf('REPLACE')===-1){
+        loadMonetagScript(CONFIG.monetagInterstitial).then(()=>console.log('Interstitial script loaded')).catch(()=>{});
+      }
+    });
 
-        // Event listeners
-        startBtn.addEventListener('click', startGame);
+    interstitialBtn.addEventListener('click', ()=>{
+      if(interstitialFired){ adStatusEl.textContent = 'Interstitial already shown'; return; }
+      interstitialFired = true;
+      setTimeout(()=>{
+        showInterstitial(CONFIG.monetagInterstitial);
+      }, CONFIG.interstitialDelayMs);
+    });
 
-        // Initialize
-        checkMonetagSDK();
-    </script>
-</body>
+    manualPop.addEventListener('click', ()=>{ openPopunder(CONFIG.monetagPopunder); });
+    pushBtn.addEventListener('click', ()=>{ triggerPush(CONFIG.monetagPush); });
+
+    // ================ QUALITY & SAFEGUARDS ================
+    // Minimal heuristics to avoid opening ads for clearly bot-like sessions
+    let interacted = false; ['click','touchstart','mousemove','keydown'].forEach(evt=>{
+      window.addEventListener(evt, ()=>{ interacted = true; }, {once:true});
+    });
+
+    setTimeout(()=>{
+      if(!interacted) adStatusEl.textContent = 'No interaction detected — Ads disabled until user gesture.';
+    },5000);
+
+    // ================ OPTIONAL: Auto-insert Monetag global script if provided ================
+    (function tryInsertGlobal(){
+      // If Monetag provides a single global script that handles all ad formats, set it in monetagGlobal variable
+      const monetagGlobal = CONFIG.monetagGlobal || null;
+      if(monetagGlobal && !monetagGlobal.startsWith('REPLACE')) loadMonetagScript(monetagGlobal).catch(()=>{});
+    })();
+
+    // ================ CLEANUP ================
+    window.addEventListener('beforeunload', ()=>{
+      // Optionally notify server/Monetag about session end
+    });
+
+  </script></body>
 </html>
