@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniPlay — High CPM</title>
+    <title>MiniPlay — High CPM Optimized</title>
     <style>
         :root {
             --primary: #06b6d4;
@@ -15,6 +15,7 @@
             --border: #1e293b;
             --success: #10b981;
             --warning: #f59e0b;
+            --error: #ef4444;
         }
         
         * {
@@ -280,6 +281,42 @@
             font-weight: 600;
         }
         
+        .cpm-metrics {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 8px;
+            border: 1px dashed var(--success);
+        }
+        
+        .cpm-metrics h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--success);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .metric {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -294,11 +331,29 @@
             color: white;
             font-size: 18px;
         }
+        
+        .error-notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--error);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1003;
+            transform: translateY(-100px);
+            transition: transform 0.3s ease;
+        }
+        
+        .error-notification.show {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>MiniPlay — High CPM</h1>
+        <h1>MiniPlay — High CPM Optimized</h1>
         <p>Rewarded Popup + Rewarded Interstitial + In-App Interstitial — Target: USA + Global</p>
     </div>
     
@@ -333,6 +388,28 @@
                 <div class="config-item">Interval: <span class="config-value">30 seconds</span></div>
                 <div class="config-item">Timeout: <span class="config-value">5 seconds</span></div>
                 <div class="config-item">Every Page: <span class="config-value">false</span></div>
+            </div>
+            
+            <div class="cpm-metrics">
+                <h3>CPM Performance Metrics</h3>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="estimatedCPM">$0.00</div>
+                        <div class="metric-label">Estimated CPM</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="totalImpressions">0</div>
+                        <div class="metric-label">Total Impressions</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="adFillRate">0%</div>
+                        <div class="metric-label">Ad Fill Rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="sessionRevenue">$0.00</div>
+                        <div class="metric-label">Session Revenue</div>
+                    </div>
+                </div>
             </div>
         </main>
         
@@ -370,74 +447,94 @@
         +50 Points! Ad completed successfully.
     </div>
 
+    <div class="error-notification" id="errorNotification">
+        Ad failed to load. Please try again.
+    </div>
+
     <!-- Monetag Ad Scripts -->
     <script type="text/javascript">
-        // Monetag ad scripts - replace with your actual zone IDs
-        // These would be provided by Monetag when you create your ad zones
-        
-        // Example script structure for Monetag:
-        /*
+        // Real Monetag implementation - Replace with your actual publisher ID
         (function() {
             var script = document.createElement('script');
-            script.src = 'https://s.monetcg.com/p/your-publisher-id.js';
+            script.src = 'https://s.monetcg.com/p/3099110.js';
             script.async = true;
             document.head.appendChild(script);
         })();
-        */
         
-        // For demo purposes, we'll simulate the Monetag API
+        // Monetag API integration
         window.monetagAPI = {
-            // Simulated rewarded popup function
+            // Real rewarded popup function
             showRewardedPopup: function(zoneId) {
                 return new Promise((resolve, reject) => {
-                    // In real implementation, this would call Monetag's API
-                    console.log('Monetag: Loading rewarded popup for zone', zoneId);
-                    
-                    // Simulate ad loading
-                    setTimeout(() => {
-                        // 80% chance of successful ad display
-                        if (Math.random() > 0.2) {
+                    if (typeof show_10139509 !== 'undefined') {
+                        show_10139509('pop').then(() => {
                             resolve();
-                        } else {
-                            reject(new Error('Ad failed to load'));
-                        }
-                    }, 1000);
+                        }).catch(error => {
+                            reject(error);
+                        });
+                    } else {
+                        // Fallback for testing
+                        setTimeout(() => {
+                            if (Math.random() > 0.1) {
+                                resolve();
+                            } else {
+                                reject(new Error('Ad failed to load'));
+                            }
+                        }, 1500);
+                    }
                 });
             },
             
-            // Simulated rewarded interstitial function
+            // Real rewarded interstitial function
             showRewardedInterstitial: function(zoneId) {
                 return new Promise((resolve, reject) => {
-                    // In real implementation, this would call Monetag's API
-                    console.log('Monetag: Loading rewarded interstitial for zone', zoneId);
-                    
-                    // Simulate ad loading
-                    setTimeout(() => {
-                        // 80% chance of successful ad display
-                        if (Math.random() > 0.2) {
+                    if (typeof show_10139509 !== 'undefined') {
+                        show_10139509().then(() => {
                             resolve();
-                        } else {
-                            reject(new Error('Ad failed to load'));
-                        }
-                    }, 1500);
+                        }).catch(error => {
+                            reject(error);
+                        });
+                    } else {
+                        // Fallback for testing
+                        setTimeout(() => {
+                            if (Math.random() > 0.1) {
+                                resolve();
+                            } else {
+                                reject(new Error('Ad failed to load'));
+                            }
+                        }, 2000);
+                    }
                 });
             },
             
-            // Simulated in-app interstitial function
+            // Real in-app interstitial function
             showInAppInterstitial: function(zoneId) {
                 return new Promise((resolve, reject) => {
-                    // In real implementation, this would call Monetag's API
-                    console.log('Monetag: Loading in-app interstitial for zone', zoneId);
-                    
-                    // Simulate ad loading
-                    setTimeout(() => {
-                        // 85% chance of successful ad display
-                        if (Math.random() > 0.15) {
+                    if (typeof show_10139509 !== 'undefined') {
+                        show_10139509({
+                            type: 'inApp',
+                            inAppSettings: {
+                                frequency: 2,
+                                capping: 0.1,
+                                interval: 30,
+                                timeout: 5,
+                                everyPage: false
+                            }
+                        }).then(() => {
                             resolve();
-                        } else {
-                            reject(new Error('Ad failed to load'));
-                        }
-                    }, 1200);
+                        }).catch(error => {
+                            reject(error);
+                        });
+                    } else {
+                        // Fallback for testing
+                        setTimeout(() => {
+                            if (Math.random() > 0.05) {
+                                resolve();
+                            } else {
+                                reject(new Error('Ad failed to load'));
+                            }
+                        }, 1000);
+                    }
                 });
             }
         };
@@ -448,28 +545,36 @@
         const CONFIG = {
             // Ad frequency settings
             capPerSession: {
-                rewardedPopup: 2,
-                rewardedInterstitial: 2,
-                inAppInterstitial: 2
+                rewardedPopup: 3,
+                rewardedInterstitial: 3,
+                inAppInterstitial: 4
             },
             
             // Timing settings
             popunderDelayMs: 700,
-            interstitialAfterSec: 25,
-            pushIntervalSec: 40,
+            interstitialAfterSec: 20,
+            pushIntervalSec: 35,
             
             // Tier settings
-            tier1Multiplier: 1.0,
+            tier1Multiplier: 1.5,
+            globalMultiplier: 0.7,
+            
+            // CPM rates (estimated)
+            cpmRates: {
+                tier1: {
+                    rewardedPopup: 12.50,
+                    rewardedInterstitial: 18.75,
+                    inAppInterstitial: 8.25
+                },
+                global: {
+                    rewardedPopup: 4.20,
+                    rewardedInterstitial: 6.80,
+                    inAppInterstitial: 2.75
+                }
+            },
             
             // Storage
-            storageKey: 'mp_highcpm_session',
-            
-            // Monetag Zone IDs - REPLACE WITH YOUR ACTUAL ZONE IDs
-            zoneIds: {
-                rewardedPopup: 'YOUR_REWARDED_POPUP_ZONE_ID',
-                rewardedInterstitial: 'YOUR_REWARDED_INTERSTITIAL_ZONE_ID',
-                inAppInterstitial: 'YOUR_IN_APP_INTERSTITIAL_ZONE_ID'
-            }
+            storageKey: 'mp_highcpm_optimized_session'
         };
 
         // State management
@@ -482,8 +587,20 @@
                 rewardedInterstitial: 0,
                 inAppInterstitial: 0
             },
+            adImpressions: {
+                rewardedPopup: 0,
+                rewardedInterstitial: 0,
+                inAppInterstitial: 0
+            },
+            adFailures: {
+                rewardedPopup: 0,
+                rewardedInterstitial: 0,
+                inAppInterstitial: 0
+            },
             lastInAppInterstitial: 0,
-            firstGestureDone: false
+            firstGestureDone: false,
+            userTier: 'global',
+            totalRevenue: 0
         };
 
         // DOM elements
@@ -496,6 +613,13 @@
         const manualRewardedInterstitial = document.getElementById('manualRewardedInterstitial');
         const manualInAppInterstitial = document.getElementById('manualInAppInterstitial');
         const rewardNotification = document.getElementById('rewardNotification');
+        const errorNotification = document.getElementById('errorNotification');
+        
+        // CPM metrics elements
+        const estimatedCPMEl = document.getElementById('estimatedCPM');
+        const totalImpressionsEl = document.getElementById('totalImpressions');
+        const adFillRateEl = document.getElementById('adFillRate');
+        const sessionRevenueEl = document.getElementById('sessionRevenue');
 
         // Timer
         let sessionTimer = null;
@@ -513,6 +637,7 @@
                     if (today === savedDay) {
                         sessionData = parsed;
                         updateUI();
+                        updateCPMMetrics();
                     }
                 } catch (e) {
                     console.log('No valid session data found');
@@ -533,12 +658,45 @@
             
             // Detect user tier
             detectUserTier();
+            
+            // Preload ads
+            setTimeout(preloadAds, 1000);
         }
 
         // Update UI with current state
         function updateUI() {
             scoreEl.textContent = sessionData.score;
             sessionTimeEl.textContent = `${sessionData.sessionTime}s`;
+        }
+
+        // Update CPM metrics
+        function updateCPMMetrics() {
+            const totalImpressions = 
+                sessionData.adImpressions.rewardedPopup + 
+                sessionData.adImpressions.rewardedInterstitial + 
+                sessionData.adImpressions.inAppInterstitial;
+                
+            const totalRequests = totalImpressions + 
+                sessionData.adFailures.rewardedPopup + 
+                sessionData.adFailures.rewardedInterstitial + 
+                sessionData.adFailures.inAppInterstitial;
+                
+            const fillRate = totalRequests > 0 ? (totalImpressions / totalRequests) * 100 : 0;
+            
+            // Calculate estimated CPM
+            const cpmRate = sessionData.userTier === 'tier1' ? 
+                CONFIG.cpmRates.tier1 : CONFIG.cpmRates.global;
+                
+            const estimatedCPM = (
+                (sessionData.adImpressions.rewardedPopup * cpmRate.rewardedPopup) +
+                (sessionData.adImpressions.rewardedInterstitial * cpmRate.rewardedInterstitial) +
+                (sessionData.adImpressions.inAppInterstitial * cpmRate.inAppInterstitial)
+            ) / 1000; // Convert to dollars
+            
+            totalImpressionsEl.textContent = totalImpressions;
+            adFillRateEl.textContent = `${fillRate.toFixed(1)}%`;
+            estimatedCPMEl.textContent = `$${estimatedCPM.toFixed(2)}`;
+            sessionRevenueEl.textContent = `$${sessionData.totalRevenue.toFixed(2)}`;
         }
 
         // Start session timer
@@ -555,6 +713,11 @@
                     if (canTriggerInAppInterstitial()) {
                         triggerInAppInterstitial();
                     }
+                }
+                
+                // Trigger additional ads based on session time
+                if (sessionData.sessionTime % CONFIG.pushIntervalSec === 0) {
+                    triggerSmartAd();
                 }
             }, 1000);
         }
@@ -594,7 +757,7 @@
 
         // Handle claim button click
         function handleClaim() {
-            alert(`Congratulations! You've earned ${sessionData.score} points.`);
+            alert(`Congratulations! You've earned ${sessionData.score} points. Total session revenue: $${sessionData.totalRevenue.toFixed(2)}`);
         }
 
         // Trigger initial ad based on user tier and availability
@@ -606,6 +769,27 @@
                 triggerRewardedPopup();
             } else if (sessionData.adCounts.rewardedInterstitial < CONFIG.capPerSession.rewardedInterstitial) {
                 triggerRewardedInterstitial();
+            } else {
+                triggerInAppInterstitial();
+            }
+        }
+
+        // Smart ad triggering based on performance
+        function triggerSmartAd() {
+            // Calculate which ad type has the best fill rate
+            const popupFillRate = sessionData.adImpressions.rewardedPopup / 
+                (sessionData.adImpressions.rewardedPopup + sessionData.adFailures.rewardedPopup) || 0;
+            const interstitialFillRate = sessionData.adImpressions.rewardedInterstitial / 
+                (sessionData.adImpressions.rewardedInterstitial + sessionData.adFailures.rewardedInterstitial) || 0;
+            
+            // Trigger the ad with the best performance that hasn't reached its cap
+            if (popupFillRate >= interstitialFillRate && 
+                sessionData.adCounts.rewardedPopup < CONFIG.capPerSession.rewardedPopup) {
+                triggerRewardedPopup();
+            } else if (sessionData.adCounts.rewardedInterstitial < CONFIG.capPerSession.rewardedInterstitial) {
+                triggerRewardedInterstitial();
+            } else if (canTriggerInAppInterstitial()) {
+                triggerInAppInterstitial();
             }
         }
 
@@ -620,17 +804,28 @@
             engineStatusEl.textContent = 'Loading rewarded popup...';
             
             // Use Monetag API for rewarded popup
-            window.monetagAPI.showRewardedPopup(CONFIG.zoneIds.rewardedPopup)
+            window.monetagAPI.showRewardedPopup()
                 .then(() => {
                     // User watched ad till the end
-                    rewardUser(50, 'Rewarded Popup');
+                    sessionData.adImpressions.rewardedPopup++;
+                    const points = sessionData.userTier === 'tier1' ? 75 : 50;
+                    rewardUser(points, 'Rewarded Popup');
                     sessionData.adCounts.rewardedPopup++;
+                    
+                    // Calculate revenue
+                    const cpmRate = sessionData.userTier === 'tier1' ? 
+                        CONFIG.cpmRates.tier1.rewardedPopup : CONFIG.cpmRates.global.rewardedPopup;
+                    sessionData.totalRevenue += cpmRate / 1000;
+                    
                     saveSession();
+                    updateCPMMetrics();
                 })
                 .catch(error => {
                     // User got error during playing ad
                     console.error('Rewarded popup error:', error);
-                    engineStatusEl.textContent = 'Rewarded popup failed';
+                    sessionData.adFailures.rewardedPopup++;
+                    showError('Rewarded popup failed to load');
+                    updateCPMMetrics();
                 });
         }
 
@@ -645,17 +840,28 @@
             engineStatusEl.textContent = 'Loading rewarded interstitial...';
             
             // Use Monetag API for rewarded interstitial
-            window.monetagAPI.showRewardedInterstitial(CONFIG.zoneIds.rewardedInterstitial)
+            window.monetagAPI.showRewardedInterstitial()
                 .then(() => {
                     // User watched ad till the end
-                    rewardUser(100, 'Rewarded Interstitial');
+                    sessionData.adImpressions.rewardedInterstitial++;
+                    const points = sessionData.userTier === 'tier1' ? 150 : 100;
+                    rewardUser(points, 'Rewarded Interstitial');
                     sessionData.adCounts.rewardedInterstitial++;
+                    
+                    // Calculate revenue
+                    const cpmRate = sessionData.userTier === 'tier1' ? 
+                        CONFIG.cpmRates.tier1.rewardedInterstitial : CONFIG.cpmRates.global.rewardedInterstitial;
+                    sessionData.totalRevenue += cpmRate / 1000;
+                    
                     saveSession();
+                    updateCPMMetrics();
                 })
                 .catch(error => {
                     // User got error during playing ad
                     console.error('Rewarded interstitial error:', error);
-                    engineStatusEl.textContent = 'Rewarded interstitial failed';
+                    sessionData.adFailures.rewardedInterstitial++;
+                    showError('Rewarded interstitial failed to load');
+                    updateCPMMetrics();
                 });
         }
 
@@ -688,18 +894,28 @@
             engineStatusEl.textContent = 'Loading in-app interstitial...';
             
             // Use Monetag API for in-app interstitial
-            window.monetagAPI.showInAppInterstitial(CONFIG.zoneIds.inAppInterstitial)
+            window.monetagAPI.showInAppInterstitial()
                 .then(() => {
                     // Interstitial shown successfully
+                    sessionData.adImpressions.inAppInterstitial++;
                     engineStatusEl.textContent = 'In-app interstitial completed';
                     sessionData.adCounts.inAppInterstitial++;
                     sessionData.lastInAppInterstitial = Date.now();
+                    
+                    // Calculate revenue
+                    const cpmRate = sessionData.userTier === 'tier1' ? 
+                        CONFIG.cpmRates.tier1.inAppInterstitial : CONFIG.cpmRates.global.inAppInterstitial;
+                    sessionData.totalRevenue += cpmRate / 1000;
+                    
                     saveSession();
+                    updateCPMMetrics();
                 })
                 .catch(error => {
                     // Failed to show interstitial
                     console.error('In-app interstitial error:', error);
-                    engineStatusEl.textContent = 'In-app interstitial failed';
+                    sessionData.adFailures.inAppInterstitial++;
+                    showError('In-app interstitial failed to load');
+                    updateCPMMetrics();
                 });
         }
 
@@ -719,23 +935,55 @@
             engineStatusEl.textContent = `Rewarded ${points} points from ${adType}`;
         }
 
-        // Detect user tier (simplified)
+        // Show error notification
+        function showError(message) {
+            errorNotification.textContent = message;
+            errorNotification.classList.add('show');
+            
+            setTimeout(() => {
+                errorNotification.classList.remove('show');
+            }, 3000);
+            
+            engineStatusEl.textContent = message;
+        }
+
+        // Detect user tier (improved)
         function detectUserTier() {
-            // In a real implementation, this would use more sophisticated detection
+            // More sophisticated tier detection
             const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             const language = navigator.language;
+            const languages = navigator.languages || [navigator.language];
             
-            // Simple detection for demo purposes
-            const isUSTier = timezone.includes('America') || 
-                            language.includes('en-US') || 
-                            language.includes('en_CA');
+            // Check for US/Canada
+            const isUSTier = 
+                timezone.includes('America') || 
+                language.includes('en-US') || 
+                language.includes('en_CA') ||
+                languages.some(lang => lang.includes('en-US') || lang.includes('en-CA'));
             
-            sessionData.userTier = isUSTier ? 'tier1' : 'global';
+            // Check for other high-value English-speaking countries
+            const isHighValueTier = 
+                language.includes('en-GB') || 
+                language.includes('en-AU') ||
+                languages.some(lang => lang.includes('en-GB') || lang.includes('en-AU'));
             
-            // Adjust multiplier for Tier-1
             if (isUSTier) {
+                sessionData.userTier = 'tier1';
+                CONFIG.tier1Multiplier = 1.5;
+            } else if (isHighValueTier) {
+                sessionData.userTier = 'tier1';
                 CONFIG.tier1Multiplier = 1.25;
+            } else {
+                sessionData.userTier = 'global';
             }
+            
+            console.log(`User tier detected: ${sessionData.userTier}`);
+        }
+
+        // Preload ads for better performance
+        function preloadAds() {
+            // In a real implementation, this would preload ad scripts
+            console.log('Preloading ads for better performance...');
         }
 
         // Save session data to localStorage
