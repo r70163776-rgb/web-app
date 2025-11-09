@@ -279,6 +279,21 @@
             color: var(--warning);
             font-weight: 600;
         }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -355,6 +370,79 @@
         +50 Points! Ad completed successfully.
     </div>
 
+    <!-- Monetag Ad Scripts -->
+    <script type="text/javascript">
+        // Monetag ad scripts - replace with your actual zone IDs
+        // These would be provided by Monetag when you create your ad zones
+        
+        // Example script structure for Monetag:
+        /*
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://s.monetcg.com/p/your-publisher-id.js';
+            script.async = true;
+            document.head.appendChild(script);
+        })();
+        */
+        
+        // For demo purposes, we'll simulate the Monetag API
+        window.monetagAPI = {
+            // Simulated rewarded popup function
+            showRewardedPopup: function(zoneId) {
+                return new Promise((resolve, reject) => {
+                    // In real implementation, this would call Monetag's API
+                    console.log('Monetag: Loading rewarded popup for zone', zoneId);
+                    
+                    // Simulate ad loading
+                    setTimeout(() => {
+                        // 80% chance of successful ad display
+                        if (Math.random() > 0.2) {
+                            resolve();
+                        } else {
+                            reject(new Error('Ad failed to load'));
+                        }
+                    }, 1000);
+                });
+            },
+            
+            // Simulated rewarded interstitial function
+            showRewardedInterstitial: function(zoneId) {
+                return new Promise((resolve, reject) => {
+                    // In real implementation, this would call Monetag's API
+                    console.log('Monetag: Loading rewarded interstitial for zone', zoneId);
+                    
+                    // Simulate ad loading
+                    setTimeout(() => {
+                        // 80% chance of successful ad display
+                        if (Math.random() > 0.2) {
+                            resolve();
+                        } else {
+                            reject(new Error('Ad failed to load'));
+                        }
+                    }, 1500);
+                });
+            },
+            
+            // Simulated in-app interstitial function
+            showInAppInterstitial: function(zoneId) {
+                return new Promise((resolve, reject) => {
+                    // In real implementation, this would call Monetag's API
+                    console.log('Monetag: Loading in-app interstitial for zone', zoneId);
+                    
+                    // Simulate ad loading
+                    setTimeout(() => {
+                        // 85% chance of successful ad display
+                        if (Math.random() > 0.15) {
+                            resolve();
+                        } else {
+                            reject(new Error('Ad failed to load'));
+                        }
+                    }, 1200);
+                });
+            }
+        };
+    </script>
+
     <script>
         // Configuration
         const CONFIG = {
@@ -374,7 +462,14 @@
             tier1Multiplier: 1.0,
             
             // Storage
-            storageKey: 'mp_highcpm_session'
+            storageKey: 'mp_highcpm_session',
+            
+            // Monetag Zone IDs - REPLACE WITH YOUR ACTUAL ZONE IDs
+            zoneIds: {
+                rewardedPopup: 'YOUR_REWARDED_POPUP_ZONE_ID',
+                rewardedInterstitial: 'YOUR_REWARDED_INTERSTITIAL_ZONE_ID',
+                inAppInterstitial: 'YOUR_IN_APP_INTERSTITIAL_ZONE_ID'
+            }
         };
 
         // State management
@@ -521,22 +616,22 @@
                 return;
             }
             
-            // Simulate the rewarded popup ad
-            engineStatusEl.textContent = 'Showing rewarded popup...';
+            // Show loading state
+            engineStatusEl.textContent = 'Loading rewarded popup...';
             
-            // This is where you would integrate the actual ad code:
-            // show_10139509('pop').then(() => {
-            //     // User watched ad till the end
-            //     rewardUser(50, 'Rewarded Popup');
-            //     sessionData.adCounts.rewardedPopup++;
-            //     saveSession();
-            // }).catch(e => {
-            //     // User got error during playing ad
-            //     engineStatusEl.textContent = 'Rewarded popup failed';
-            // });
-            
-            // For demo, we'll simulate the ad
-            simulateRewardedPopup();
+            // Use Monetag API for rewarded popup
+            window.monetagAPI.showRewardedPopup(CONFIG.zoneIds.rewardedPopup)
+                .then(() => {
+                    // User watched ad till the end
+                    rewardUser(50, 'Rewarded Popup');
+                    sessionData.adCounts.rewardedPopup++;
+                    saveSession();
+                })
+                .catch(error => {
+                    // User got error during playing ad
+                    console.error('Rewarded popup error:', error);
+                    engineStatusEl.textContent = 'Rewarded popup failed';
+                });
         }
 
         // Trigger rewarded interstitial ad
@@ -546,19 +641,22 @@
                 return;
             }
             
-            // Simulate the rewarded interstitial ad
-            engineStatusEl.textContent = 'Showing rewarded interstitial...';
+            // Show loading state
+            engineStatusEl.textContent = 'Loading rewarded interstitial...';
             
-            // This is where you would integrate the actual ad code:
-            // show_10139509().then(() => {
-            //     // You need to add your user reward function here
-            //     rewardUser(100, 'Rewarded Interstitial');
-            //     sessionData.adCounts.rewardedInterstitial++;
-            //     saveSession();
-            // });
-            
-            // For demo, we'll simulate the ad
-            simulateRewardedInterstitial();
+            // Use Monetag API for rewarded interstitial
+            window.monetagAPI.showRewardedInterstitial(CONFIG.zoneIds.rewardedInterstitial)
+                .then(() => {
+                    // User watched ad till the end
+                    rewardUser(100, 'Rewarded Interstitial');
+                    sessionData.adCounts.rewardedInterstitial++;
+                    saveSession();
+                })
+                .catch(error => {
+                    // User got error during playing ad
+                    console.error('Rewarded interstitial error:', error);
+                    engineStatusEl.textContent = 'Rewarded interstitial failed';
+                });
         }
 
         // Check if we can trigger in-app interstitial
@@ -586,27 +684,23 @@
                 return;
             }
             
-            // Simulate the in-app interstitial ad
-            engineStatusEl.textContent = 'Showing in-app interstitial...';
+            // Show loading state
+            engineStatusEl.textContent = 'Loading in-app interstitial...';
             
-            // This is where you would integrate the actual ad code:
-            // show_10139509({
-            //   type: 'inApp',
-            //   inAppSettings: {
-            //     frequency: 2,
-            //     capping: 0.1,
-            //     interval: 30,
-            //     timeout: 5,
-            //     everyPage: false
-            //   }
-            // });
-            
-            // For demo, we'll simulate the ad
-            simulateInAppInterstitial();
-            
-            sessionData.adCounts.inAppInterstitial++;
-            sessionData.lastInAppInterstitial = Date.now();
-            saveSession();
+            // Use Monetag API for in-app interstitial
+            window.monetagAPI.showInAppInterstitial(CONFIG.zoneIds.inAppInterstitial)
+                .then(() => {
+                    // Interstitial shown successfully
+                    engineStatusEl.textContent = 'In-app interstitial completed';
+                    sessionData.adCounts.inAppInterstitial++;
+                    sessionData.lastInAppInterstitial = Date.now();
+                    saveSession();
+                })
+                .catch(error => {
+                    // Failed to show interstitial
+                    console.error('In-app interstitial error:', error);
+                    engineStatusEl.textContent = 'In-app interstitial failed';
+                });
         }
 
         // Reward user function
@@ -647,171 +741,6 @@
         // Save session data to localStorage
         function saveSession() {
             localStorage.setItem(CONFIG.storageKey, JSON.stringify(sessionData));
-        }
-
-        // Simulate rewarded popup for demo
-        function simulateRewardedPopup() {
-            const popup = document.createElement('div');
-            popup.style.position = 'fixed';
-            popup.style.top = '0';
-            popup.style.left = '0';
-            popup.style.width = '100%';
-            popup.style.height = '100%';
-            popup.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-            popup.style.zIndex = '1000';
-            popup.style.display = 'flex';
-            popup.style.alignItems = 'center';
-            popup.style.justifyContent = 'center';
-            
-            const content = document.createElement('div');
-            content.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
-            content.style.padding = '30px';
-            content.style.borderRadius = '12px';
-            content.style.maxWidth = '400px';
-            content.style.textAlign = 'center';
-            content.style.color = 'white';
-            content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
-            
-            content.innerHTML = `
-                <h3 style="margin-bottom: 15px; color: #06b6d4; font-size: 24px;">Rewarded Popup Ad</h3>
-                <p style="margin-bottom: 20px; font-size: 16px;">Watch this ad to earn 50 points!</p>
-                <div style="margin-bottom: 20px; padding: 15px; background: rgba(6, 182, 212, 0.1); border-radius: 8px;">
-                    <p style="margin-bottom: 10px;">Simulating ad playback...</p>
-                    <div style="height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden;">
-                        <div id="adProgress" style="height: 100%; width: 0%; background: #06b6d4; transition: width 5s linear;"></div>
-                    </div>
-                </div>
-                <button id="completeAd" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: none;">Complete Ad</button>
-                <button id="closeAd" style="padding: 10px 20px; background: transparent; color: #94a3b8; border: 1px solid #94a3b8; border-radius: 6px; cursor: pointer; font-weight: 600; margin-left: 10px;">Skip Ad</button>
-            `;
-            
-            popup.appendChild(content);
-            document.body.appendChild(popup);
-            
-            // Simulate ad progress
-            const progressBar = document.getElementById('adProgress');
-            progressBar.style.width = '100%';
-            
-            setTimeout(() => {
-                document.getElementById('completeAd').style.display = 'inline-block';
-            }, 5000);
-            
-            document.getElementById('completeAd').addEventListener('click', () => {
-                document.body.removeChild(popup);
-                rewardUser(50, 'Rewarded Popup');
-                sessionData.adCounts.rewardedPopup++;
-                saveSession();
-            });
-            
-            document.getElementById('closeAd').addEventListener('click', () => {
-                document.body.removeChild(popup);
-                engineStatusEl.textContent = 'Ad skipped - no reward';
-            });
-        }
-
-        // Simulate rewarded interstitial for demo
-        function simulateRewardedInterstitial() {
-            const interstitial = document.createElement('div');
-            interstitial.style.position = 'fixed';
-            interstitial.style.top = '0';
-            interstitial.style.left = '0';
-            interstitial.style.width = '100%';
-            interstitial.style.height = '100%';
-            interstitial.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-            interstitial.style.zIndex = '1001';
-            interstitial.style.display = 'flex';
-            interstitial.style.alignItems = 'center';
-            interstitial.style.justifyContent = 'center';
-            interstitial.style.flexDirection = 'column';
-            
-            const content = document.createElement('div');
-            content.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
-            content.style.padding = '30px';
-            content.style.borderRadius = '12px';
-            content.style.maxWidth = '500px';
-            content.style.textAlign = 'center';
-            content.style.color = 'white';
-            content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
-            
-            content.innerHTML = `
-                <h3 style="margin-bottom: 15px; color: #06b6d4; font-size: 24px;">Rewarded Interstitial</h3>
-                <p style="margin-bottom: 20px; font-size: 16px;">Complete this ad to earn 100 points!</p>
-                <div style="margin-bottom: 20px; padding: 15px; background: rgba(6, 182, 212, 0.1); border-radius: 8px;">
-                    <p style="margin-bottom: 10px;">Advertisement content playing...</p>
-                    <div style="height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden;">
-                        <div id="interstitialProgress" style="height: 100%; width: 0%; background: #06b6d4; transition: width 3s linear;"></div>
-                    </div>
-                </div>
-                <button id="completeInterstitial" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: none;">Claim 100 Points</button>
-            `;
-            
-            interstitial.appendChild(content);
-            document.body.appendChild(interstitial);
-            
-            // Simulate ad progress
-            const progressBar = document.getElementById('interstitialProgress');
-            progressBar.style.width = '100%';
-            
-            setTimeout(() => {
-                document.getElementById('completeInterstitial').style.display = 'inline-block';
-            }, 3000);
-            
-            document.getElementById('completeInterstitial').addEventListener('click', () => {
-                document.body.removeChild(interstitial);
-                rewardUser(100, 'Rewarded Interstitial');
-                sessionData.adCounts.rewardedInterstitial++;
-                saveSession();
-            });
-        }
-
-        // Simulate in-app interstitial for demo
-        function simulateInAppInterstitial() {
-            const interstitial = document.createElement('div');
-            interstitial.style.position = 'fixed';
-            interstitial.style.top = '0';
-            interstitial.style.left = '0';
-            interstitial.style.width = '100%';
-            interstitial.style.height = '100%';
-            interstitial.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-            interstitial.style.zIndex = '1002';
-            interstitial.style.display = 'flex';
-            interstitial.style.alignItems = 'center';
-            interstitial.style.justifyContent = 'center';
-            interstitial.style.flexDirection = 'column';
-            
-            const content = document.createElement('div');
-            content.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
-            content.style.padding = '30px';
-            content.style.borderRadius = '12px';
-            content.style.maxWidth = '500px';
-            content.style.textAlign = 'center';
-            content.style.color = 'white';
-            content.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
-            
-            content.innerHTML = `
-                <h3 style="margin-bottom: 15px; color: #f59e0b; font-size: 24px;">In-App Interstitial</h3>
-                <p style="margin-bottom: 20px; font-size: 16px;">This is an automatic interstitial ad</p>
-                <div style="margin-bottom: 20px; padding: 15px; background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
-                    <p style="margin-bottom: 10px;">Advertisement content</p>
-                </div>
-                <button id="closeInterstitial" style="padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Continue</button>
-            `;
-            
-            interstitial.appendChild(content);
-            document.body.appendChild(interstitial);
-            
-            document.getElementById('closeInterstitial').addEventListener('click', () => {
-                document.body.removeChild(interstitial);
-                engineStatusEl.textContent = 'In-app interstitial completed';
-            });
-            
-            // Auto-close after 7 seconds
-            setTimeout(() => {
-                if (document.body.contains(interstitial)) {
-                    document.body.removeChild(interstitial);
-                    engineStatusEl.textContent = 'In-app interstitial completed';
-                }
-            }, 7000);
         }
 
         // Initialize the app
